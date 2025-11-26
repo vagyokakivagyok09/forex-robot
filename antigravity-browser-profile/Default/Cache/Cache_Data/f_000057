@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html class="no-js" ng-app="tippmixDesktop">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+
+	<link rel="icon" type="image/png" href="/favicon.png">
+
+		<meta property="og:title" content="Szerencsejáték Zrt. - Error 404" />
+<meta name="twitter:title" content="Szerencsejáték Zrt. - Error 404" />
+<meta name="description" content="Ismerkedj meg új oldalunkkal! Tájékozódj az aktuális nyerőszámokról, a várható főnyereményről, akcióinkról, vagy regisztrálj és játssz online te is!" />
+<meta property="og:description" content="Ismerkedj meg új oldalunkkal! Tájékozódj az aktuális nyerőszámokról, a várható főnyereményről, akcióinkról, vagy regisztrálj és játssz online te is!" />
+<meta name="twitter:description" content="Ismerkedj meg új oldalunkkal! Tájékozódj az aktuális nyerőszámokról, a várható főnyereményről, akcióinkról, vagy regisztrálj és játssz online te is!" />
+<meta property="og:url" content="https://www.tippmix.hu/sport/asztalitenisz" />
+<meta property="og:type" content="website" />
+<script type="text/javascript" src="/ruxitagentjs_ICA7NVfqrux_10321250808084810.js" data-dtconfig="rid=RID_1942173190|rpid=-1716929559|domain=tippmix.hu|reportUrl=/rb_792e432a-829a-416b-a11e-5fd703f44de4|app=5a94360386b64be1|owasp=1|featureHash=ICA7NVfqrux|rdnt=1|uxrgce=1|cuc=ctel9xmb|mel=100000|expw=1|dpvc=1|lastModification=1763373771084|postfix=ctel9xmb|tp=500,50,0|srbbv=2|agentUri=/ruxitagentjs_ICA7NVfqrux_10321250808084810.js"></script><link rel="canonical" href="https://www.tippmix.hu/sport/asztalitenisz" />
+<link rel="stylesheet" type="text/css" href="/assets/8fd758e1/1aad6a47/ng-dialog/css/ngDialog.css" />
+<link rel="stylesheet" type="text/css" href="/assets/8fd758e1/1aad6a47/videojs/css/video-js.css" />
+<link rel="stylesheet" type="text/css" href="/assets/8fd758e1/1aad6a47/glide/glide.core.min.css" />
+<link rel="stylesheet" type="text/css" href="/assets/8fd758e1/1aad6a47/glide/glide.theme.min.css" />
+<link rel="stylesheet" type="text/css" href="/assets/8fd758e1/1aad6a47/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css" />
+<link rel="stylesheet" type="text/css" href="/assets/a9691f86/59470ec9/css/scp-desktop.css" />
+<link rel="stylesheet" type="text/css" href="/assets/7aa3d7d2/524d6423/css/main.css" />
+<script type="text/javascript" src="/assets/88fa1a06/b9bb0990/modernizr.min.js"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+
+				(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+				new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+				j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+				'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+				})(window,document,'script','dataLayer','GTM-5TWR34F');
+				
+/*]]>*/
+</script>
+<title>Tippmix - Sport. Fogadás. Élmény - Oddsok és események, élő meccsek</title><div><style type="text/css">
+.n-header__dropdown{
+overflow: auto !important;
+max-height: calc(100vh - 47px) !important;
+}
+</style>
+
+
+<style type="text/css">.ngdialog-content{
+min-width: 1px;
+}
+</style></div>
+	</head>
+<body>
+						<!-- Google Tag Manager (noscript) -->
+						<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5TWR34F" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+						<!-- End Google Tag Manager (noscript) -->
+					<script type="text/javascript">
+/*<![CDATA[*/
+
+				var CONSTS = CONSTS || {};
+				CONSTS = {
+					CSRF: {
+						CSRF_3c38c2c6: 'R3F4TXA5ekJiVm9zUDUyNXhWNzFqVHhJZjRyUEdzOWKu-SEB0Yc4t_m-LYcwLEirgYlUPQMX2jnU4kMCe2bdIQ==',
+					},
+					API_URI: '//api.tippmix.hu/',
+					V_SPORT_API_URL: '//vsapi.tippmix.hu/',
+					BETSLIP: {"MAX_COUNT":20,"MAX_COUNT_ERROR_MESSAGE":"Az esem\u00e9ny nem ker\u00fclt fel a fogad\u00f3szelv\u00e9nyre. A fogad\u00f3szelv\u00e9ny legfeljebb {MAX_COUNT} esem\u00e9nyt tartalmazhat.","DEFAULT_ERROR_MESSAGE":"Az esem\u00e9ny nem ker\u00fclt fel a fogad\u00f3szelv\u00e9nyre.","TIPPMIX":{"LIVE_MAX_COUNT":4,"PREMATCH_MAX_COUNT":20,"MIN_LIVE_STAKE":100,"MAX_LIVE_STAKE":100000,"MIN_PREMATCH_STAKE":10,"MAX_PREMATCH_STAKE":100000},"SPECIAL_COMBINATIONS":{"3":["TRIXIE","PATENT"],"4":["YANKEE","LUCKY_15"],"5":["CANADIAN","LUCKY_31"],"6":["HEINZ","LUCKY_63"],"7":["SUPER_HEINZ"],"8":["GOLIATH"]},"SINGLE":{"TITLE":"Egyes k\u00f6t\u00e9s","DETAILS":"Egyes k\u00f6t\u00e9sben t\u00f6rt\u00e9n\u0151 fogad\u00e1skor a kiv\u00e1lasztott fogad\u00e1si esem\u00e9ny(ek) kiv\u00e1lasztott kimenetel\u00e9t lehet \u00f6n\u00e1ll\u00f3an megfogadni. Nyerem\u00e9ny el\u00e9r\u00e9s\u00e9hez a kiv\u00e1lasztott kimenetel eltal\u00e1l\u00e1sa sz\u00fcks\u00e9ges.","UNIT_COUNT":1},"N":{"TITLE":[" k\u00f6t\u00e9s","2-es","3-as","4-es","5-\u00f6s","6-os","7-es","8-as","9-es","10-es","11-es","12-es","13-as","14-es","15-\u00f6s","16-os","17-es","18-as","19-es","20-as"],"DETAILS":"K\u00f6t\u00e9sben t\u00f6rt\u00e9n\u0151 fogad\u00e1skor legal\u00e1bb 2, legfeljebb 20 kiv\u00e1lasztott kimenetelt lehet egyidej\u0171leg megfogadni. Nyerem\u00e9ny el\u00e9r\u00e9s\u00e9hez a megfogadott valamennyi kimenetel eltal\u00e1l\u00e1sa sz\u00fcks\u00e9ges.","UNIT_COUNT":1},"K_SLASH_N":{"TITLE":"{k}\/{n} kombin\u00e1ci\u00f3","DETAILS":"{k}\/{n} t\u00edpus\u00fa kombin\u00e1ci\u00f3 megfogad\u00e1sa a kiv\u00e1lasztott {n} kimenetelb\u0151l k\u00e9pezhet\u0151 \u00f6sszes lehets\u00e9ges {k} tippet tartalmaz\u00f3 k\u00f6t\u00e9s egyidej\u0171 megfogad\u00e1s\u00e1t jelenti. Nyerem\u00e9ny el\u00e9r\u00e9s\u00e9hez legal\u00e1bb {k} kimenetel eltal\u00e1l\u00e1sa sz\u00fcks\u00e9ges."},"TRIXIE":{"ID":21,"TITLE":"Trixie","DETAILS":"A \u201eTrixie\u201d 4 darab fogad\u00e1s megt\u00e9tel\u00e9t jelenti 3 k\u00fcl\u00f6nb\u00f6z\u0151 fogad\u00e1si esem\u00e9ny kimenetel\u00e9re. A \u201eTrixie\u201d 3 db kettes k\u00f6t\u00e9s\u0171 \u00e9s 1 db h\u00e1rmas k\u00f6t\u00e9s\u0171 fogad\u00e1st tartalmaz. B\u00e1rmely k\u00e9t v\u00e1lasztott kimenetel eltal\u00e1l\u00e1sa eset\u00e9n a fogad\u00e1s m\u00e1r nyerem\u00e9nyre jogos\u00edt.","UNIT_COUNT":4},"PATENT":{"ID":22,"TITLE":"Patent","DETAILS":"A \u201ePatent\u201d 7 darab fogad\u00e1s megt\u00e9tel\u00e9t jelenti 3 k\u00fcl\u00f6nb\u00f6z\u0151 fogad\u00e1si esem\u00e9ny kimenetel\u00e9re. A \u201ePatent\u201d 3 db \u00f6n\u00e1ll\u00f3, 3 db kettes k\u00f6t\u00e9s\u0171 \u00e9s 1 db h\u00e1rmas k\u00f6t\u00e9s\u0171 fogad\u00e1st tartalmaz. B\u00e1rmely kiv\u00e1lasztott kimenetel eltal\u00e1l\u00e1sa eset\u00e9n a fogad\u00e1s m\u00e1r nyerem\u00e9nyre jogos\u00edt.","UNIT_COUNT":7},"YANKEE":{"ID":23,"TITLE":"Yankee","DETAILS":"A \u201eYankee\u201d 11 darab fogad\u00e1s megt\u00e9tel\u00e9t jelenti 4 k\u00fcl\u00f6nb\u00f6z\u0151 fogad\u00e1si esem\u00e9ny kimenetel\u00e9re. A \u201eYankee\u201d 6 db kettes k\u00f6t\u00e9s\u0171, 4 db h\u00e1rmas k\u00f6t\u00e9s\u0171 \u00e9s 1 db n\u00e9gyes k\u00f6t\u00e9s\u0171 fogad\u00e1st tartalmaz. B\u00e1rmely k\u00e9t v\u00e1lasztott kimenetel eltal\u00e1l\u00e1sa eset\u00e9n a fogad\u00e1s m\u00e1r nyerem\u00e9nyre jogos\u00edt.","UNIT_COUNT":11},"LUCKY_15":{"ID":24,"TITLE":"Lucky 15","DETAILS":"A \u201eLucky 15\u201d 15 darab fogad\u00e1s megt\u00e9tel\u00e9t jelenti 4 k\u00fcl\u00f6nb\u00f6z\u0151 fogad\u00e1si esem\u00e9ny kimenetel\u00e9re. A \u201eLucky 15\u201d 4 db \u00f6n\u00e1ll\u00f3, 6 db kettes k\u00f6t\u00e9s\u0171, 4 db h\u00e1rmas k\u00f6t\u00e9s\u0171 \u00e9s 1 db n\u00e9gyes k\u00f6t\u00e9s\u0171 fogad\u00e1st tartalmaz. B\u00e1rmely kiv\u00e1lasztott kimenetel eltal\u00e1l\u00e1sa eset\u00e9n a fogad\u00e1s m\u00e1r nyerem\u00e9nyre jogos\u00edt.","UNIT_COUNT":15},"CANADIAN":{"ID":25,"TITLE":"Canadian","DETAILS":"A \u201eCanadian\u201d 26 darab fogad\u00e1s megt\u00e9tel\u00e9t jelenti 5 k\u00fcl\u00f6nb\u00f6z\u0151 fogad\u00e1si esem\u00e9ny kimenetel\u00e9re. A \u201eCanadian\u201d 10 db kettes k\u00f6t\u00e9s\u0171, 10 db h\u00e1rmas k\u00f6t\u00e9s\u0171, 5 db n\u00e9gyes k\u00f6t\u00e9s\u0171 \u00e9s 1 db \u00f6t\u00f6s k\u00f6t\u00e9s\u0171 fogad\u00e1st tartalmaz. B\u00e1rmely k\u00e9t v\u00e1lasztott kimenetel eltal\u00e1l\u00e1sa eset\u00e9n a fogad\u00e1s m\u00e1r nyerem\u00e9nyre jogos\u00edt.","UNIT_COUNT":26},"LUCKY_31":{"ID":26,"TITLE":"Lucky 31","DETAILS":"A \u201eLucky 31\u201d 31 darab fogad\u00e1s megt\u00e9tel\u00e9t jelenti 5 k\u00fcl\u00f6nb\u00f6z\u0151 fogad\u00e1si esem\u00e9ny kimenetel\u00e9re. A \u201eLucky 31\u201d 5 db \u00f6n\u00e1ll\u00f3, 10 db kettes k\u00f6t\u00e9s\u0171, 10 db h\u00e1rmas k\u00f6t\u00e9s\u0171, 5 db n\u00e9gyes k\u00f6t\u00e9s\u0171 \u00e9s 1 db \u00f6t\u00f6s k\u00f6t\u00e9s\u0171 fogad\u00e1st tartalmaz. B\u00e1rmely kiv\u00e1lasztott kimenetel eltal\u00e1l\u00e1sa eset\u00e9n a fogad\u00e1s m\u00e1r nyerem\u00e9nyre jogos\u00edt.","UNIT_COUNT":31},"HEINZ":{"ID":27,"TITLE":"Heinz","DETAILS":"A \u201eHeinz\u201d 57 darab fogad\u00e1s megt\u00e9tel\u00e9t jelenti 6 k\u00fcl\u00f6nb\u00f6z\u0151 fogad\u00e1si esem\u00e9ny kimenetel\u00e9re. A \u201eHeinz\u201d  15 db kettes k\u00f6t\u00e9s\u0171, 20 db h\u00e1rmas k\u00f6t\u00e9s\u0171, 15 db n\u00e9gyes k\u00f6t\u00e9s\u0171, 6 db \u00f6t\u00f6s k\u00f6t\u00e9s\u0171 \u00e9s 1 db hatos k\u00f6t\u00e9s\u0171 fogad\u00e1st tartalmaz. B\u00e1rmely k\u00e9t v\u00e1lasztott kimenetel eltal\u00e1l\u00e1sa eset\u00e9n a fogad\u00e1s m\u00e1r nyerem\u00e9nyre jogos\u00edt.","UNIT_COUNT":57},"LUCKY_63":{"ID":28,"TITLE":"Lucky 63","DETAILS":"A \u201eLucky 63\u201d 63 darab fogad\u00e1s megt\u00e9tel\u00e9t jelenti 6 k\u00fcl\u00f6nb\u00f6z\u0151 fogad\u00e1si esem\u00e9ny kimenetel\u00e9re.  A \u201eLucky 63\u201d 6 db \u00f6n\u00e1ll\u00f3, 15 db kettes k\u00f6t\u00e9s\u0171, 20 db h\u00e1rmas k\u00f6t\u00e9s\u0171, 15 db n\u00e9gyes k\u00f6t\u00e9s\u0171, 6 db \u00f6t\u00f6s k\u00f6t\u00e9s\u0171 \u00e9s 1 db hatos k\u00f6t\u00e9s\u0171 fogad\u00e1st tartalmaz. B\u00e1rmely kiv\u00e1lasztott kimenetel eltal\u00e1l\u00e1sa eset\u00e9n a fogad\u00e1s m\u00e1r nyerem\u00e9nyre jogos\u00edt.","UNIT_COUNT":63},"SUPER_HEINZ":{"ID":29,"TITLE":"Super Heinz","DETAILS":"A \u201eSuper Heinz\u201d 120 darab fogad\u00e1s megt\u00e9tel\u00e9t jelenti 7 k\u00fcl\u00f6nb\u00f6z\u0151 fogad\u00e1si esem\u00e9ny kimenetel\u00e9re. A \u201eSuper Heinz\u201d 21 db kettes k\u00f6t\u00e9s\u0171, 35 db h\u00e1rmas k\u00f6t\u00e9s\u0171, 35 db n\u00e9gyes k\u00f6t\u00e9s\u0171, 21 db \u00f6t\u00f6s k\u00f6t\u00e9s\u0171, 7 db hatos k\u00f6t\u00e9s\u0171 \u00e9s 1 db hetes k\u00f6t\u00e9s\u0171 fogad\u00e1st tartalmaz. B\u00e1rmely k\u00e9t v\u00e1lasztott kimenetel eltal\u00e1l\u00e1sa eset\u00e9n a fogad\u00e1s m\u00e1r nyerem\u00e9nyre jogos\u00edt.","UNIT_COUNT":120},"GOLIATH":{"ID":30,"TITLE":"Goliath","DETAILS":"A \u201eGoliath\u201d 247 db fogad\u00e1s megt\u00e9tel\u00e9t jelenti 8 k\u00fcl\u00f6nb\u00f6z\u0151 fogad\u00e1si esem\u00e9ny kimenetel\u00e9re. A \u201eGoliath\u201d 28 db kettes k\u00f6t\u00e9s\u0171, 56 db h\u00e1rmas k\u00f6t\u00e9s\u0171, 70 db n\u00e9gyes k\u00f6t\u00e9s\u0171, 56 db \u00f6t\u00f6s k\u00f6t\u00e9s\u0171, 28 db hatos k\u00f6t\u00e9s\u0171, 8 db hetes k\u00f6t\u00e9s\u0171 \u00e9s 1 db nyolcas k\u00f6t\u00e9s\u0171 fogad\u00e1st tartalmaz. B\u00e1rmely k\u00e9t v\u00e1lasztott kimenetel eltal\u00e1l\u00e1sa eset\u00e9n a fogad\u00e1s m\u00e1r nyerem\u00e9nyre jogos\u00edt.","UNIT_COUNT":247}},
+					BETSLIP_CONFIRM_URL: '/',
+					LOGIN_LAYER_URL: '/ajax/login?type=tippmix',
+					REDIRECT_URL: '/sport/asztalitenisz',
+					HOMEPAGE_URL: '/',
+					ROWS_DISPLAY_SPORT_IDS: [5,23,34],
+					BETRADAR_URL: 'https://s5.sir.sportradar.com/tippmix/hu/match/',
+					BETRADAR_LIVE_URL: '//widgets.sir.sportradar.com/c9324d71dbed2d0e88474b5fb9bf03b3/widgetloader',
+					BETRADAR_VSPORT_URL: 'https://s5.sir.sportradar.com/scigamingvirtuals/hu/{sport}/match/{match}',
+					BETRADAR_VSPORT_URL_TAB2: 'https://s5.sir.sportradar.com/scigaming2virtuals/hu/{sport}/match/{match}',
+					EVENT_PAGE_URL: '/esemeny?id=',
+					LIVE_EVENT_PAGE_URL: '/elo/esemeny?id=',
+					SPORT_NAMES: {"all":{"sportName":"all","sportNameHu":"Minden sport"},"0":{"sportName":"all","sportNameHu":"\u00d6sszes sport"},"1":{"sportName":"soccer","sportNameHu":"Labdar\u00fag\u00e1s"},"2":{"sportName":"basketball","sportNameHu":"Kos\u00e1rlabda"},"155":{"sportName":"basketball","sportNameHu":"3x3 kos\u00e1rlabda"},"761":{"sportName":"basketball","sportNameHu":"3x3 kos\u00e1rlabda"},"3":{"sportName":"baseball","sportNameHu":"Baseball"},"4":{"sportName":"ice-hockey","sportNameHu":"J\u00e9gkorong"},"5":{"sportName":"tennis","sportNameHu":"Tenisz"},"6":{"sportName":"handball","sportNameHu":"K\u00e9zilabda"},"7":{"sportName":"floorball","sportNameHu":"Floorball"},"9":{"sportName":"golf","sportNameHu":"Golf"},"11":{"sportName":"bikes-moto-gp","sportNameHu":"Motorsport"},"12":{"sportName":"rugby","sportNameHu":"R\u00f6gbi"},"13":{"sportName":"aussie-rules","sportNameHu":"Ausztr\u00e1l futball"},"14":{"sportName":"winter-sports","sportNameHu":"T\u00e9li sportok"},"15":{"sportName":"bandy","sportNameHu":"Bandy"},"16":{"sportName":"american-football","sportNameHu":"Amerikai futball"},"17":{"sportName":"cycling","sportNameHu":"Ker\u00e9kp\u00e1r"},"19":{"sportName":"snooker","sportNameHu":"Snooker"},"20":{"sportName":"table-tennis","sportNameHu":"Asztalitenisz"},"21":{"sportName":"cricket","sportNameHu":"Krikett"},"22":{"sportName":"darts","sportNameHu":"Darts"},"23":{"sportName":"volleyball","sportNameHu":"R\u00f6plabda"},"24":{"sportName":"field-hockey","sportNameHu":"Gyeplabda"},"26":{"sportName":"waterpolo","sportNameHu":"V\u00edzilabda"},"28":{"sportName":"curling","sportNameHu":"Curling"},"29":{"sportName":"futsal","sportNameHu":"Futsal"},"30":{"sportName":"olympics","sportNameHu":"Olimpia"},"31":{"sportName":"badminton","sportNameHu":"Tollaslabda"},"32":{"sportName":"bowls","sportNameHu":"Bowls"},"34":{"sportName":"beach-volley","sportNameHu":"Strandr\u00f6plabda"},"37":{"sportName":"squash","sportNameHu":"Squash"},"60":{"sportName":"beach-soccer","sportNameHu":"Strandlabdar\u00fag\u00e1s"},"61":{"sportName":"pesapallo","sportNameHu":"Pesapallo"},"117":{"sportName":"mma","sportNameHu":"MMA"},"541":{"sportName":"chess","sportNameHu":"Sakk"},"543":{"sportName":"boxing","sportNameHu":"\u00d6k\u00f6lv\u00edv\u00e1s"},"561":{"sportName":"athletics","sportNameHu":"Atl\u00e9tika"},"582":{"sportName":"wrestling","sportNameHu":"Birk\u00f3z\u00e1s"},"583":{"sportName":"judo","sportNameHu":"Cselg\u00e1ncs"},"545":{"sportName":"kayak","sportNameHu":"Kajak-kenu"},"546":{"sportName":"pentathlon","sportNameHu":"\u00d6ttusa"},"544":{"sportName":"swimming","sportNameHu":"\u00dasz\u00e1s"},"601":{"sportName":"sword","sportNameHu":"V\u00edv\u00e1s"},"641":{"sportName":"gymnastics","sportNameHu":"Torna"},"642":{"sportName":"shooting","sportNameHu":"Sportl\u00f6v\u00e9szet"},"662":{"sportName":"triathlon","sportNameHu":"Triatlon"},"48":{"sportName":"ski-jumping","sportNameHu":"S\u00edugr\u00e1s"},"43":{"sportName":"alpine-ski","sportNameHu":"Alpesi s\u00ed"},"721":{"sportName":"winter-olympics","sportNameHu":"T\u00e9li olimpia"},"45":{"sportName":"bobsled","sportNameHu":"Bob"},"661":{"sportName":"rowing","sportNameHu":"Evez\u00e9s"},"50":{"sportName":"speed-skating","sportNameHu":"Gyorskorcsolya"},"102":{"sportName":"figure-skating","sportNameHu":"M\u0171korcsolya"},"105":{"sportName":"short-track-speed-skating","sportNameHu":"R\u00f6vidp\u00e1ly\u00e1s gyorskorcsolya"},"104":{"sportName":"skeleton","sportNameHu":"Skeleton"},"49":{"sportName":"snowboard","sportNameHu":"Snowboard"},"103":{"sportName":"freestyle-ski","sportNameHu":"Szabadst\u00edlus\u00fa s\u00ed"},"51":{"sportName":"sled","sportNameHu":"Sz\u00e1nk\u00f3"},"46":{"sportName":"ski-running","sportNameHu":"S\u00edfut\u00e1s"},"44":{"sportName":"biathlon","sportNameHu":"S\u00edl\u00f6v\u00e9szet"},"663":{"sportName":"weight-lifting","sportNameHu":"S\u00falyemel\u00e9s"},"47":{"sportName":"north-composite","sportNameHu":"\u00c9szaki \u00f6sszetett"},"681":{"sportName":"archery","sportNameHu":"\u00cdj\u00e1szat"},"861":{"sportName":"winter-olympics","sportNameHu":"T\u00e9li olimpia"},"741":{"sportName":"pool","sportNameHu":"Pool billi\u00e1rd"},"999":{"sportName":"e-sport","sportNameHu":"E-Sport"}},
+					ALL_NAMES: ["\u00d6sszes sport","\u00d6sszes orsz\u00e1g","\u00d6sszes liga"],
+					TOTAL_ODDS_ACCURACY: 5,
+					PRIZE_AMOUNT_ROUNDING_VALUE: 500,
+					PRIZE_AMOUNT_ROUNDING_METHOD: 1,
+					PRIZE_AMOUNT_ROUNDING_LEVEL: 3,
+					PACKAGE_URL: '/assets/7aa3d7d2/524d6423',
+					EVENTS_RESULTS_SELECT: {"market":["\u00d6sszes piac","Pre-match","\u00c9l\u0151"],"interval":{"1":"1 nap","3":"3 nap","7":"1 h\u00e9t","180":"7-180 nap"}},
+					BETTING_URL: '/sportfogadas',
+					BEST_COMBINATION_PRINT_URL: '/nyomtatas/szelvenyajanlo',
+					BETTING_PRINT_URL: '/nyomtatas/sportfogadas',
+					BEST_GAMES_PRINT_URL: '/nyomtatas/legjobb-meccsek',
+					IS_LIR: false,
+					RECAPTCHA: '6Lf9_qkcAAAAALWnBC7itSruRh6_HurVcA69P2G9',
+					MIN_STAKE_TYPE: 500,
+					MIN_STAKE_WAGER: 500,
+					V_SPORT_MIN_STAKE_TYPE: 500,
+					V_SPORT_MIN_STAKE_WAGER: 500,
+					CUSTOMBET_OFFER_PRINT_URL: '/nyomtatas/custombet-szelvenyajanlo',
+				};
+			
+/*]]>*/
+</script>
+
+		<div id="wrapper" class="wrapper">
+	<header id="header">
+		<div class="container">
+			<a href="/" class="brand">Tippmix</a>
+
+			<nav id="navigation">
+							</nav>
+
+			
+		</div>
+	</header>
+		<main class="main-container">
+		
+	
+	<div class="widget-error404">
+		<div class="widget-content">
+			<h2 class="title" data-dictionary-id="2414">
+                404 - A keresett oldal nem található            </h2>
+			<p data-dictionary-id="2415">
+                Ellenőrizd, hogy biztosan helyesen gépelted-e be a keresett oldal címét! Ha jó címet adtál meg, és mégis ezt az üzenet látod, akkor előfordulhat, hogy a keresett oldal megszűnt. Próbáld a böngészését a főoldalról kezdeni, úgy talán megtalálod, amit keresel!            </p>
+			<a href="/" class="back-to-homepage" data-dictionary-id="2417">
+                Vissza főoldalra            </a>
+		</div>
+	</div>
+
+	</main>
+</div>
+<footer id="footer">
+		<div class="footer-info">
+		<div class="container">
+			<div class="customer-service" data-dictionary-id="2455">
+				Ügyfélszolgálat:<span class="phone" data-dictionary-id="2419">06 (1) 201-0580</span> minden nap 7-23 óráig <a class="email" href="mailto:ugyfelszolgalat@szerencsejatek.hu" data-dictionary-id="2420">ugyfelszolgalat@szerencsejatek.hu</a>			</div>
+			<ul class="policy-logos">
+				<li class="policy-logo-staygame" data-dictionary-id="2427">
+					Maradjon játék! <br />A túlzásba vitt szerencsejáték ártalmas, függőséget okozhat!<br />Éljen az önkorlátozás, önkizárás lehetőségével!<br /> <a href="/informaciok/a-jatekszenvedelyrol" data-dictionary-id="2422">A játékszenvedélyről</a>				</li>
+				<li class="policy-logo-18" data-dictionary-id="2423">
+					Ajánlott felelős szervező!<br />Szerencsejátékban<br />csak 18 éven felüliek<br />vehetnek részt!				</li>
+				<li class="policy-logo-szrt">
+					<a href="http://www.szerencsejatek.hu/" target="_blank" data-dictionary-id="2424">
+						Szerencsejáték Zrt.					</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="copy">
+		<div class="container">
+			<ul>
+				<li>
+					<a href="https://bet.szerencsejatek.hu/informaciok/online-fogadasi-rendszer-adatvedelmi-tajekoztato" target="_blank" data-dictionary-id="2428">
+						Adatvédelmi tájékoztató					</a>
+				</li>
+				<li>
+					<a href="/informaciok/reszveteli-szabalyzat"  target="_blank" data-dictionary-id="2429">
+						Részvételi szabályzat					</a>
+				</li>
+				<li>
+					<a href="/lottozok" data-dictionary-id="2430">
+						Lottózók					</a>
+				</li>
+				<li>
+					<a href="/szerencsemix" data-dictionary-id="2431">
+						SzerencseMix					</a>
+				</li>
+				<li>
+					<a href="https://bet.szerencsejatek.hu/nyeremenyjegyzek" data-dictionary-id="8896">
+						Nyereményjegyzék					</a>
+				</li>
+							</ul>
+			<span data-dictionary-id="13412">
+								</span>
+		</div>
+	</div>
+</footer>
+
+<script type="text/ng-template" id="defaultErrorDialog">
+    <div class="overlay overlay-warning">
+        <div class="overlay-header">
+            <h1 data-dictionary-id="12419">
+                Figyelmeztetés            </h1>
+            <a href="#" class="link-close ico ico-bezaras" ng-click="closeThisDialog()"></a>
+        </div>
+        <div class="overlay-body">
+            <p data-dictionary-id="12420">
+                Az esemény nem került fel a fogadószelvényre.            </p>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-green" ng-click="closeThisDialog()" data-dictionary-id="12421">
+                Tovább            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="prematchMaxCountErrorDialog">
+    <div class="overlay overlay-warning">
+        <div class="overlay-header">
+            <h1 data-dictionary-id="2436">
+                Figyelmeztetés            </h1>
+            <a href="#" class="link-close ico ico-bezaras" ng-click="closeThisDialog()"></a>
+        </div>
+        <div class="overlay-body">
+            <p data-dictionary-id="2437">
+                Az esemény nem került fel a fogadószelvényre. A prematch szelvény legfeljebb 20 eseményt tartalmazhat.            </p>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-green" ng-click="closeThisDialog()" data-dictionary-id="2438">
+                Tovább            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="liveMaxCountErrorDialog">
+    <div class="overlay overlay-warning">
+        <div class="overlay-header">
+            <h1 data-dictionary-id="2439">
+                Figyelmeztetés            </h1>
+            <a href="#" class="link-close ico ico-bezaras" ng-click="closeThisDialog()"></a>
+        </div>
+        <div class="overlay-body">
+            <p data-dictionary-id="2440">
+                Az esemény nem került fel a fogadószelvényre. Az élő szelvény legfeljebb 4 eseményt tartalmazhat.            </p>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-green" ng-click="closeThisDialog()" data-dictionary-id="2441">
+                Tovább            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="vSportMaxCountErrorDialog">
+    <div class="overlay overlay-warning">
+        <div class="overlay-header">
+            <h1 data-dictionary-id="9940">
+                Figyelmeztetés            </h1>
+            <a href="#" class="link-close ico ico-bezaras" ng-click="closeThisDialog()"></a>
+        </div>
+        <div class="overlay-body">
+            <p data-dictionary-id="9941">
+                Az esemény nem került fel a fogadószelvényre. A virtuális sport szelvény legfeljebb 8 eseményt tartalmazhat.            </p>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-green" ng-click="closeThisDialog()" data-dictionary-id="9942">
+                Tovább            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="calculateCallError">
+    <div class="overlay overlay-warning">
+        <div class="overlay-header">
+            <h1 data-dictionary-id="12907">
+                Hiba történt a calculate híváskor            </h1>
+            <a href="#" class="link-close ico ico-bezaras" ng-click="closeThisDialog()"></a>
+        </div>
+        <div class="overlay-body">
+            <p data-dictionary-id="12908">
+                Hiba történt a calculate api híváskor            </p>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-green" ng-click="closeThisDialog()" data-dictionary-id="12909">
+                Tovább            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="calculateCallErrorNoAddItem">
+    <div class="overlay overlay-warning">
+        <div class="overlay-header">
+            <h1 data-dictionary-id="12907">
+                Hiba történt a calculate híváskor            </h1>
+            <a href="#" class="link-close ico ico-bezaras" ng-click="closeThisDialog()"></a>
+        </div>
+        <div class="overlay-body">
+            <p data-dictionary-id="12908">
+                Az esemény nem került fel a fogadószelvényre. Hibás fogadáskészítő kombináció.            </p>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-green" ng-click="closeThisDialog()" data-dictionary-id="12909">
+                Tovább            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="customBetMaxCountError">
+    <div class="overlay overlay-warning">
+        <div class="overlay-header">
+            <h1 data-dictionary-id="12910">
+                Hiba a fogadáskészítőben            </h1>
+            <a href="#" class="link-close ico ico-bezaras" ng-click="closeThisDialog()"></a>
+        </div>
+        <div class="overlay-body">
+            <p data-dictionary-id="12911">
+                Elérted a maximális események számát a fogadáskészítőben            </p>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-green" ng-click="closeThisDialog()" data-dictionary-id="12912">
+                Tovább            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="customBetMaxBetslipCountError">
+    <div class="overlay overlay-warning">
+        <div class="overlay-header">
+            <h1 data-dictionary-id="12910">
+                Hiba a fogadáskészítőben            </h1>
+            <a href="#" class="link-close ico ico-bezaras" ng-click="closeThisDialog()"></a>
+        </div>
+        <div class="overlay-body">
+            <p data-dictionary-id="12911">
+                Elérted a maximális események számát a fogadáskészítőben            </p>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-green" ng-click="closeThisDialog()" data-dictionary-id="12912">
+                Tovább            </button>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="betslipWagerWarning">
+	<div class="overlay overlay-betslip-warning">
+		<div class="overlay-header">
+			<h1 data-dictionary-id="2442">
+				Új Szelvény azonosító			</h1>
+			<a href="#" class="link-close ico ico-bezaras" ng-click="closeThisDialog()"></a>
+		</div>
+		<div class="overlay-body">
+			<p data-dictionary-id="2443">
+				Ha megváltoztatod bármely részét a szelvényednek, akkor ne felejts el új azonosítót kérni, mert a mostani a változatás előtti szelvényt azonosítja.			</p>
+		</div>
+		<div class="overlay-footer">
+			<button class="btn btn-green" ng-click="continueBetting()" data-dictionary-id="2444">
+				Folytatom a fogadást			</button>
+            <a class="btn btn-outline" href="#" ng-click="closeThisDialog()" data-dictionary-id="13499">
+                Mégsem            </a>
+		</div>
+	</div>
+</script>
+
+<script type="text/ng-template" id="custombetOffersActions">
+    <div class="overlay overlay-betslip-warning">
+        <div class="overlay-header">
+            <h1 data-dictionary-id="13414">
+                Figyelmeztetés            </h1>
+            <a href="#" class="link-close ico ico-bezaras" ng-click="closeThisDialog()"></a>
+        </div>
+        <div class="overlay-body">
+            <p data-dictionary-id="13415">
+                Ajánlott fogadást szeretnél a szelvényeden megjeleníteni, de a szelvényed nem üres, már szerepel rajta esemény. A Törlés gombra kattintva a korábban kiválasztott események elvesznek a szelvényedről, és csak a kiválasztott ajánlott fogadáshoz kapcsolódó események jelennek meg ott. A Kiegészítés opcióval a már korábban kiválasztott eseményeket kiegészítheted az érintett ajánlott fogadás eseményeivel.            </p>
+        </div>
+        <div class="overlay-footer">
+            <button class="btn btn-green" ng-click="clearBetslip()" data-dictionary-id="13409">
+                Törlés            </button>
+            <button ng-if="!additionDisabled" class="btn btn-green" ng-click="addToBetslip()" data-dictionary-id="13410">
+                Kiegészítés            </button>
+            <a class="btn btn-outline" ng-click="closeThisDialog()" data-dictionary-id="13411">
+                Mégsem            </a>
+        </div>
+    </div>
+</script>
+	
+	<!-- Google Tag Manager (noscript) -->
+	<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5TWR34F" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	<!-- End Google Tag Manager (noscript) -->
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+window.jQuery || document.write("\x3Cscript\x20type\x3D\x22text\x2Fjavascript\x22\x20src\x3D\x22\x2Fassets\x2F6792e2b7\x2F114d1261\x2Fjs\x2Fjquery.min.js\x22\x3E\x3C\x2Fscript\x3E\x0A");
+/*]]>*/
+</script>
+<script type="text/javascript" src="/assets/f2a438f6/114d1261/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+window.angular || document.write("\x3Cscript\x20type\x3D\x22text\x2Fjavascript\x22\x20src\x3D\x22\x2Fassets\x2F180081d5\x2F114d1261\x2Fjs\x2Fangular.min.js\x22\x3E\x3C\x2Fscript\x3E\x0A");
+/*]]>*/
+</script>
+<script type="text/javascript" src="/assets/8fd758e1/1aad6a47/tippmix-common-vendors.js"></script>
+<script type="text/javascript" src="/assets/8fd758e1/1aad6a47/tippmix-common-depends.js"></script>
+<script type="text/javascript" src="/assets/1bb17141/7070616d/js/tippmix-common.js"></script>
+<script type="text/javascript" src="/assets/8fd758e1/1aad6a47/tippmix-desktop-vendors.js"></script>
+<script type="text/javascript" src="/assets/8fd758e1/1aad6a47/tippmix-desktop-depends.js"></script>
+<script type="text/javascript" src="/assets/7aa3d7d2/524d6423/js/tippmix-desktop.js"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+
+			window.CookieConsentModal.init({
+				theme: 'tm',
+				dictionary: {
+					id: 'dictionary-id',
+					entries: {
+						title: {
+							id: '10410',
+							value: 'A tippmix.hu oldalon sütiket (cookie-kat) használunk.'
+						},
+						description: {
+							id: '10411',
+							value: 'Ezeket a sütiket a weboldalunk megfelelő működéséhez, használatának megkönnyítéséhez, valamint ajánlataink személyre szabásához és a weboldalforgalmunk elemzéséhez alkalmazunk. Az oldal használatához feltétlenül szükséges (alapműködést biztosító) sütiken kívül amennyiben szeretnéd, az analitikai és a marketing jellegű sütik használatát személyre szabottan beállíthatod az alábbi jelölőnégyzet/ek bepipálásával, vagy az összes (valamennyi sütifajta) engedélyezésével. A weboldalainkon használt sütik működéséről és annak körülményeiről részletes információkat'
+						},
+						link: {
+							id: '10412',
+							value: '<strong>erre a tájékoztató linkre kattintva találsz!</strong>'
+						},
+						subtitle: {
+							id: '10413',
+							value: 'Beállítások módosítása'
+						},
+						'checkbox-one-title': {
+							id: '10414',
+							value: 'Alapműködést biztosító, úgynevezett szükséges sütik'
+						},
+						'checkbox-one-description': {
+							id: '10415',
+							value: 'A weboldalunk hibátlan műszaki működését szolgálják ki, amelyek elengedhetetlenek ahhoz, hogy például összeállíthasd szelvényedet, vagy részt vegyél az éppen aktuális nyereményjátékunkban/akciónkban. A weboldal használatával ezek a sütik automatikusan települnek eszközödre, aminek jogalapja a Szerencsejáték Zrt. jogos érdeke, így ezekhez nem szükséges hozzájárulásodat megadni. '
+						},
+						'checkbox-one-tooltip': {
+							id: '10416',
+							value: 'Ez a beállítás nem módosítható, a weboldal használatához szükséges sütik miatt.'
+						},
+						'checkbox-two-title': {
+							id: '10417',
+							value: 'Analitikai/statisztikai sütik'
+						},
+						'checkbox-two-description': {
+							id: '10418',
+							value: 'Ezek a sütik segítenek nekünk, hogy elemezhessük a weboldalon tett látogatásaidat, ezen látogatások során végzett tevékenységeidet, annak érdekében, hogy további fejlesztésekkel növelhessük a játékélményedet. Az analitika/statisztikai sütik elfogadása nem kötelező, önkéntesen járulhatsz hozzá az eszközödön való telepítésükhöz.'
+						},
+						'checkbox-three-title': {
+							id: '10419',
+							value: 'Marketing sütik'
+						},
+						'checkbox-three-description': {
+							id: '10420',
+							value: 'Abban segédkeznek, hogy érdeklődési körödnek, egyéni preferenciádnak megfelelő, személyre szabott szolgáltatásainkat és ajánlatainkat a weboldalon és a weboldalon kívül, - mint például social média felületeiden is, amennyiben azokba bejelentkezve használod a weboldalt - megoszthassuk veled. A marketing sütik elfogadása nem kötelező, önkéntesen járulhatsz hozzá az eszközödön való telepítésükhöz. Amennyiben később úgy gondolod, hogy mégsem szeretnéd elfogadni az analitikai/statisztikai és/vagy a marketing sütiket, úgy beállításaidat bármikor módosíthatod. '
+						},
+						'btn-settings': {
+							id: '10421',
+							value: 'Beállítások'
+						},
+						'btn-accept-selected': {
+							id: '10422',
+							value: 'Kijelöltek engedélyezése'
+						},
+						'btn-accept-all': {
+							id: '10423',
+							value: 'Összes engedélyezése'
+						}
+					}
+				},
+				inject: {
+					vwo: {
+						accountId: 365418,
+						settingsTolerance: 2000,
+						libraryTolerance: 2500,
+						useExistingJquery: false,
+						isSpa: 0,
+						hideElement: ''
+					}
+				}
+			});
+		
+/*]]>*/
+</script>
+</body>
+<!-- Version:25.80.0+build16
+ --></html>

@@ -1,0 +1,19 @@
+# Crossover Logic Fix Implementation Plan
+
+## Goal
+Prevent multiple alerts for the same breakout by ensuring alerts are only triggered on the specific candle that crosses the entry level (Fresh Breakout).
+
+## Proposed Changes
+### Core Logic ([app.py](file:///c:/Users/Tomi/.gemini/app.py))
+#### [MODIFY] [app.py](file:///c:/Users/Tomi/.gemini/app.py)
+- **[analyze_pair](file:///c:/Users/Tomi/.gemini/app.py#93-199) function**:
+    - Get `prev_close = data['Close'].iloc[-2]`.
+    - Update Alert Condition:
+        - **Long Alert**: `breakout_direction == "LONG"` AND `prev_close <= long_entry`.
+        - **Short Alert**: `breakout_direction == "SHORT"` AND `prev_close >= short_entry`.
+    - This ensures that if the price stays outside the box for hours, we don't keep alerting (because `prev_close` would also be outside).
+
+## Verification Plan
+### Manual Verification
+- Logic check: If price is 1.0500 (Entry 1.0400), and prev was 1.0450. Both > Entry. No Alert.
+- If price is 1.0500, prev was 1.0390. Cross! Alert.

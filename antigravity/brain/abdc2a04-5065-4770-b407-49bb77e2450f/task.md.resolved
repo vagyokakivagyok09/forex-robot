@@ -1,0 +1,7 @@
+# Task: Investigate Missing Signal
+
+- [/] Analyze codebase and signal logic <!-- id: 0 -->
+- [/] Check trade history for today's signals <!-- id: 1 -->
+- [/] Run debug script to analyze market data <!-- id: 2 -->
+- [ ] Determine root cause (Market condition vs Bug) <!-- id: 3 -->
+- [ ] Explain findings to user <!-- id: 

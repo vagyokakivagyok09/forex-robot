@@ -1,0 +1,10 @@
+# Strategy & One Bullet Tasks
+
+- [x] Configuration Updates <!-- id: 86 -->
+    - [x] Define `PAIRS_CONFIG` with strategies <!-- id: 87 -->
+- [x] Logic Updates <!-- id: 88 -->
+    - [x] Implement "One Bullet" State (`daily_signals`) <!-- id: 89 -->
+    - [x] Implement CLASSIC Strategy Logic <!-- id: 90 -->
+    - [x] Implement FADE Strategy Logic (Fakeouts) <!-- id: 91 -->
+- [x] UI/UX Updates <!-- id: 92 -->
+    - [x] Display "Locked" status for finished pairs <!-- id: 93 -->

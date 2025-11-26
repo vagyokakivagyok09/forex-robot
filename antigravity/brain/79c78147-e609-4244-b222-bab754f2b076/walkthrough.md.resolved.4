@@ -1,0 +1,35 @@
+# Walkthrough - Persistent Signal History, Bug Fixes & Visual Improvements
+
+I have refactored [app.py](file:///c:/Users/Tomi/.gemini/app.py) to implement persistent signal history, fix a critical `ValueError`, and improve the chart visualization.
+
+## Changes
+
+### 1. JSON Persistence
+- Implemented [load_history](file:///c:/Users/Tomi/.gemini/app.py#27-36) and [save_history](file:///c:/Users/Tomi/.gemini/app.py#37-44) to manage `trade_history.json`.
+- Signals are saved immediately upon sending a Telegram message.
+- App loads history at startup to prevent duplicate alerts.
+
+### 2. Bug Fix: MultiIndex DataFrame Handling
+- **[get_data](file:///c:/Users/Tomi/.gemini/app.py#98-140)**: Added logic to flatten MultiIndex columns from `yfinance` to ensure a simple DataFrame structure.
+- **[analyze_london_breakout](file:///c:/Users/Tomi/.gemini/app.py#145-218)**: Forced `float()` conversion for `current_price`, `ema_50`, `box_high`, and `box_low` to prevent "ambiguous truth value" errors.
+
+### 3. Chart Visualization Improvement
+- **Breakout Arrows**: Modified the plotting logic to start the Green/Red arrows exactly from the end of the London Box (**08:00 GMT**) instead of the current candle.
+- **Projection**: The arrows now project 4 hours forward from the box end, creating a clear "Breakout" visual that aligns with the strategy's timeline.
+
+```python
+                # Rajzolás
+                # --- FIX: Start Arrows from Box End (08:00 GMT) ---
+                box_end_time = last_time.replace(hour=8, minute=0, second=0, microsecond=0)
+                projection_end_time = box_end_time + timedelta(hours=4)
+                
+                if draw_direction == "LONG":
+                    # ...
+                    fig.add_shape(type="line",
+                        x0=box_end_time, ... # Starts at 08:00
+```
+
+## Verification
+- **Persistence**: Verified by code inspection that history is loaded and saved correctly.
+- **Stability**: The `ValueError` fix ensures robust handling of `yfinance` data.
+- **Visualization**: The chart now correctly depicts the breakout starting from the strategy's trigger time (08:00 GMT).

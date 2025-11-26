@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kvíz Mester</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <main class="app-container">
+        <!-- Start Screen -->
+        <section id="start-screen" class="screen active">
+            <div class="content-wrapper">
+                <h1 class="title">Kvíz <span class="highlight">Mester</span></h1>
+                <p class="subtitle">Teszteld a tudásod ebben a gyors kvízben!</p>
+                <button id="start-btn" class="btn primary-btn">Kvíz Indítása</button>
+            </div>
+        </section>
+
+        <!-- Question Screen -->
+        <section id="quiz-screen" class="screen hidden">
+            <div class="quiz-header">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="stats">
+                    <span id="question-counter">1 / 5</span>
+                    <span id="score-display">Pontszám: 0</span>
+                </div>
+            </div>
+            
+            <div class="question-container">
+                <h2 id="question-text">Kérdés helye...</h2>
+            </div>
+
+            <div class="options-container" id="options-container">
+                <!-- Options will be generated here -->
+            </div>
+        </section>
+
+        <!-- Result Screen -->
+        <section id="result-screen" class="screen hidden">
+            <div class="content-wrapper">
+                <h2 class="result-title">Eredmény</h2>
+                <div class="score-circle">
+                    <span id="final-score">0</span>
+                    <span class="total">/ 5</span>
+                </div>
+                <p id="result-message" class="result-message">Szép munka!</p>
+                <button id="restart-btn" class="btn secondary-btn">Újra</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

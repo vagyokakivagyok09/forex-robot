@@ -1,0 +1,47 @@
+# Walkthrough - Persistent Signal History & Bug Fixes
+
+I have refactored [app.py](file:///c:/Users/Tomi/.gemini/app.py) to implement a "Long-term Memory" using a JSON file (`trade_history.json`) and fixed a critical `ValueError` related to `yfinance` data structures.
+
+## Changes
+
+### 1. JSON Persistence Helper Functions
+Added [load_history](file:///c:/Users/Tomi/.gemini/app.py#27-36) and [save_history](file:///c:/Users/Tomi/.gemini/app.py#37-44) to manage the JSON file.
+
+```python
+HISTORY_FILE = "trade_history.json"
+
+def load_history():
+    # ... loads from json file ...
+
+def save_history(history):
+    # ... saves to json file ...
+```
+
+### 2. Initialization from File
+Instead of initializing an empty dictionary in `st.session_state`, the app now loads the history from the file at the start of [main()](file:///c:/Users/Tomi/.gemini/app.py#221-470).
+
+```python
+    # Memória inicializálása (Fájlból)
+    daily_signals = load_history()
+```
+
+### 3. Saving Signals
+When a Telegram message is sent, the signal is saved to the dictionary and immediately written to the JSON file.
+
+```python
+                if send_telegram(msg):
+                    # Siker esetén mentés a fájlba
+                    daily_signals[symbol] = {
+                        'date': today_str, 
+                        'direction': analysis['signal_type']
+                    }
+                    save_history(daily_signals)
+```
+
+### 4. Bug Fix: MultiIndex DataFrame Handling
+Fixed a `ValueError: The truth value of a Series is ambiguous` caused by `yfinance` returning MultiIndex DataFrames.
+- **[get_data](file:///c:/Users/Tomi/.gemini/app.py#98-140)**: Added logic to flatten MultiIndex columns and extract the 'Close' price correctly.
+- **[analyze_london_breakout](file:///c:/Users/Tomi/.gemini/app.py#145-218)**: Ensured that `current_price` and `ema_50` are treated as scalar floats, preventing Series comparisons.
+
+## Verification
+I have verified that the code implements the logic as described. The bot will now check `trade_history.json` to see if a signal was already sent for the day, preventing duplicate alerts even if the server is restarted. The `ValueError` should be resolved by the robust data handling.

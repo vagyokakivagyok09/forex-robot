@@ -1,0 +1,8 @@
+# Hardcoding Credentials Tasks
+
+- [ ] UI/UX Updates <!-- id: 73 -->
+    - [ ] Remove Token/ID Input Fields <!-- id: 74 -->
+    - [ ] Add "Telegram Connected" Status <!-- id: 75 -->
+- [ ] Logic Updates <!-- id: 76 -->
+    - [ ] Define Global Constants for Credentials <!-- id: 77 -->
+    - [ ] Update Functions to Use Constants <!-- id: 78 -->

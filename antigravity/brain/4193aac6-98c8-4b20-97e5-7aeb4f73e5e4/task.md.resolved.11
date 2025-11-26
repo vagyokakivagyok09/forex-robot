@@ -1,0 +1,27 @@
+# Task: Crypto/Forex Pattern Matching App
+
+- [x] Initialize project artifacts <!-- id: 0 -->
+    - [x] Create [task.md](file:///C:/Users/Tomi/.gemini/antigravity/brain/4193aac6-98c8-4b20-97e5-7aeb4f73e5e4/task.md) <!-- id: 1 -->
+    - [x] Create [implementation_plan.md](file:///C:/Users/Tomi/.gemini/antigravity/brain/4193aac6-98c8-4b20-97e5-7aeb4f73e5e4/implementation_plan.md) <!-- id: 2 -->
+- [x] Implement Application <!-- id: 3 -->
+    - [x] Create [app.py](file:///C:/Users/Tomi/.gemini/app.py) with Streamlit, yfinance, plotly, numpy <!-- id: 4 -->
+    - [x] Implement data downloading (BTC-USD default) <!-- id: 5 -->
+    - [x] Implement Pattern Matching Engine (Last 30 days vs History) <!-- id: 6 -->
+    - [x] Implement Visualization (Chart + Projection) <!-- id: 7 -->
+    - [x] Ensure UI is in Hungarian <!-- id: 8 -->
+- [/] Verification <!-- id: 9 -->
+    - [x] Verify file creation <!-- id: 10 -->
+    - [x] Provide run command to user <!-- id: 11 -->
+- [x] Modifications <!-- id: 12 -->
+    - [x] Change symbol input to dropdown <!-- id: 13 -->
+    - [x] Add timeframe selector and info text <!-- id: 14 -->
+    - [x] Modifications <!-- id: 12 -->
+    - [x] Change symbol input to dropdown <!-- id: 13 -->
+    - [x] Add timeframe selector and info text <!-- id: 14 -->
+    - [x] Add Confidence Index (Correlation count) <!-- id: 15 -->
+    - [x] Modifications <!-- id: 12 -->
+    - [x] Change symbol input to dropdown <!-- id: 13 -->
+    - [x] Add timeframe selector and info text <!-- id: 14 -->
+    - [x] Add Confidence Index (Correlation count) <!-- id: 15 -->
+    - [x] Refactor Chart: Ghost Cloud (Top 5 matches + Average) <!-- id: 16 -->
+    - [ ] Refine Chart: Zoom, X-Axis format, Seamless connection <!-- id: 17 -->

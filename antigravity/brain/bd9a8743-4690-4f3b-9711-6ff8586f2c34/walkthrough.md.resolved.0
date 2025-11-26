@@ -1,0 +1,115 @@
+# Mechanika Bajnokság - GitHub Pages Telepítés
+
+## Áttekintés
+
+Sikeresen átmásoltuk a **Mechanika Bajnokság** kvíz alkalmazást a tiiny.site-ról GitHub Pages számára. Az alkalmazás egy interaktív oktatási kvíz, amely 4 küldetésen keresztül tanítja a mechanika és kölcsönhatások alapjait.
+
+## 🎯 Mit készítettünk
+
+### 1. Forráskód letöltése
+- Letöltöttük a teljes HTML forráskódot az `https://osszefoglalas.tiiny.site` címről
+- Az alkalmazás egy egyetlen HTML fájlból áll, amely tartalmazza:
+  - Inline CSS stílusokat (modern design gradientekkel és animációkkal)
+  - Inline JavaScript logikát (kvíz funkciók, drag-and-drop párosítás, stb.)
+  - 4 különböző típusú feladatot (Igaz/Hamis, Kvíz, Párosítás, Kiegészítés)
+
+### 2. Kód tisztítása
+- **Eltávolítottuk** a tiiny.site analytics és hirdetési script-eket:
+  - `analytics.tiiny.site/js/plausible.js`
+  - `tiiny.host/ad-script.js`
+- Így a kód tiszta és készen áll GitHub Pages-re
+
+### 3. Fájlstruktúra
+
+```
+C:\Users\Tomi\Kölcsönhatások összefoglalás\
+├── index.html          # Főoldal (23.8 KB)
+└── README.md          # Telepítési útmutató (2.2 KB)
+```
+
+## 📋 Alkalmazás tartalma
+
+A kvíz **4 küldetést** tartalmaz, összesen **34 ponttal**:
+
+| Küldetés | Típus | Pontszám | Leírás |
+|----------|-------|----------|--------|
+| ✅ 1. Igaz/Hamis | True/False | 10 pont | Alapvető mechanikai állítások ellenőrzése |
+| ❓ 2. Kvíz | Multiple Choice | 10 pont | Feleletválasztós kérdések energia, gravitáció témákban |
+| 🔗 3. Párosítás | Drag & Drop | 6 pont | Fogalmak és definíciók párosítása húzással |
+| 📝 4. Kiegészítés | Fill-in-the-blank | 8 pont | Mondatok kiegészítése legördülő menükből |
+
+## ✅ Tesztelés
+
+Az [index.html](file:///C:/Users/Tomi/K%C3%B6lcs%C3%B6nhat%C3%A1sok%20%C3%B6sszefoglal%C3%A1s/index.html) fájlt megnyitottuk a böngészőben, és az alkalmazás tökéletesen működik:
+- ✅ Modern, reszponzív design
+- ✅ Animációk és átmenetek működnek
+- ✅ Drag-and-drop funkció aktív
+- ✅ Pontszámítás helyes
+- ✅ Minden feladat típus működik
+
+![osszefoglalas_page_1764056523689.png](C:/Users/Tomi/.gemini/antigravity/brain/bd9a8743-4690-4f3b-9711-6ff8586f2c34/osszefoglalas_page_1764056523689.png)
+
+## 🚀 Következő lépések - GitHub Pages Telepítés
+
+A [README.md](file:///C:/Users/Tomi/K%C3%B6lcs%C3%B6nhat%C3%A1sok%20%C3%B6sszefoglal%C3%A1s/README.md) fájlban részletes útmutatót készítettünk a GitHub Pages telepítéshez. Íme a lépések:
+
+### 1. GitHub Repository létrehozása
+1. Menj a GitHub-ra és jelentkezz be
+2. Kattints **+ → New repository**
+3. Nevezd el (pl. `mechanika-bajnoksag`)
+4. Állítsd **Public**-ra
+5. Kattints **Create repository**
+
+### 2. Fájlok feltöltése
+
+**Opció A - Böngészőben:**
+1. **Add file → Upload files**
+2. Húzd be az [index.html](file:///C:/Users/Tomi/K%C3%B6lcs%C3%B6nhat%C3%A1sok%20%C3%B6sszefoglal%C3%A1s/index.html) és [README.md](file:///C:/Users/Tomi/K%C3%B6lcs%C3%B6nhat%C3%A1sok%20%C3%B6sszefoglal%C3%A1s/README.md) fájlokat
+3. **Commit changes**
+
+**Opció B - Git parancssorral:**
+```bash
+cd "C:\Users\Tomi\Kölcsönhatások összefoglalás"
+git init
+git add index.html README.md
+git commit -m "Initial commit - Mechanika Bajnokság quiz"
+git branch -M main
+git remote add origin https://github.com/FELHASZNALONEV/mechanika-bajnoksag.git
+git push -u origin main
+```
+
+### 3. GitHub Pages aktiválása
+1. Repository **Settings** → **Pages**
+2. **Source:** Deploy from a branch
+3. **Branch:** main / (root)
+4. **Save**
+
+### 4. Élő oldal
+Néhány perc múlva az oldal elérhető lesz:
+```
+https://FELHASZNALONEV.github.io/mechanika-bajnoksag/
+```
+
+## 🛠️ Technológiai részletek
+
+### Design jellemzők:
+- **Színséma:** Modern színpaletta (narancs primary, zöld secondary, kék accent)
+- **Betűtípus:** Google Fonts - Poppins (400, 600, 700)
+- **Animációk:** Smooth fade-in effektek, hover átmenetek, scale effektek
+- **Layout:** Flexbox és Grid alapú, teljesen reszponzív
+
+### Funkciók:
+- **State management:** JavaScript objektummal (pontszámok, befejezett feladatok)
+- **Dynamic rendering:** Minden feladat típus dinamikusan renderelődik
+- **Drag & Drop API:** Natív HTML5 drag-and-drop a párosításhoz
+- **Local storage:** Jelenleg nincs perzisztencia (könnyen hozzáadható)
+
+## 📁 Fájlok
+
+- [index.html](file:///C:/Users/Tomi/Kölcsönhatások%20összefoglalás/index.html) - Az alkalmazás fő fájlja
+- [README.md](file:///C:/Users/Tomi/Kölcsönhatások%20összefoglalás/README.md) - Telepítési útmutató
+
+---
+
+**Státusz:** ✅ Kész GitHub Pages telepítésre  
+**Következő lépés:** Repository létrehozása és fájlok feltöltése GitHub-ra

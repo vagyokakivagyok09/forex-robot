@@ -1,0 +1,15 @@
+# Task List: Tippmix Integration
+
+- [ ] Research `tippmix.hu` for data access <!-- id: 0 -->
+    - [ ] Inspect network traffic for API endpoints <!-- id: 1 -->
+    - [ ] Check for Table Tennis specific data structure <!-- id: 2 -->
+- [ ] Design Data Integration <!-- id: 3 -->
+    - [ ] Create Implementation Plan <!-- id: 4 -->
+    - [ ] Solve CORS issue (Proxy or Backend?) <!-- id: 5 -->
+- [ ] Implement Data Fetching <!-- id: 6 -->
+    - [ ] Update [js/data_fetcher.js](file:///c:/Users/Tomi/PR%C3%B3ba/js/data_fetcher.js) <!-- id: 7 -->
+    - [ ] Map Tippmix data to internal model <!-- id: 8 -->
+- [ ] Update UI <!-- id: 9 -->
+    - [ ] Display Live Odds <!-- id: 10 -->
+    - [ ] Match Tippmix events with Analysis <!-- id: 11 -->
+- [ ] Verify Integration <!-- id: 12 -->

@@ -1,0 +1,14 @@
+# Task: Crypto/Forex Pattern Matching App
+
+- [ ] Initialize project artifacts <!-- id: 0 -->
+    - [ ] Create `task.md` <!-- id: 1 -->
+    - [ ] Create `implementation_plan.md` <!-- id: 2 -->
+- [ ] Implement Application <!-- id: 3 -->
+    - [ ] Create `app.py` with Streamlit, yfinance, plotly, numpy <!-- id: 4 -->
+    - [ ] Implement data downloading (BTC-USD default) <!-- id: 5 -->
+    - [ ] Implement Pattern Matching Engine (Last 30 days vs History) <!-- id: 6 -->
+    - [ ] Implement Visualization (Chart + Projection) <!-- id: 7 -->
+    - [ ] Ensure UI is in Hungarian <!-- id: 8 -->
+- [ ] Verification <!-- id: 9 -->
+    - [ ] Verify file creation <!-- id: 10 -->
+    - [ ] Provide run command to user <!-- id: 11 -->

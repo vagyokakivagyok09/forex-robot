@@ -229,9 +229,18 @@ def main():
     st.caption("3 Eszköz Szimultán Figyelése (07:00-08:00 GMT + EMA 50)")
     
     # Session State inicializálása (Védi az automatikus frissítést)
-    # Alapból mindig auto_refresh módban vagyunk - NEM küld új jelzéseket napközben
     if 'auto_refresh_mode' not in st.session_state:
         st.session_state.auto_refresh_mode = True
+        
+    # --- TRADING MODE KAPCSOLÓ ---
+    # Ez engedélyezi a jelzések küldését. Alapból kikapcsolva a biztonságért.
+    trading_mode = st.sidebar.checkbox("Trading Mode (Jelzések küldése)", value=False, help="Pipáld be, ha szeretnéd, hogy a rendszer Telegram üzeneteket küldjön!")
+    
+    if trading_mode:
+        st.sidebar.success("✅ JELZÉSEK AKTÍVAK")
+    else:
+        st.sidebar.warning("⚠️ JELZÉSEK KIKAPCSOLVA")
+
     
     # Automatikus frissítés időzítő megjelenítése
     placeholder = st.empty()
@@ -695,8 +704,8 @@ def main():
                 st.info(f"🔒 **MAI JELZÉS ELKÜLDVE:** {locked_direction}. A terv a grafikonon látható (One Bullet Rule).")
                 
             # Ha még nem volt jelzés, de most van TRIGGER és friss az adat
-            # ÉS nem vagyunk automatikus frissítési módban
-            elif analysis and analysis["signal_type"] and is_data_fresh and not st.session_state.auto_refresh_mode:
+            # ÉS be van kapcsolva a Trading Mode
+            elif analysis and analysis["signal_type"] and is_data_fresh and trading_mode:
                 
                 # --- DUPLA ELLENŐRZÉS (Race Condition ellen) ---
                 # Frissítjük a memóriát a fájlból, hátha egy másik tab már elküldte

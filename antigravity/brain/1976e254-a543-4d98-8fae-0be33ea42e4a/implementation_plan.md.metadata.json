@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
+  "summary": "I will add a \"Trading Plan Analysis\" section to `app.py` below the chart.\nThis includes:\n1.  Calculating trading metrics: Trend Direction, Entry, Target, Stop Loss, and Success Probability.\n2.  Displaying these metrics in a 3-column layout using Streamlit metrics.\n3.  Styling the metrics with Green/Red indicators based on the trend direction.",
+  "updatedAt": "2025-11-23T12:35:06.282522300Z"
+}

@@ -1,0 +1,24 @@
+# Daytrade Probability Engine Implementation Plan
+
+## Goal
+Transform the app into a probability-based daytrading tool using historical pattern matching.
+
+## Proposed Changes
+### Core Logic ([app.py](file:///c:/Users/Tomi/.gemini/app.py))
+#### [MODIFY] [app.py](file:///c:/Users/Tomi/.gemini/app.py)
+- **[find_top_patterns](file:///c:/Users/Tomi/.gemini/app.py#77-137)**: Update default `top_n` to 10.
+- **[main](file:///c:/Users/Tomi/.gemini/app.py#138-441)**:
+    - Calculate Bullish/Bearish probabilities based on the 10 matches.
+    - Calculate `Avg High` and `Avg Low` from the projection paths.
+    - **Chart**: Add horizontal dashed lines for Avg High (Green) and Avg Low (Red).
+    - **UI**: Redesign the metrics section into 3 columns:
+        1.  **Probability**: Bullish vs Bearish %.
+        2.  **Levels**: Target High/Low prices.
+        3.  **Decision**: Logic-based suggestion (Strong/Uncertain).
+
+## Verification Plan
+### Manual Verification
+- Run the app and check if 10 matches are used (ghost cloud density).
+- Verify the calculation of probabilities (do they sum to ~100%?).
+- Check if the Green/Red dashed lines appear on the chart and look reasonable.
+- Verify the Decision logic matches the probability displayed.

@@ -1,0 +1,7 @@
+# Automatic Alerts Tasks
+
+- [x] UI/UX Updates <!-- id: 68 -->
+    - [x] Remove "Enable Alerts" Checkbox <!-- id: 69 -->
+    - [x] Add "System Armed" Indicator <!-- id: 70 -->
+- [x] Logic Updates <!-- id: 71 -->
+    - [x] Enable Alerts Automatically if Credentials Exist <!-- id: 72 -->

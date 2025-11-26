@@ -1,0 +1,299 @@
+�L<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adaptív Tanulási Platform - Személyre Szabott Oktatás AI-val</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/design-system.css">
+  <link rel="stylesheet" href="css/components.css">
+  
+  <style>
+    /* Page-specific styles */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--space-2xl) var(--space-lg);
+      background: linear-gradient(135deg, 
+        hsl(250, 75%, 60%) 0%, 
+        hsl(280, 70%, 50%) 50%,
+        hsl(15, 85%, 65%) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>');
+      animation: float 20s linear infinite;
+    }
+    
+    @keyframes float {
+      from { transform: translateY(0); }
+      to { transform: translateY(-100px); }
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+    
+    .hero h1 {
+      font-size: var(--font-size-4xl);
+      color: white;
+      margin-bottom: var(--space-lg);
+      text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    .hero p {
+      font-size: var(--font-size-xl);
+      color: rgba(255,255,255,0.95);
+      margin-bottom: var(--space-2xl);
+      line-height: var(--line-height-relaxed);
+    }
+    
+    .subject-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-lg);
+      margin: var(--space-2xl) auto;
+      max-width: 900px;
+    }
+    
+    .subject-card {
+      background: white;
+      border-radius: var(--radius-2xl);
+      padding: var(--space-2xl);
+      cursor: pointer;
+      transition: all var(--transition-base);
+      border: 3px solid transparent;
+    }
+    
+    [data-theme="dark"] .subject-card {
+      background: var(--color-neutral-800);
+    }
+    
+    .subject-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-2xl);
+      border-color: var(--color-primary);
+    }
+    
+    .subject-icon {
+      font-size: 4rem;
+      margin-bottom: var(--space-md);
+    }
+    
+    .subject-name {
+      font-family: var(--font-family-heading);
+      font-size: var(--font-size-2xl);
+      font-weight: var(--font-weight-bold);
+      margin-bottom: var(--space-sm);
+    }
+    
+    .subject-grade {
+      color: var(--color-neutral-500);
+      font-size: var(--font-size-sm);
+      margin-bottom: var(--space-md);
+    }
+    
+    .subject-desc {
+      color: var(--color-neutral-700);
+      line-height: var(--line-height-relaxed);
+    }
+    
+    [data-theme="dark"] .subject-desc {
+      color: var(--color-neutral-300);
+    }
+    
+    .api-setup {
+      background: var(--glass-bg);
+      backdrop-filter: blur(var(--glass-blur));
+      border-radius: var(--radius-xl);
+      padding: var(--space-xl);
+      margin: var(--space-2xl) auto;
+      max-width: 600px;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    .theme-toggle {
+      position: fixed;
+      top: var(--space-lg);
+      right: var(--space-lg);
+      z-index: var(--z-sticky);
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Theme Toggle -->
+  <button class="btn btn-ghost theme-toggle" id="themeToggle" aria-label="Témaváltás">
+    <span id="themeIcon">🌙</span>
+  </button>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-content animate-fade-in">
+      <h1>🚀 Adaptív Tanulási Platform</h1>
+      <p>
+        Személyre szabott oktatás mesterséges intelligenciával. 
+        Minden diák a saját tempójában, a saját útvonalán tanulhat.
+      </p>
+      
+      <!-- API Setup (if not configured) -->
+      <div id="apiSetup" class="api-setup">
+        <h3>⚙️ Első lépés: API Kulcs beállítása</h3>
+        <p style="margin-bottom: var(--space-lg); font-size: var(--font-size-sm);">
+          A platform működéséhez szükséges egy ingyenes Google Gemini API kulcs. 
+          <a href="https://aistudio.google.com/apikey" target="_blank" style="color: var(--color-primary); text-decoration: underline;">
+            Szerezz egyet itt →
+          </a>
+        </p>
+        
+        <div class="input-group">
+          <label class="input-label" for="apiKeyInput">Gemini API Kulcs</label>
+          <input 
+            type="password" 
+            id="apiKeyInput" 
+            class="input" 
+            placeholder="AIza..." 
+            autocomplete="off"
+          >
+        </div>
+        
+        <button class="btn btn-primary btn-lg" id="saveApiKey">
+          Kulcs mentése és folytatás
+        </button>
+        
+        <p style="margin-top: var(--space-md); font-size: var(--font-size-xs); color: var(--color-neutral-500);">
+          🔒 Az API kulcs csak a böngésződben tárolódik, nem küldjük el sehová.
+        </p>
+      </div>
+      
+      <!-- Subject Selection (shown after API setup) -->
+      <div id="subjectSelection" class="hidden">
+        <h2 style="color: white; margin-bottom: var(--space-xl);">Válassz tantárgyat:</h2>
+        
+        <div class="subject-selector">
+          <!-- Science Card -->
+          <div class="subject-card" data-subject="science">
+            <div class="subject-icon">🔬</div>
+            <div class="subject-name">Természettudomány</div>
+            <div class="subject-grade">5-6. évfolyam</div>
+            <p class="subject-desc">
+              Fedezd fel az anyagok világát, a halmazállapotokat és a természeti folyamatokat 
+              interaktív szimulációkkal és AI támogatással.
+            </p>
+          </div>
+          
+          <!-- Geography Card -->
+          <div class="subject-card" data-subject="geography">
+            <div class="subject-icon">🌍</div>
+            <div class="subject-name">Földrajz</div>
+            <div class="subject-grade">7-8. évfolyam</div>
+            <p class="subject-desc">
+              Ismerd meg a demográfiai folyamatokat, korfákat és gazdasági összefüggéseket 
+              valós adatok alapján, játékos szimulációkkal.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/gemini-agent.js"></script>
+  <script src="js/knowledge-tracing.js"></script>
+  <script src="js/adaptive-engine.js"></script>
+  <script src="subjects/science/knowledge-graph.js"></script>
+  
+  <script>
+    // === Main Application Logic ===
+    
+    // Check if API key exists
+    function checkApiKey() {
+      const apiKey = localStorage.getItem(CONFIG.STORAGE.API_KEY);
+      if (apiKey) {
+        document.getElementById('apiSetup').classList.add('hidden');
+        document.getElementById('subjectSelection').classList.remove('hidden');
+        return apiKey;
+      }
+      return null;
+    }
+    
+    // Save API key
+    document.getElementById('saveApiKey').addEventListener('click', () => {
+      const apiKey = document.getElementById('apiKeyInput').value.trim();
+      
+      if (!apiKey) {
+        alert('Kérlek add meg az API kulcsot!');
+        return;
+      }
+      
+      if (!apiKey.startsWith('AIza')) {
+        alert('Az API kulcs formátuma nem megfelelő. Biztos, hogy jó kulcsot adtál meg?');
+        return;
+      }
+      
+      // Save to localStorage
+      localStorage.setItem(CONFIG.STORAGE.API_KEY, apiKey);
+      
+      // Show success and transition
+      document.getElementById('apiSetup').classList.add('hidden');
+      document.getElementById('subjectSelection').classList.remove('hidden');
+    });
+    
+    // Subject selection
+    document.querySelectorAll('.subject-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const subject = card.dataset.subject;
+        
+        // Save selection
+        localStorage.setItem('selected_subject', subject);
+        
+        // Redirect to learning page
+        window.location.href = `pages/learning-session.html?subject=${subject}`;
+      });
+    });
+    
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const html = document.documentElement;
+    
+    // Load saved theme
+    const savedTheme = localStorage.getItem(CONFIG.STORAGE.THEME) || 'light';
+    html.setAttribute('data-theme', savedTheme);
+    themeIcon.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+      localStorage.setItem(CONFIG.STORAGE.THEME, newTheme);
+    });
+    
+    // Initialize
+    checkApiKey();
+  </script>
+</body>
+</html>
+�L*cascade082kfile:///C:/Users/Tomi/Term%C3%A9szettudom%C3%A1ny,f%C3%B6ldrajz%20%C3%B6n%C3%A1ll%C3%B3%20modell/index.html

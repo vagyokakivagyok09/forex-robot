@@ -1,0 +1,28 @@
+# Tűz Mestereinek Titkos Laboratóriuma - Szabadulószoba Webapp
+
+## Tervezés
+- [ ] Projektstruktúra megtervezése
+- [ ] Implementációs terv készítése
+- [ ] Felhasználói élmény (UX) kialakítása
+
+## Megvalósítás
+- [ ] HTML struktúra létrehozása
+- [ ] CSS design system (5. osztályosoknak megfelelő, izgalmas, de nem ijesztő)
+- [ ] JavaScript logika megírása
+  - [ ] Állomás 1: A Tűz Háromszöge
+  - [ ] Állomás 2: A Hőmérő Rejtélye
+  - [ ] Állomás 3: A Vészhelyzet Szimulátor
+  - [ ] Állomás 4: A Biztonsági Széf
+  - [ ] Végső kód validálás
+- [ ] Képek generálása (laboratórium, Dr. Láng, stb.)
+
+## GitHub és Deployment
+- [ ] GitHub repository létrehozása
+- [ ] Kód feltöltése
+- [ ] GitHub Pages beállítása
+- [ ] Megosztható link tesztelése
+
+## Ellenőrzés
+- [ ] Webapp tesztelése
+- [ ] Minden állomás helyes működésének ellenőrzése
+- [ ] Mobil kompatibilitás

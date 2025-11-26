@@ -1,0 +1,6 @@
+{
+  "artifactType": "ARTIFACT_TYPE_WALKTHROUGH",
+  "summary": "I fixed the Y-axis scaling to make the candles look larger and more visible.\nNow:\n-   **Smart Scaling**: The Y-axis range is calculated based on the *visible* data (last ~60 candles) and the projection.\n-   **Padding**: A 10% padding is added to the top and bottom to ensure nothing is cut off.\n-   **Fixed Range**: The calculated range is applied explicitly, preventing Plotly from zooming out too far.",
+  "updatedAt": "2025-11-23T13:11:43.773643300Z",
+  "version": "3"
+}

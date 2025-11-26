@@ -1,0 +1,7 @@
+6streamlit
+yfinance
+plotly
+pandas
+numpy
+requests
+ *cascade08*cascade08, *cascade08,6*cascade082.file:///c:/Users/Tomi/.gemini/requirements.txt

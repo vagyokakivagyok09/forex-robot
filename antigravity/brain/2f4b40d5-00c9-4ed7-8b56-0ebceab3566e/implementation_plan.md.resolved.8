@@ -1,0 +1,21 @@
+# Automatic Alerts Implementation Plan
+
+## Goal
+Streamline the alert system by removing the manual toggle and automatically enabling alerts when credentials are provided.
+
+## Proposed Changes
+### Core Logic ([app.py](file:///c:/Users/Tomi/.gemini/app.py))
+#### [MODIFY] [app.py](file:///c:/Users/Tomi/.gemini/app.py)
+- **Sidebar**:
+    - Remove `st.sidebar.checkbox("Automata küldés...")`.
+    - Check `if bot_token and chat_id:`
+        - Display `st.sidebar.success("🟢 Rendszer ÉLESÍTVE")`.
+- **Main Loop**:
+    - Pass `enable_alert=True` (or remove the parameter and rely on token/id check inside) to [analyze_pair](file:///c:/Users/Tomi/.gemini/app.py#85-193).
+    - Ensure [analyze_pair](file:///c:/Users/Tomi/.gemini/app.py#85-193) only sends if `bot_token` and `chat_id` are truthy.
+
+## Verification Plan
+### Manual Verification
+- Verify the checkbox is gone.
+- Verify "🟢 Rendszer ÉLESÍTVE" appears when default credentials are used.
+- Verify alerts are still sent (logic-wise).

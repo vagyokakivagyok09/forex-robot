@@ -1,0 +1,6 @@
+# Spam Alert Fix Tasks
+
+- [ ] Logic Updates <!-- id: 82 -->
+    - [ ] Initialize `alert_history` in Session State <!-- id: 83 -->
+    - [ ] Implement One-Alert-Per-Day Check <!-- id: 84 -->
+    - [ ] Persist Alert History across reruns <!-- id: 85 -->

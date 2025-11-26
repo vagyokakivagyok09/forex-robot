@@ -1,0 +1,22 @@
+# Hardcoding Credentials Implementation Plan
+
+## Goal
+Simplify the user experience by hardcoding the Telegram credentials, removing the need for manual input on every reload.
+
+## Proposed Changes
+### Core Logic ([app.py](file:///c:/Users/Tomi/.gemini/app.py))
+#### [MODIFY] [app.py](file:///c:/Users/Tomi/.gemini/app.py)
+- **Constants**:
+    - Add `TELEGRAM_BOT_TOKEN = "7487229026:AAH51YJ4atFsvqHKfQj9l_QU7ytJMIwo0w0"` (Using known working token for continuity, with comment).
+    - Add `TELEGRAM_CHAT_ID = "1736205722"`.
+- **Sidebar**:
+    - Remove `text_input` for token and chat_id.
+    - Add `st.sidebar.success(f"📡 Telegram Csatlakoztatva\nID: {TELEGRAM_CHAT_ID}")`.
+- **Functions**:
+    - Update [send_telegram](file:///c:/Users/Tomi/.gemini/app.py#32-46) and [analyze_pair](file:///c:/Users/Tomi/.gemini/app.py#85-191) to use the global constants instead of arguments.
+
+## Verification Plan
+### Manual Verification
+- Verify sidebar inputs are gone.
+- Verify "Telegram Csatlakoztatva" message appears.
+- Verify alerts still function (using the hardcoded credentials).

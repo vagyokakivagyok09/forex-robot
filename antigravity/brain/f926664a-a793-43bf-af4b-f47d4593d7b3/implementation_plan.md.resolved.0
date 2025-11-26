@@ -1,0 +1,28 @@
+# Tippmix.hu Integration Plan
+
+## Goal Description
+Integrate live match data and odds from `tippmix.hu` into the existing Table Tennis Analyzer app. This will allow users to see real-time odds alongside the statistical analysis.
+
+## User Review Required
+> [!IMPORTANT]
+> **CORS / Data Access**: Fetching data directly from `tippmix.hu` via a browser-based app (client-side) is likely blocked by CORS policies. We may need to use a CORS proxy (like `cors-anywhere`) or a simple local backend server. I will investigate the best approach.
+
+## Proposed Changes
+
+### Data Layer
+#### [MODIFY] [data_fetcher.js](file:///c:/Users/Tomi/PRóba/js/data_fetcher.js)
+- Add function to fetch data from Tippmix API (once identified).
+- Add parser to extract:
+    - Player Names
+    - Match Time
+    - Odds (Home/Away)
+
+### UI Layer
+#### [MODIFY] [ui.js](file:///c:/Users/Tomi/PRóba/js/ui.js)
+- Update dashboard to show a list of live/upcoming matches from Tippmix.
+- Add "Odds" column to the match display.
+
+## Verification Plan
+### Manual Verification
+- Check if matches load in the console/UI.
+- Verify odds match the website.

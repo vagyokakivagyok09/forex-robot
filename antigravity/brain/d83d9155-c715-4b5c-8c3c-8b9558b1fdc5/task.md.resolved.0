@@ -1,0 +1,17 @@
+# Task List - Czech Table Tennis Betting Analyzer
+
+- [ ] Project Initialization <!-- id: 0 -->
+    - [ ] Create/Update `task.md` <!-- id: 1 -->
+    - [ ] Create `implementation_plan.md` <!-- id: 2 -->
+    - [ ] Verify existing file structure <!-- id: 3 -->
+- [ ] Core Logic Implementation <!-- id: 4 -->
+    - [ ] Implement `calculators.js` with the specified algorithm (Rating, H2H, Daily Form) <!-- id: 5 -->
+    - [ ] Create mock data service in `data_fetcher.js` (since live scraping might be blocked/complex without backend) <!-- id: 6 -->
+- [ ] UI/UX Design & Implementation <!-- id: 7 -->
+    - [ ] Design modern, premium dashboard in [index.html](file:///c:/Users/Tomi/PR%C3%B3ba/index.html) <!-- id: 8 -->
+    - [ ] Implement styling in `style.css` (Dark mode, neon accents, glassmorphism) <!-- id: 9 -->
+    - [ ] Connect logic to UI in `app.js` <!-- id: 10 -->
+- [ ] Verification <!-- id: 11 -->
+    - [ ] Test algorithm with sample scenarios <!-- id: 12 -->
+    - [ ] Verify UI responsiveness and aesthetics <!-- id: 13 -->
+    - [ ] Create `walkthrough.md` <!-- id: 14 -->

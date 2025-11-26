@@ -1,0 +1,13 @@
+# London Daybreak Strategy Tasks
+
+- [x] Configuration Updates <!-- id: 94 -->
+    - [x] Update Asset List (Hougaard's Pairs) <!-- id: 95 -->
+- [x] Logic Updates <!-- id: 96 -->
+    - [x] Implement EMA 50 Calculation <!-- id: 97 -->
+    - [x] Define "Daybreak Range" (07:00-08:00 GMT) <!-- id: 98 -->
+    - [x] Implement Trend Filter (Price vs EMA 50) <!-- id: 99 -->
+    - [x] Implement Strict Entry Rules (Trend-aligned only) <!-- id: 100 -->
+- [x] UI/UX Updates <!-- id: 101 -->
+    - [x] Plot EMA 50 (Yellow Line) <!-- id: 102 -->
+    - [x] Visualize Daybreak Box (07:00-08:00) <!-- id: 103 -->
+    - [x] Update Telegram Message Format <!-- id: 104 -->

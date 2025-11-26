@@ -1,0 +1,182 @@
+# GitHub és Cloud Deployment - Implementációs Terv
+
+Feltöltés GitHubra és 24/7 cloud hosting beállítása a TTM Squeeze webapp számára.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **GitHub Account:** Szükséges egy GitHub account a repository létrehozásához. Ha még nincs, regisztrálj itt: [github.com/signup](https://github.com/signup)
+
+> [!IMPORTANT]
+> **Platform választás:** Három opció közül választhatsz:
+> 1. **Streamlit Cloud** - 100% ingyenes, csak dashboard (scheduler nem fut)
+> 2. **Railway** - Fizetős ($5/hó után), dashboard + scheduler 24/7
+> 3. **Render** - Ingyenes, de sleep mode van inaktivitás után
+
+> [!WARNING]
+> **Secrets biztonság:** A `.env` fájl NEM kerül fel GitHubra (`.gitignore` védi). A Telegram tokent a cloud platformon külön kell beállítani környezeti változóként.
+
+## Proposed Changes
+
+### Git és GitHub Setup
+
+#### [NEW] [.gitignore](file:///c:/Users/Tomi/FOREX/.gitignore)
+
+Git ignore fájl a biztonságos feltöltéshez:
+- `.env` kizárása (Telegram credentials)
+- `trade_history.json` kizárása (személyes adatok)
+- Python cache fájlok, logs kizárása
+- Virtual environment kizárása
+
+---
+
+#### [NEW] [LICENSE](file:///c:/Users/Tomi/FOREX/LICENSE)
+
+MIT License az open source terjesztéshez
+
+---
+
+#### [MODIFY] [README.md](file:///c:/Users/Tomi/FOREX/README.md)
+
+Professzionális GitHub README:
+- Badges (Python, Streamlit, License)
+- Features lista
+- Quick start útmutató
+- Screenshots section (placeholder)
+- Tech stack
+- Contributing guidelines
+- Disclaimer
+
+---
+
+### Deployment Konfiguráció
+
+#### [NEW] [DEPLOYMENT.md](file:///c:/Users/Tomi/FOREX/DEPLOYMENT.md)
+
+Részletes deployment útmutató:
+
+**Streamlit Cloud (AJÁNLOTT):**
+1. Git repository setup
+2. GitHub feltöltés
+3. Streamlit Cloud kapcsolat
+4. Secrets konfiguráció
+5. Deploy
+
+**Railway (Scheduler-rel):**
+1. GitHub setup
+2. Railway projekt létrehozás
+3. Environment variables
+4. Procfile konfiguráció
+5. Auto-deploy
+
+**Render (Alternatíva):**
+1. GitHub setup
+2. Render web service
+3. Build és start commands
+4. Environment variables
+
+---
+
+#### [NEW] [.streamlit/secrets.toml](file:///c:/Users/Tomi/FOREX/.streamlit/secrets.toml)
+
+Streamlit secrets template:
+- TELEGRAM_BOT_TOKEN placeholder
+- TELEGRAM_CHAT_ID placeholder
+
+Ez a file lokálisan marad, a cloud-on külön beállítod a secretset.
+
+---
+
+### Git Parancsok (Terminálban futtatandó)
+
+```bash
+# 1. Git inicializálás
+cd c:\Users\Tomi\FOREX
+git init
+
+# 2. Fájlok hozzáadása
+git add .
+
+# 3. Első commit
+git commit -m "Initial commit: TTM Squeeze Trading Dashboard"
+
+# 4. GitHub remote hozzáadása (cseréld USERNAME-et!)
+git remote add origin https://github.com/USERNAME/ttm-squeeze-trading.git
+
+# 5. Branch átnevezése
+git branch -M main
+
+# 6. Push GitHubra
+git push -u origin main
+```
+
+---
+
+## Verification Plan
+
+### GitHub Upload Teszt
+
+1. **Repository láthatóság:**
+   - Nyisd meg `https://github.com/USERNAME/ttm-squeeze-trading`
+   - Ellenőrizd, hogy minden fájl feltöltődött
+   - Ellenőrizd, hogy `.env` NINCS ott (gitignore működik)
+
+2. **README megjelenítés:**
+   - A GitHub automatikusan rendereli a README.md-t
+   - Badges láthatók
+   - Formázás rendben
+
+---
+
+### Streamlit Cloud Deployment Teszt
+
+1. **Deploy sikeresség:**
+   - Várj 2-3 percet a build-re
+   - Látogasd meg az app URL-t
+   - Dashboard betöltődik
+
+2. **Telegram működés:**
+   - Ellenőrizd a sidebar-ban a Telegram statust
+   - Teszteld a kapcsolatot (ha van test gomb)
+
+3. **Adatok betöltése:**
+   - Ellenőrizd, hogy a forex párok adatai betöltődnek
+   - Squeeze státusz frissül
+   - Chartok megjelennek
+
+---
+
+### Railway Deployment Teszt (ha ezt választod)
+
+1. **Dashboard működés:**
+   - App URL megnyitása
+   - Dashboard betöltés
+
+2. **Scheduler működés:**
+   - Railway logs ellenőrzése
+   - Scheduler futási logok láthatók
+   - Nincs error
+
+3. **Telegram alerts:**
+   - Várj egy signal-ra
+   - Telegram értesítés érkezik
+
+---
+
+## Next Steps After Deployment
+
+1. **Custom domain** (opcionális):
+   - Streamlit Cloud: Settings → Custom domain
+   - Railway: Settings → Domain
+
+2. **Monitoring setup:**
+   - Streamlit Cloud: Automatikus uptime monitoring
+   - Railway: Metrics dashboard
+
+3. **Updates:**
+   - Git push automatikusan újra-deployal
+   - `git push origin main`
+
+4. **Scaling** (ha szükséges):
+   - Streamlit Cloud: Ingyenes tier limitek
+   - Railway: Horizontal scaling opció

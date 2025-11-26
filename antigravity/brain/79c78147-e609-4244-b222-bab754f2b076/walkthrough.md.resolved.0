@@ -1,0 +1,40 @@
+# Walkthrough - Permanent Signal Visualization Refactor
+
+I have refactored [app.py](file:///c:/Users/Tomi/.gemini/app.py) to implement the "One Bullet" signal visualization as requested.
+
+## Changes
+
+### 1. Session State Structure
+Updated `st.session_state.daily_signals` to store the signal direction along with the date.
+
+```python
+st.session_state.daily_signals[ticker] = {
+    'date': today_str,
+    'direction': breakout_direction
+}
+```
+
+### 2. Alerting Logic
+When a valid breakout is detected and a Telegram message is sent, the specific direction ('LONG' or 'SHORT') is now saved into the session state.
+
+### 3. Chart Visualization Logic
+In [render_view](file:///c:/Users/Tomi/.gemini/app.py#203-317), the code now checks if a signal is locked for the current day.
+- **If Locked:** It forces the chart to draw the arrow/lines for the *saved* direction, ignoring the current EMA trend.
+- **If Not Locked:** It continues to use the live EMA trend logic.
+
+```python
+    visual_direction = None
+    if lock_info and lock_info.get('date') == datetime.now().strftime('%Y-%m-%d'):
+        visual_direction = lock_info.get('direction')
+        st.info(f"🔒 MAI JELZÉS RÖGZÍTVE: {visual_direction}. A grafikon a reggeli tervet mutatja.")
+    else:
+        visual_direction = "LONG" if trend == "BULLISH" else "SHORT"
+```
+
+### 4. UI Feedback
+- The chart is always rendered.
+- A specific `st.info` banner is displayed when a signal is locked:
+  `"🔒 MAI JELZÉS RÖGZÍTVE: {Direction}. A grafikon a reggeli tervet mutatja."`
+
+## Verification
+I have verified that the code implements the logic as described in the user request. The [analyze_pair](file:///c:/Users/Tomi/.gemini/app.py#81-202) function correctly returns the necessary data even when locked, allowing [render_view](file:///c:/Users/Tomi/.gemini/app.py#203-317) to visualize the saved signal.

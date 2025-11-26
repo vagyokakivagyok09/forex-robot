@@ -1,0 +1,5 @@
+{
+  "artifactType": "ARTIFACT_TYPE_WALKTHROUGH",
+  "summary": "Walkthrough of the completed TT.League Analyzer.\nDemonstrates:\n- The premium dashboard UI with dark mode and neon accents.\n- The \"Statistical Dominance\" algorithm in action (Rating, H2H, Flow).\n- How the \"Mumus\" and \"Flow\" indicators work.\n- The mock data generation for instant testing.",
+  "updatedAt": "2025-11-23T21:02:46.887877200Z"
+}

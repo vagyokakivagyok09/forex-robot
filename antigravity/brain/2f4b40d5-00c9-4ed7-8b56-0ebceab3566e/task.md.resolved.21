@@ -1,0 +1,5 @@
+# Crossover Logic Fix Tasks
+
+- [x] Logic Updates <!-- id: 79 -->
+    - [x] Implement "Fresh Breakout" Check (Crossover) <!-- id: 80 -->
+    - [x] Alert ONLY if Previous Candle was Inside Range <!-- id: 81 -->

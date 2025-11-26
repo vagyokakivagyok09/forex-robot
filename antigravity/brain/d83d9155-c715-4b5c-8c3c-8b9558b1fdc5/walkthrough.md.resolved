@@ -1,0 +1,42 @@
+# TT.League Analyzer - Walkthrough
+
+## Overview
+This application is a specialized decision support tool for Czech Table Tennis (Liga Pro) betting. It focuses on identifying "Statistical Dominance" using a custom algorithm that weighs **Rating**, **Head-to-Head (H2H)** history, and **Daily Form**.
+
+## Key Features
+
+### 1. Premium Dashboard
+The interface is designed for quick decision-making with a "Dark Mode" aesthetic, neon accents, and glassmorphism effects.
+
+- **Active Matches**: Shows currently simulated live matches.
+- **Strong Tips**: Automatically counts matches where one player has >70% calculated winning chance.
+
+### 2. The "Matek" Algorithm (Calculators.js)
+The core logic calculates a winning probability based on three factors:
+
+1.  **Rating Difference**: +1% for every 10 points advantage.
+2.  **H2H Dominance ("Mumus" Effect)**:
+    -   **+15%** if a player won ≥70% of the last 10 matches.
+    -   **-15%** if a player lost ≥70% (the opponent is their "Mumus").
+3.  **Daily Form ("Flow" State)**:
+    -   **+3%** per daily win.
+    -   **+5%** extra bonus for a perfect 3-0 streak ("Flow" state).
+
+### 3. Visual Indicators
+The dashboard uses badges to highlight critical trends:
+
+-   <span style="background: rgba(239, 68, 68, 0.2); color: #ef4444; padding: 2px 6px; border-radius: 4px; border: 1px solid #ef4444;">MUMUS ⚠️</span> : Indicates that one player historically dominates the other, even if ratings suggest otherwise.
+-   <span style="background: rgba(16, 185, 129, 0.2); color: #10b981; padding: 2px 6px; border-radius: 4px; border: 1px solid #10b981;">FLOW 🔥</span> : Indicates a player is currently on a hot streak (3+ wins today).
+
+## How to Use
+1.  Open [index.html](file:///c:/Users/Tomi/PR%C3%B3ba/index.html) in your browser.
+2.  The app automatically generates realistic mock data for Czech Liga Pro players.
+3.  Look for the **Green Neon Bars** indicating a high probability (>60-70%).
+4.  Click the **Refresh (↻)** button to generate a new set of matches and test different scenarios.
+
+## Files Implemented
+-   [index.html](file:///c:/Users/Tomi/PR%C3%B3ba/index.html): The main dashboard structure.
+-   [css/style.css](file:///c:/Users/Tomi/PR%C3%B3ba/css/style.css): Premium dark theme styling.
+-   [js/calculators.js](file:///c:/Users/Tomi/PR%C3%B3ba/js/calculators.js): The betting algorithm logic.
+-   [js/data_fetcher.js](file:///c:/Users/Tomi/PR%C3%B3ba/js/data_fetcher.js): Mock data generator for testing.
+-   [js/app.js](file:///c:/Users/Tomi/PR%C3%B3ba/js/app.js): Application controller.

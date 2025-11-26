@@ -1,0 +1,91 @@
+# London Breakout Pro Dashboard - Fejlesztési Összefoglaló
+
+## 🎯 Elvégzett Munkák
+
+### 1. LONG/SHORT Címkék Hozzáadása
+
+Módosítottam az `app.py` fájlt, hogy a Telegram üzenetek egyértelműbben jelezzék az irányokat:
+- **LONG** → **LONG/vétel**
+- **SHORT** → **SHORT/eladás**
+
+**Érintett helyek:**
+- Új jelzés üzenetek
+- TP hit (nyerő) üzenetek
+- SL hit (vesztő) üzenetek  
+- Napi zárás emlékeztetők
+- Nyitott pozíciók listázása (sidebar)
+
+### 2. Logo Hozzáadása a Dashboard-hoz
+
+Professzionális logo került a dashboard tetejére:
+- ✅ Logo tervezve (London Breakout téma, Big Ben, trading elemek)
+- ✅ Fehér háttérrel, letisztult megjelenés
+- ✅ Beillesztve az alkalmazásba, központosan a címsor fölé
+- ✅ Feltöltve GitHub-ra (`logo.png`)
+
+### 3. Git Telepítése és Konfiguráció
+
+**Telepítés:**
+```bash
+winget install --id Git.Git -e --source winget
+```
+
+**Eredmény:** Git 2.52.0 sikeresen telepítve ✅
+
+**Konfiguráció:**
+```bash
+git config user.name "vagyokakivagyok09"
+git config user.email "oroszt92@gmail.com"
+```
+
+### 4. GitHub Repository Összekapcsolás
+
+**Repository inicializálás:**
+```bash
+cd C:\Users\Tomi\.gemini
+git init
+git remote add origin https://github.com/vagyokakivagyok09/forex-robot.git
+```
+
+**Feltöltések:**
+
+1. **Első push** - LONG/vétel címkék:
+```bash
+git add app.py requirements.txt README.md
+git commit -m "feat: LONG/vétel és SHORT/eladás megjelenítés hozzáadva Telegram üzenetekhez"
+git push -u origin master --force
+```
+
+2. **Második push** - Logo hozzáadása:
+```bash
+git add logo.png app.py
+git commit -m "feat: London Breakout Pro logo hozzáadása a dashboard tetejére"
+git push
+```
+
+**Eredmény:** Mindkét push sikeres! ✅
+
+---
+
+## 🚀 Mi Történik Most?
+
+A **Streamlit Cloud automatikusan észleli** a GitHub változásokat és **1-3 percen belül újratelepíti** az alkalmazást az új verzióval.
+
+**Új funkciók:**
+- ✅ Logo megjelenik a dashboard tetején
+- ✅ Telegram üzenetek tartalmazzák a LONG/vétel és SHORT/eladás címkéket
+
+---
+
+## 📝 Jövőbeli Használat
+
+Amikor legközelebb módosítasz az `app.py`-ban:
+
+```bash
+cd C:\Users\Tomi\.gemini
+git add <fájlnév>
+git commit -m "leírás a változtatásról"
+git push
+```
+
+A Streamlit Cloud automatikusan frissíti az alkalmazást! 🎯

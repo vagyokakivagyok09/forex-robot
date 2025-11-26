@@ -1,0 +1,13 @@
+# GitHub Pages Setup Task
+
+## Objective
+Set up the Mechanika Bajnokság quiz website from tiiny.site to GitHub Pages
+
+## Tasks
+- [/] Download website source code from https://osszefoglalas.tiiny.site
+- [ ] Create index.html file in the workspace
+- [ ] Extract and organize any CSS/JS assets
+- [ ] Initialize Git repository (if needed)
+- [ ] Create README.md with setup instructions
+- [ ] Test the site locally
+- [ ] Provide instructions for GitHub Pages deployment

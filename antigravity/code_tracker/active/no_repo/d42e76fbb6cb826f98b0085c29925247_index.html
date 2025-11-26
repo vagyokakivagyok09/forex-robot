@@ -1,0 +1,438 @@
+î¶<!DOCTYPE html>
+<html lang="hu">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A T≈±z Mestereinek Titkos Laborat√≥riuma</title>
+    <meta name="description"
+        content="Interakt√≠v szabadul√≥szoba - Bizony√≠tsd be, hogy mindent tudsz az √©g√©sr≈ël √©s a t≈±zbiztons√°gr√≥l!">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Mono:wght@500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="progress-bar">
+        <div class="code-slots">
+            <div class="code-slot">?</div>
+            <div class="code-slot">?</div>
+            <div class="code-slot">?</div>
+            <div class="code-slot">?</div>
+            <div class="code-slot">?</div>
+        </div>
+    </div>
+
+    <!-- Bevezet≈ë k√©perny≈ë -->
+    <section id="intro-screen" class="screen active">
+        <div class="container">
+            <div class="lab-header">
+                <div class="flame-icon">üî•</div>
+                <h1>A T≈±z Mestereinek<br>Titkos Laborat√≥riuma</h1>
+            </div>
+            <div class="intro-content">
+                <div class="story-card">
+                    <h3>üß™ Dr. L√°ng √ºzenete:</h3>
+                    <p>√údv√∂z√∂llek a laborat√≥riumomban, ifj√∫ kutat√≥! V√©letlen√ºl bekapcsoltad a biztons√°gi rendszert, √©s
+                        az ajt√≥k lez√°rultak. A kijut√°shoz meg kell szerezned az 5 sz√°mjegy≈± titkos k√≥dot.</p>
+                    <p>Oldd meg a feladatokat az √°llom√°sokon, gy≈±jtsd √∂ssze a k√≥dr√©szleteket, √©s √≠rd be a v√©gs≈ë k√≥dot a
+                        kij√°ratn√°l!</p>
+                </div>
+                <button class="btn btn-primary" onclick="startGame()">Kezdj√ºk a Kalandot! üöÄ</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- F≈ëmen√º (Hub) -->
+    <section id="main-menu" class="screen">
+        <div class="container">
+            <div class="lab-header">
+                <h1>K√ºldet√©s K√∂zpont</h1>
+                <p>V√°lassz egy √°llom√°st a feladatok megold√°s√°hoz!</p>
+            </div>
+            <div class="mission-grid">
+                <div class="mission-card active" onclick="selectStation(1)">
+                    <div class="card-icon">üî•</div>
+                    <h3>1. A T≈±z H√°romsz√∂ge</h3>
+                    <div class="card-status">NYITVA</div>
+                </div>
+                <div class="mission-card locked" onclick="selectStation(2)">
+                    <div class="card-icon">üå°Ô∏è</div>
+                    <h3>2. A H≈ëm√©r≈ë Rejt√©lye</h3>
+                    <div class="card-status">Z√ÅRVA</div>
+                </div>
+                <div class="mission-card locked" onclick="selectStation(3)">
+                    <div class="card-icon">üö®</div>
+                    <h3>3. V√©szhelyzet</h3>
+                    <div class="card-status">Z√ÅRVA</div>
+                </div>
+                <div class="mission-card locked" onclick="selectStation(4)">
+                    <div class="card-icon">‚ò£Ô∏è</div>
+                    <h3>4. Vesz√©lyes Anyagok</h3>
+                    <div class="card-status">Z√ÅRVA</div>
+                </div>
+                <div class="mission-card locked" onclick="selectStation(5)">
+                    <div class="card-icon">üïµÔ∏è</div>
+                    <h3>5. Az Igazs√°g Detektora</h3>
+                    <div class="card-status">Z√ÅRVA</div>
+                </div>
+                <div class="mission-card final-gate locked" onclick="selectStation('final')">
+                    <div class="card-icon">üö™</div>
+                    <h3>Kij√°rat</h3>
+                    <div class="card-status">Z√ÅRVA</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 1. √Ållom√°s: A T≈±z H√°romsz√∂ge -->
+    <section id="station-1" class="screen station">
+        <div class="container">
+            <div class="station-header">
+                <span class="station-number">1. √ÅLLOM√ÅS</span>
+                <h2>üî• A T≈±z H√°romsz√∂ge</h2>
+            </div>
+            <div class="puzzle-card">
+                <p>A t≈±z keletkez√©s√©hez h√°rom felt√©tel egy√ºttes jelenl√©te sz√ºks√©ges: √âghet≈ë anyag, Gyullad√°si
+                    h≈ëm√©rs√©klet, √©s...</p>
+                <div class="triangle-img">
+                    <div class="fire-triangle">üî∫</div>
+                </div>
+                <div class="answer-section">
+                    <label for="answer-1">Mi a harmadik felt√©tel?</label>
+                    <input type="text" id="answer-1" class="answer-input" placeholder="√çrd ide a v√°laszt...">
+                    <button class="btn btn-secondary" onclick="checkStation1()">Ellen≈ërz√©s</button>
+                    <div id="feedback-1" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. √Ållom√°s: A H≈ëm√©r≈ë Rejt√©lye -->
+    <section id="station-2" class="screen station">
+        <div class="container">
+            <div class="station-header">
+                <span class="station-number">2. √ÅLLOM√ÅS</span>
+                <h2>üå°Ô∏è A H≈ëm√©r≈ë Rejt√©lye</h2>
+            </div>
+            <div class="notebook">
+                <h3>üìì Dr. L√°ng jegyzetf√ºzete</h3>
+                <p class="notebook-desc">
+                    A jegyzetek √∂sszekeveredtek! Rendezd sorba az anyagokat a gyullad√°si h≈ëm√©rs√©klet√ºk alapj√°n
+                    <strong>a legalacsonyabbt√≥l a legmagasabbig</strong>!
+                </p>
+                <div class="data-table">
+                    <div class="data-row"><span class="material">Feketesz√©n</span><span class="temp">350 ¬∞C</span></div>
+                    <div class="data-row"><span class="material">√öjs√°gpap√≠r</span><span class="temp">190 ¬∞C</span></div>
+                    <div class="data-row"><span class="material">Feny≈ëfa</span><span class="temp">280 ¬∞C</span></div>
+                    <div class="data-row"><span class="material">F√∂ldg√°z</span><span class="temp">530 ¬∞C</span></div>
+                    <div class="data-row"><span class="material">Barnasz√©n</span><span class="temp">250 ¬∞C</span></div>
+                </div>
+            </div>
+            <div class="answer-section">
+                <label for="answer-2">Melyik anyag gyullad meg a <strong>legk√∂nnyebben</strong> (legalacsonyabb
+                    h≈ëfokon)?<br>
+                    <small>Add meg a h≈ëm√©rs√©klet els≈ë sz√°mjegy√©t!</small></label>
+                <input type="number" id="answer-2" class="answer-input" min="0" max="9" placeholder="?">
+                <button class="btn btn-secondary" onclick="checkStation2()">Ellen≈ërz√©s</button>
+                <div id="feedback-2" class="feedback"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. √Ållom√°s: A V√©szhelyzet Szimul√°tor -->
+    <section id="station-3" class="screen station">
+        <div class="container">
+            <div class="station-header">
+                <span class="station-number">3. √ÅLLOM√ÅS</span>
+                <h2>üö® A V√©szhelyzet Szimul√°tor</h2>
+            </div>
+
+            <div class="alert-panel">
+                <div class="alert-header">
+                    <span class="alert-icon">‚ö†Ô∏è</span>
+                    <span>RENDSZER HIBA √âSZLELVE</span>
+                    <span class="alert-icon">‚ö†Ô∏è</span>
+                </div>
+                <p class="alert-message">
+                    A rendszer √∂sszezavarodott! Csak akkor l√©phetsz tov√°bb, ha kiv√°lasztod azt az esetet,
+                    ahol <strong>SZIGOR√öAN TILOS v√≠zzel oltani</strong>, mert az √°ram√ºt√©st okozhat!
+                </p>
+            </div>
+
+            <div class="scenarios">
+                <div class="scenario-card" onclick="selectScenario(1)">
+                    <input type="radio" name="scenario" id="scenario-1" value="1">
+                    <label for="scenario-1">
+                        <div class="scenario-icon">üóëÔ∏è</div>
+                        <h4>1. Meggyulladt a kuka</h4>
+                        <p>Pap√≠r √©g az oszt√°lyteremben</p>
+                    </label>
+                </div>
+
+                <div class="scenario-card" onclick="selectScenario(2)">
+                    <input type="radio" name="scenario" id="scenario-2" value="2">
+                    <label for="scenario-2">
+                        <div class="scenario-icon">‚ö°</div>
+                        <h4>2. L√°ngol a keny√©rpir√≠t√≥</h4>
+                        <p>M√©g be van dugva a konnektorba!</p>
+                    </label>
+                </div>
+
+                <div class="scenario-card" onclick="selectScenario(3)">
+                    <input type="radio" name="scenario" id="scenario-3" value="3">
+                    <label for="scenario-3">
+                        <div class="scenario-icon">üåæ</div>
+                        <h4>3. Par√°zslik a szalma</h4>
+                        <p>Az udvaron f√ºst√∂l</p>
+                    </label>
+                </div>
+            </div>
+
+            <div class="answer-section">
+                <button class="btn btn-secondary" onclick="checkStation3()">V√°laszt√°s meger≈ës√≠t√©se</button>
+                <div id="feedback-3" class="feedback"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. √Ållom√°s: A Biztons√°gi Sz√©f -->
+    <section id="station-4" class="screen station">
+        <div class="container">
+            <div class="station-header">
+                <span class="station-number">4. √ÅLLOM√ÅS</span>
+                <h2>üîê A Biztons√°gi Sz√©f</h2>
+            </div>
+
+            <div class="safe-panel">
+                <div class="safe-icon">üîí</div>
+                <h3>V√©szhelyzeti Inform√°ci√≥k</h3>
+                <p>
+                    Az utols√≥ el≈ëtti ajt√≥ el≈ëtt egy sz√©f tal√°lhat√≥. A tov√°bbjut√°shoz tudnod kell a
+                    <strong>v√©szhelyzeti h√≠v√≥sz√°mokat</strong>!
+                </p>
+
+                <div class="emergency-numbers">
+                    <div class="emergency-card">
+                        <span class="emergency-icon">üöë</span>
+                        <h4>Ment≈ëk</h4>
+                        <span class="number">104</span>
+                    </div>
+                    <div class="emergency-card">
+                        <span class="emergency-icon">üöí</span>
+                        <h4>T≈±zolt√≥s√°g</h4>
+                        <span class="number">105</span>
+                    </div>
+                    <div class="emergency-card">
+                        <span class="emergency-icon">üëÆ</span>
+                        <h4>Rend≈ërs√©g</h4>
+                        <span class="number">107</span>
+                    </div>
+                </div>
+
+                <div class="math-puzzle">
+                    <p class="puzzle-text">
+                        üìê Add √∂ssze mind a h√°rom h√≠v√≥sz√°mot!<br>
+                        Az eredm√©ny <strong>utols√≥ sz√°mjegye</strong> nyitja a sz√©fet.
+                    </p>
+                    <div class="calculation">
+                        104 + 105 + 107 = <span class="result">?</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="answer-section">
+                <label for="answer-4">Mi az √∂sszeg utols√≥ sz√°mjegye?</label>
+                <input type="number" id="answer-4" class="answer-input" min="0" max="9" placeholder="?">
+                <button class="btn btn-secondary" onclick="checkStation4()">Sz√©f nyit√°sa</button>
+                <div id="feedback-4" class="feedback"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. √Ållom√°s: Az Igazs√°g Detektora -->
+    <section id="station-5" class="screen station">
+        <div class="container">
+            <div class="station-header">
+                <span class="station-number">5. √ÅLLOM√ÅS</span>
+                <h2>üïµÔ∏è Az Igazs√°g Detektora</h2>
+            </div>
+
+            <div class="quiz-panel">
+                <div class="quiz-header">
+                    <div class="quiz-icon">‚öñÔ∏è</div>
+                    <h3>Igaz vagy Hamis?</h3>
+                </div>
+                <p class="quiz-desc">
+                    A kij√°rat kinyit√°s√°hoz bizony√≠tanod kell a tud√°sodat. D√∂ntsd el az al√°bbi √°ll√≠t√°sokr√≥l, hogy
+                    <strong>IGAZ</strong> vagy <strong>HAMIS</strong>!
+                </p>
+
+                <div class="quiz-list">
+                    <!-- 1. K√©rd√©s -->
+                    <div class="quiz-item" data-correct="true">
+                        <p>1. A t≈±zolt√≥kat a 105-√∂s sz√°mon h√≠vhatjuk.</p>
+                        <div class="quiz-buttons">
+                            <button class="btn-quiz btn-true" onclick="answerQuiz(this, true)">IGAZ</button>
+                            <button class="btn-quiz btn-false" onclick="answerQuiz(this, false)">HAMIS</button>
+                        </div>
+                    </div>
+
+                    <!-- 2. K√©rd√©s -->
+                    <div class="quiz-item" data-correct="false">
+                        <p>2. Ha kigyullad az olaj a serpeny≈ëben, v√≠zzel kell eloltani.</p>
+                        <div class="quiz-buttons">
+                            <button class="btn-quiz btn-true" onclick="answerQuiz(this, true)">IGAZ</button>
+                            <button class="btn-quiz btn-false" onclick="answerQuiz(this, false)">HAMIS</button>
+                        </div>
+                    </div>
+
+                    <!-- 3. K√©rd√©s -->
+                    <div class="quiz-item" data-correct="true">
+                        <p>3. T≈±z eset√©n a f√ºst miatt √©rdemes n√©gyk√©zl√°b k√∂zlekedni.</p>
+                        <div class="quiz-buttons">
+                            <button class="btn-quiz btn-true" onclick="answerQuiz(this, true)">IGAZ</button>
+                            <button class="btn-quiz btn-false" onclick="answerQuiz(this, false)">HAMIS</button>
+                        </div>
+                    </div>
+
+                    <!-- 4. K√©rd√©s -->
+                    <div class="quiz-item" data-correct="false">
+                        <p>4. Elektromos t√ºzet szabad v√≠zzel oltani, ha nincs √°ramtalan√≠tva.</p>
+                        <div class="quiz-buttons">
+                            <button class="btn-quiz btn-true" onclick="answerQuiz(this, true)">IGAZ</button>
+                            <button class="btn-quiz btn-false" onclick="answerQuiz(this, false)">HAMIS</button>
+                        </div>
+                    </div>
+
+                    <!-- 5. K√©rd√©s -->
+                    <div class="quiz-item" data-correct="true">
+                        <p>5. A t≈±z h√°rom felt√©tele: √©ghet≈ë anyag, oxig√©n, gyullad√°si h≈ëm√©rs√©klet.</p>
+                        <div class="quiz-buttons">
+                            <button class="btn-quiz btn-true" onclick="answerQuiz(this, true)">IGAZ</button>
+                            <button class="btn-quiz btn-false" onclick="answerQuiz(this, false)">HAMIS</button>
+                        </div>
+                    </div>
+
+                    <!-- 6. K√©rd√©s -->
+                    <div class="quiz-item" data-correct="false">
+                        <p>6. Ha a ruh√°d meggyullad, fuss, amilyen gyorsan csak tudsz!</p>
+                        <div class="quiz-buttons">
+                            <button class="btn-quiz btn-true" onclick="answerQuiz(this, true)">IGAZ</button>
+                            <button class="btn-quiz btn-false" onclick="answerQuiz(this, false)">HAMIS</button>
+                        </div>
+                    </div>
+
+                    <!-- 7. K√©rd√©s -->
+                    <div class="quiz-item" data-correct="true">
+                        <p>7. A porolt√≥ alkalmas elektromos t√ºzek olt√°s√°ra is.</p>
+                        <div class="quiz-buttons">
+                            <button class="btn-quiz btn-true" onclick="answerQuiz(this, true)">IGAZ</button>
+                            <button class="btn-quiz btn-false" onclick="answerQuiz(this, false)">HAMIS</button>
+                        </div>
+                    </div>
+
+                    <!-- 8. K√©rd√©s -->
+                    <div class="quiz-item" data-correct="false">
+                        <p>8. T≈±zriad√≥ eset√©n haszn√°ld a liftet a gyorsabb menek√ºl√©s √©rdek√©ben.</p>
+                        <div class="quiz-buttons">
+                            <button class="btn-quiz btn-true" onclick="answerQuiz(this, true)">IGAZ</button>
+                            <button class="btn-quiz btn-false" onclick="answerQuiz(this, false)">HAMIS</button>
+                        </div>
+                    </div>
+
+                    <!-- 9. K√©rd√©s -->
+                    <div class="quiz-item" data-correct="true">
+                        <p>9. A menek√ºl√©si √∫tvonalat z√∂ld t√°bl√°k jelzik.</p>
+                        <div class="quiz-buttons">
+                            <button class="btn-quiz btn-true" onclick="answerQuiz(this, true)">IGAZ</button>
+                            <button class="btn-quiz btn-false" onclick="answerQuiz(this, false)">HAMIS</button>
+                        </div>
+                    </div>
+
+                    <!-- 10. K√©rd√©s -->
+                    <div class="quiz-item" data-correct="false">
+                        <p>10. Ha f√ºstszagot √©rzel, nyisd ki az √∂sszes ablakot, hogy kiszell≈ëzz√∂n.</p>
+                        <div class="quiz-buttons">
+                            <button class="btn-quiz btn-true" onclick="answerQuiz(this, true)">IGAZ</button>
+                            <button class="btn-quiz btn-false" onclick="answerQuiz(this, false)">HAMIS</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="answer-section">
+                    <p id="quiz-status">Helyes v√°laszok: <span id="correct-count">0</span> / 10</p>
+                    <button id="quiz-check-btn" class="btn btn-secondary" onclick="checkStation5()"
+                        disabled>Ellen≈ërz√©s</button>
+                    <div id="feedback-5" class="feedback"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- V√©gs≈ë K√≥d K√©perny≈ë -->
+    <section id="final-screen" class="screen">
+        <div class="container">
+            <div class="station-header">
+                <h2>üîì A Kij√°rat K√≥dja</h2>
+            </div>
+
+            <p>Sikeresen teljes√≠tetted mind az 5 √°llom√°st! Most m√°r birtokodban van a teljes k√≥d.</p>
+
+            <div class="final-code-display">
+                <span>A megszerzett k√≥dod:</span>
+                <div class="final-code-slots">
+                    <div class="final-code-slot" id="final-slot-1">?</div>
+                    <div class="final-code-slot" id="final-slot-2">?</div>
+                    <div class="final-code-slot" id="final-slot-3">?</div>
+                    <div class="final-code-slot" id="final-slot-4">?</div>
+                    <div class="final-code-slot" id="final-slot-5">?</div>
+                </div>
+            </div>
+
+            <div class="answer-section">
+                <label for="final-code">√çrd be az 5 sz√°mjegy≈± k√≥dot:</label>
+                <input type="text" id="final-code" class="answer-input" maxlength="5" placeholder="_____">
+                <button class="btn btn-primary" onclick="checkFinalCode()">üö™ Kij√°rat nyit√°sa</button>
+                <div id="final-feedback" class="feedback"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gy≈ëzelmi k√©perny≈ë -->
+    <section id="victory-screen" class="screen">
+        <div class="container victory-container">
+            <div class="victory-animation">
+                <div class="trophy">üèÜ</div>
+                <div class="flames">
+                    <span>üî•</span>
+                    <span>üî•</span>
+                    <span>üî•</span>
+                </div>
+            </div>
+
+            <h1 class="victory-title">Gratul√°lok, Ifj√∫ T≈±zlovag!</h1>
+
+            <p class="victory-highlight">
+                ‚≠ê Te vagy a T≈±zbiztons√°gi Mester! ‚≠ê
+            </p>
+            <p>Sikeresen kijutott√°l a laborat√≥riumb√≥l √©s bizony√≠tottad tud√°sodat.</p>
+        </div>
+
+        <button class="btn btn-primary" onclick="restartGame()">
+            üîÑ J√°t√©k √∫jrakezd√©se
+        </button>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html># *cascade08#%*cascade08%Ó *cascade08Ó˜*cascade08˜Å *cascade08Åú*cascade08úû *cascade08û®*cascade08®© *cascade08©Ç*cascade08ÇÉ *cascade08Éå*cascade08åç *cascade08ç‹*cascade08‹› *cascade08›Ñ	*cascade08Ñ	ç	 *cascade08ç	ï	*cascade08ï	ñ	 *cascade08ñ	¨	*cascade08¨	≠	 *cascade08≠	¥	*cascade08¥	µ	 *cascade08µ	Ã	*cascade08Ã	Õ	 *cascade08Õ	à
+*cascade08à
+ä
+ *cascade08ä
+è*cascade08èê *cascade08êí*cascade08íì *cascade08ìÆ*cascade08Æ∞ *cascade08∞≤*cascade08≤≥ *cascade08≥Õ*cascade08ÕŒ *cascade08ŒÓ*cascade08ÓÔ *cascade08Ô˛*cascade08˛Ä *cascade08Äº*cascade08ºΩ *cascade08Ωä"*cascade08ä"¢" *cascade08¢"Ÿ:*cascade08Ÿ:É; *cascade08É;ã;*cascade08ã;ó; *cascade08ó;ó;*cascade08ó;ù; *cascade08ù;•;*cascade08•;¿; *cascade08¿;∆;*cascade08∆;Œ; *cascade08Œ;–;*cascade08–;Ï; *cascade08Ï;Ù;*cascade08Ù;®< *cascade08®<¨<*cascade08¨<∏< *cascade08∏<º<*cascade08º<‚< *cascade08‚<Â<*cascade08Â<Ò< *cascade08Ò<ˆ<*cascade08ˆ<û= *cascade08û=†=*cascade08†=®= *cascade08®=Æ=*cascade08Æ=∂= *cascade08∂=æ=*cascade08æ=Ì= *cascade08Ì=ı=*cascade08ı=Œ> *cascade08Œ>Œ>*cascade08Œ>–> *cascade08–>÷>*cascade08÷>‚> *cascade08‚>‰>*cascade08‰>¬? *cascade08¬? ?*cascade08 ?‘? *cascade08‘?‹?*cascade08‹?Ê? *cascade08Ê?Ó?*cascade08Ó?ã@ *cascade08ã@ç@*cascade08ç@ï@ *cascade08ï@õ@*cascade08õ@‘@ *cascade08‘@€@*cascade08€@Á@ *cascade08Á@Ë@*cascade08Ë@¥A *cascade08¥AºA*cascade08ºA÷A *cascade08÷A€A*cascade08€AÎA *cascade08ÎAÓA*cascade08ÓA®B *cascade08®B∞B*cascade08∞B–B *cascade08–B”B*cascade08”B„B *cascade08„BËB*cascade08ËBõC *cascade08õC£C*cascade08£C≠C *cascade08≠CÆC*cascade08ÆC∂C *cascade08∂CΩC*cascade08ΩC≈C *cascade08≈C≈C*cascade08≈C«C *cascade08«CŒC*cascade08ŒC÷C *cascade08÷C◊C*cascade08◊CêD *cascade08êDòD*cascade08òD‰D *cascade08‰DÈD*cascade08ÈDıD *cascade08ıD¯D*cascade08¯DíE *cascade08íEöE*cascade08öE–E *cascade08–E”E*cascade08”E„E *cascade08„EËE*cascade08ËEèF *cascade08èFóF*cascade08óF–F *cascade08–F—F*cascade08—F›F *cascade08›F‰F*cascade08‰FÓF *cascade08ÓFÙF*cascade08ÙF¸F *cascade08¸F˛F*cascade08˛FÜG *cascade08ÜGÜG*cascade08ÜGàG *cascade08àGêG*cascade08êG—G *cascade08—G’G*cascade08’G·G *cascade08·GÂG*cascade08ÂG±H *cascade08±HπH*cascade08πH”H *cascade08”H’H*cascade08’HÂH *cascade08ÂHÎH*cascade08ÎHíI *cascade08íIöI*cascade08öI€I *cascade08€I„I*cascade08„IˇI *cascade08ˇIÑJ*cascade08ÑJêJ *cascade08êJìJ*cascade08ìJùJ *cascade08ùJ°J*cascade08°J©J *cascade08©J≠J*cascade08≠JµJ *cascade08µJΩJ*cascade08ΩJÀJ *cascade08ÀJ”J*cascade08”JıJ *cascade08ıJˆJ*cascade08ˆJ˛J *cascade08˛JÖK*cascade08ÖKÔK *cascade08ÔK˜K*cascade08˜K©L *cascade08©L±L*cascade08±LπL *cascade08πLΩL*cascade08ΩLîO *cascade08îOîO*cascade08îOŸP *cascade08ŸP·P*cascade08·PáQ *cascade08áQçQ*cascade08çQéQ *cascade08éQèQ*cascade08èQêQ *cascade08êQëQ*cascade08ëQÇR *cascade08ÇRÇR*cascade08ÇR∞X *cascade08∞X∞X*cascade08∞X _ *cascade08 _˜_ *cascade08˜_˜_*cascade08˜_ﬂ` *cascade08ﬂ`œa*cascade08œa“a *cascade08“a±d*cascade08±d≤d *cascade08≤d∫d*cascade08∫dªd *cascade08ªdΩd*cascade08Ωdæd *cascade08æd¬d*cascade08¬d√d *cascade08√dÃd*cascade08ÃdÕd *cascade08Õdˆd*cascade08ˆd¯d *cascade08¯de*cascade08eÒe *cascade08Òe˜e*cascade08˜e¯e *cascade08¯eßf*cascade08ßf©f *cascade08©fég*cascade08égèg *cascade08èg∑j*cascade08∑j∫j *cascade08∫j«n*cascade08«n»n *cascade08»n˘o*cascade08˘o˚o *cascade08˚oøï*cascade08øï¬ï *cascade08¬ïÛï*cascade08Ûï£ñ *cascade08£ñ§ñ*cascade08§ñ•ñ *cascade08•ñ¶ñ*cascade08¶ñ•ö *cascade08•öÒö *cascade08Òö˙õ *cascade08˙õ˚õ*cascade08˚õ¸õ *cascade08¸õ˝õ*cascade08˝õÓú *cascade08ÓúÔú*cascade08Ôú˛ú *cascade08˛úˇú*cascade08ˇúó¢ *cascade08ó¢ó¢*cascade08ó¢„¢ *cascade08„¢„¢*cascade08„¢›£ *cascade08›£∫§*cascade08∫§ã¶ *cascade08ã¶ç¶*cascade08ç¶î¶ *cascade082>file:///C:/Users/Tomi/Oktat%C3%A1s/fire-escape-room/index.html

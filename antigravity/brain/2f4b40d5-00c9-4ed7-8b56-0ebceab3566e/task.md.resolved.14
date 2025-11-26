@@ -1,0 +1,11 @@
+# Background Monitoring & Single View Tasks
+
+- [ ] Core Logic Refactor <!-- id: 59 -->
+    - [ ] Update Target Pairs (Top 5) <!-- id: 60 -->
+    - [ ] Define Strategy Metadata Dictionary <!-- id: 61 -->
+    - [ ] Implement Background Loop (Monitor All, Alert All) <!-- id: 62 -->
+    - [ ] Separate Analysis Logic from Rendering Logic <!-- id: 63 -->
+- [ ] UI/UX Updates <!-- id: 64 -->
+    - [ ] Restore Sidebar Asset Selector <!-- id: 65 -->
+    - [ ] Render Chart & Panel ONLY for Selected Pair <!-- id: 66 -->
+    - [ ] Display Strategy Tip Badge <!-- id: 67 -->

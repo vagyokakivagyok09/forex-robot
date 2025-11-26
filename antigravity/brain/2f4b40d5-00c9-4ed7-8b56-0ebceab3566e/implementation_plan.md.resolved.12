@@ -1,0 +1,29 @@
+# Strategy & One Bullet Implementation Plan
+
+## Goal
+Implement distinct trading strategies (Classic Breakout vs Fade/Fakeout) for different pairs and enforce a strict limit of one signal per pair per day.
+
+## Proposed Changes
+### Core Logic ([app.py](file:///c:/Users/Tomi/.gemini/app.py))
+#### [MODIFY] [app.py](file:///c:/Users/Tomi/.gemini/app.py)
+- **Configuration**:
+    - Replace `TARGET_PAIRS` with `PAIRS_CONFIG` dict.
+- **State Management**:
+    - Init `st.session_state.daily_signals = {}`.
+- **[analyze_pair](file:///c:/Users/Tomi/.gemini/app.py#97-217)**:
+    - Check `daily_signals` at start. If locked, return "LOCKED" status.
+    - **Classic Logic**: Same as before (Breakout + Buffer).
+    - **Fade Logic**:
+        - Long: `Low < Asian_Low` AND `Close > Asian_Low`.
+        - Short: `High > Asian_High` AND `Close < Asian_High`.
+    - If Signal:
+        - Send Telegram.
+        - Mark `daily_signals[ticker] = today`.
+- **Rendering**:
+    - If status is "LOCKED", show 🔒 icon and message.
+
+## Verification Plan
+### Manual Verification
+- Check if EURUSD (Fade) triggers on a wick.
+- Check if GBPUSD (Classic) triggers on a breakout.
+- Verify that after a signal, the pair shows as "Locked" and no further alerts are sent.

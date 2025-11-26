@@ -1,0 +1,9 @@
+# Multi-Asset Dashboard Tasks
+
+- [ ] Core Logic Refactor <!-- id: 46 -->
+    - [ ] Hardcode Target Pairs (GBPUSD, GBPJPY, EURUSD) <!-- id: 47 -->
+    - [ ] Implement Loop for Multi-Asset Processing <!-- id: 48 -->
+    - [ ] Update Alert State Management for Multiple Symbols <!-- id: 49 -->
+- [ ] Visualization Updates <!-- id: 50 -->
+    - [ ] Stack Charts Vertically <!-- id: 51 -->
+    - [ ] Render Trading Plan per Asset <!-- id: 52 -->
