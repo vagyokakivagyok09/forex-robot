@@ -985,104 +985,104 @@ def main():
             padding = (y_max - y_min) * 0.1
             
             fig = go.Figure()
-    
-                # Gyertyák
-                fig.add_trace(go.Candlestick(
-                    x=df.index,
-                    open=df['Open'], high=df['High'],
-                    low=df['Low'], close=df['Close'],
-                    name="Árfolyam",
-                    increasing_line_color='green', decreasing_line_color='red'
-                ))
-    
-                # EMA 50 (Sárga vonal)
-                fig.add_trace(go.Scatter(
-                    x=df.index, y=df['EMA_50'],
-                    line=dict(color='yellow', width=2),
-                    name="Trend (EMA 50)"
-                ))
-    
-                # London Doboz Rajzolása MINDEN Látható Napra (07:00-08:00 GMT)
-                # Utolsó 5 kereskedési napra rajzoljuk be a dobozokat
-                visible_days = sorted(list(set(df.index.date)))[-5:]  # Utolsó 5 egyedi nap
+
+            # Gyertyák
+            fig.add_trace(go.Candlestick(
+                x=df.index,
+                open=df['Open'], high=df['High'],
+                low=df['Low'], close=df['Close'],
+                name="Árfolyam",
+                increasing_line_color='green', decreasing_line_color='red'
+            ))
+
+            # EMA 50 (Sárga vonal)
+            fig.add_trace(go.Scatter(
+                x=df.index, y=df['EMA_50'],
+                line=dict(color='yellow', width=2),
+                name="Trend (EMA 50)"
+            ))
+
+            # London Doboz Rajzolása MINDEN Látható Napra (07:00-08:00 GMT)
+            # Utolsó 5 kereskedési napra rajzoljuk be a dobozokat
+            visible_days = sorted(list(set(df.index.date)))[-5:]  # Utolsó 5 egyedi nap
+            
+            for day in visible_days:
+                # Szűrés az adott napra és a 07:00-08:00 GMT időszakra
+                day_mask = (df.index.date == day) & (df.index.hour == 7)
+                morning_candles = df[day_mask]
                 
-                for day in visible_days:
-                    # Szűrés az adott napra és a 07:00-08:00 GMT időszakra
-                    day_mask = (df.index.date == day) & (df.index.hour == 7)
-                    morning_candles = df[day_mask]
+                if not morning_candles.empty:
+                    # Doboz határainak kiszámítása
+                    box_high = float(morning_candles['High'].max())
+                    box_low = float(morning_candles['Low'].min())
                     
-                    if not morning_candles.empty:
-                        # Doboz határainak kiszámítása
-                        box_high = float(morning_candles['High'].max())
-                        box_low = float(morning_candles['Low'].min())
-                        
-                        # Időpontok a dobozhoz
-                        box_start_time = pd.Timestamp(day).tz_localize('UTC').replace(hour=7, minute=0, second=0, microsecond=0)
-                        box_end_time = pd.Timestamp(day).tz_localize('UTC').replace(hour=8, minute=0, second=0, microsecond=0)
-                        
-                        # Mai napra más szín
-                        is_today = (day == last_time.date())
-                        fillcolor = "lightblue" if is_today else "lightgray"
-                        linecolor = "blue" if is_today else "gray"
-                        opacity = 0.3 if is_today else 0.15
-                        
-                        # Téglalap alakú doboz
-                        fig.add_shape(
-                            type="rect",
-                            x0=box_start_time, 
-                            x1=box_end_time,
-                            y0=box_low, 
-                            y1=box_high,
-                            fillcolor=fillcolor,
-                            opacity=opacity,
-                            line=dict(color=linecolor, width=2 if is_today else 1),
-                            xref="x", 
-                            yref="y"
+                    # Időpontok a dobozhoz
+                    box_start_time = pd.Timestamp(day).tz_localize('UTC').replace(hour=7, minute=0, second=0, microsecond=0)
+                    box_end_time = pd.Timestamp(day).tz_localize('UTC').replace(hour=8, minute=0, second=0, microsecond=0)
+                    
+                    # Mai napra más szín
+                    is_today = (day == last_time.date())
+                    fillcolor = "lightblue" if is_today else "lightgray"
+                    linecolor = "blue" if is_today else "gray"
+                    opacity = 0.3 if is_today else 0.15
+                    
+                    # Téglalap alakú doboz
+                    fig.add_shape(
+                        type="rect",
+                        x0=box_start_time, 
+                        x1=box_end_time,
+                        y0=box_low, 
+                        y1=box_high,
+                        fillcolor=fillcolor,
+                        opacity=opacity,
+                        line=dict(color=linecolor, width=2 if is_today else 1),
+                        xref="x", 
+                        yref="y"
+                    )
+                    
+                    # Felirat csak a mai dobozra
+                    if is_today:
+                        box_center_time = box_start_time + (box_end_time - box_start_time) / 2
+                        fig.add_annotation(
+                            x=box_center_time,
+                            y=box_high,
+                            text="London Doboz (07-08 GMT)",
+                            showarrow=False,
+                            yshift=10,
+                            font=dict(color="blue", size=10, weight="bold")
                         )
-                        
-                        # Felirat csak a mai dobozra
-                        if is_today:
-                            box_center_time = box_start_time + (box_end_time - box_start_time) / 2
-                            fig.add_annotation(
-                                x=box_center_time,
-                                y=box_high,
-                                text="London Doboz (07-08 GMT)",
-                                showarrow=False,
-                                yshift=10,
-                                font=dict(color="blue", size=10, weight="bold")
-                            )
+
+
+            # Formázás (Fix nézet, Nincs Zoom/Pan, Smart Scaling)
+            fig.update_layout(
+                height=500,
+                xaxis_rangeslider_visible=False,
+                yaxis=dict(range=[y_min - padding, y_max + padding], fixedrange=True), # Smart Scaling + Lock
+                xaxis=dict(range=[zoom_start, zoom_end], fixedrange=True), # Zoom Lock
+                dragmode=False, # Pan letiltása
+                template="plotly_white",
+                title=f"{symbol} (15m) - {analysis['trend'] if analysis else 'N/A'}",
+                margin=dict(l=10, r=10, t=40, b=10)
+            )
+            
+            # Hétvégék kivétele (Hogy ne legyen rés)
+            fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])
     
-    
-                # Formázás (Fix nézet, Nincs Zoom/Pan, Smart Scaling)
-                fig.update_layout(
-                    height=500,
-                    xaxis_rangeslider_visible=False,
-                    yaxis=dict(range=[y_min - padding, y_max + padding], fixedrange=True), # Smart Scaling + Lock
-                    xaxis=dict(range=[zoom_start, zoom_end], fixedrange=True), # Zoom Lock
-                    dragmode=False, # Pan letiltása
-                    template="plotly_white",
-                    title=f"{symbol} (15m) - {analysis['trend'] if analysis else 'N/A'}",
-                    margin=dict(l=10, r=10, t=40, b=10)
-                )
+            # Konfiguráció (Görgő letiltása)
+            st.plotly_chart(fig, use_container_width=True, config={'scrollZoom': False, 'displayModeBar': False})
+
+            # Kereskedési Terv Szövegesen (Ha van doboz)
+            if analysis:
+                c1, c2, c3, c4 = st.columns(4)
+                c1.metric("Trend (EMA 50)", analysis['trend'], delta="Bika" if analysis['trend']=="BULLISH" else "-Medve")
+                c2.metric("Doboz Magasság", f"{(analysis['box_height']*10000):.1f} pip")
+                c3.metric("💰 Aktuális Ár", f"{analysis['current_price']:.5f}")
                 
-                # Hétvégék kivétele (Hogy ne legyen rés)
-                fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])
-    
-                # Konfiguráció (Görgő letiltása)
-                st.plotly_chart(fig, use_container_width=True, config={'scrollZoom': False, 'displayModeBar': False})
-    
-                # Kereskedési Terv Szövegesen (Ha van doboz)
-                if analysis:
-                    c1, c2, c3, c4 = st.columns(4)
-                    c1.metric("Trend (EMA 50)", analysis['trend'], delta="Bika" if analysis['trend']=="BULLISH" else "-Medve")
-                    c2.metric("Doboz Magasság", f"{(analysis['box_height']*10000):.1f} pip")
-                    c3.metric("💰 Aktuális Ár", f"{analysis['current_price']:.5f}")
-                    
-                    # Státusz kiírása
-                    if signal_locked:
-                        c4.info(f"🔒 Pozíció: {locked_direction}")
-                    else:
-                        c4.warning("⏳ Várakozás kitörésre...")
+                # Státusz kiírása
+                if signal_locked:
+                    c4.info(f"🔒 Pozíció: {locked_direction}")
+                else:
+                    c4.warning("⏳ Várakozás kitörésre...")
     
     # Automatikus frissítés visszaszámláló
     st.markdown("---")
