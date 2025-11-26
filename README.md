@@ -1,0 +1,50 @@
+# 🇬🇧 London Breakout Pro 2025
+
+Ez a **London Breakout Pro 2025** kereskedési algoritmus hivatalos repository-ja. A rendszer automatikusan figyeli a devizapiacokat és Telegramon riasztást küld a londoni nyitás (09:00 GMT+1) körüli kitöréseknél.
+
+🔗 **ÉLŐ DEMO:** [https://forex-robot-u7sx7cbkeyn3xmtggnqpzw.streamlit.app/](https://forex-robot-u7sx7cbkeyn3xmtggnqpzw.streamlit.app/)
+
+## 🚀 Funkciók
+
+*   **Multi-Asset Monitorozás:** Egyszerre figyeli az 5 fő devizapárt (`GBPUSD`, `GBPJPY`, `EURUSD`, `EURJPY`, `USDCHF`).
+*   **London Breakout Pro Stratégia:**
+    *   Ázsiai sáv (00:00 - 08:00) automatikus azonosítása.
+    *   **Buffer Zónák:** 3 pip ráhagyás a fals kitörések ellen (JPY pároknál skálázva).
+    *   **Wick-to-Wick:** A kanócokat is figyelembe veszi a doboz rajzolásánál.
+*   **Automata Telegram Riasztás:**
+    *   Azonnali üzenetküldés kitöréskor.
+    *   Beépített kockázatkezelés (Stop távolság kiszámítása pip-ben).
+    *   Kereskedési terv (Belépő, SL, TP) generálása.
+*   **Single View UI:** Letisztult felület, ahol egyszerre egy párra fókuszálhatsz, miközben a többi a háttérben fut.
+
+## 🛠️ Telepítés
+
+1.  Klónozd a repót vagy töltsd le a fájlokat.
+2.  Telepítsd a függőségeket:
+    ```bash
+    pip install -r requirements.txt
+    ```
+3.  Indítsd el az alkalmazást:
+    ```bash
+    streamlit run app.py
+    ```
+
+## ⚙️ Konfiguráció
+
+A `app.py` fájl elején található konstansokban állíthatod be a Telegram adataidat:
+
+```python
+TELEGRAM_BOT_TOKEN = "A_TE_TOKENED"
+TELEGRAM_CHAT_ID = "A_TE_CHAT_ID-D"
+```
+
+## 📊 Használt Technológiák
+
+*   Python
+*   Streamlit
+*   Plotly (Interaktív chartok)
+*   Yfinance (Adatletöltés)
+*   Telegram Bot API
+
+---
+*Készítette: Vagyokakivagyok09*
