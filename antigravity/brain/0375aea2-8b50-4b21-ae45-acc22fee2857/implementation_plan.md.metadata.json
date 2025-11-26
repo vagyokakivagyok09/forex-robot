@@ -1,5 +1,0 @@
-{
-  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
-  "summary": "Implementation plan for a personal Sports Betting Decision Support App. Features include Odds Converter, Kelly Calculator, EV Calculator, and a LocalStorage-based Bet Tracker. UI will use Vanilla CSS with a premium dark mode design.",
-  "updatedAt": "2025-11-23T13:53:44.261691Z"
-}

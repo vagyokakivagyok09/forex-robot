@@ -1,0 +1,6 @@
+.venv/
+antigravity/
+antigravity-browser-profile/
+__pycache__/
+*.pyc
+.env

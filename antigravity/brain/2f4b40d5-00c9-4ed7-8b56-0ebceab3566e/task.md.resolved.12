@@ -1,8 +1,0 @@
-# Weekend Ghost Alert Fix Tasks
-
-- [ ] Core Logic Refactor <!-- id: 53 -->
-    - [ ] Implement Freshness Check (Last Candle vs Current Date) <!-- id: 54 -->
-    - [ ] Suppress Breakout Logic/Alerts if Data is Stale <!-- id: 55 -->
-- [ ] Visualization Updates <!-- id: 56 -->
-    - [ ] Show Warning if Market is Closed <!-- id: 57 -->
-    - [ ] Hide Entry/Target Lines if Market is Closed <!-- id: 58 -->

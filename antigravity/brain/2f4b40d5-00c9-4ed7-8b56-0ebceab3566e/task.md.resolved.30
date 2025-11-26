@@ -1,9 +1,0 @@
-# Signal Visibility Tasks
-
-- [ ] Logic Updates <!-- id: 114 -->
-    - [ ] Update Session State Schema (Store Direction) <!-- id: 115 -->
-    - [ ] Update Alert Logic to Save Direction <!-- id: 116 -->
-- [ ] UI/UX Updates <!-- id: 117 -->
-    - [ ] Always Render Chart (Remove 'Locked' Hiding) <!-- id: 118 -->
-    - [ ] Display "Signal Sent" Banner <!-- id: 119 -->
-    - [ ] Force Visualization of Sent Direction <!-- id: 120 -->

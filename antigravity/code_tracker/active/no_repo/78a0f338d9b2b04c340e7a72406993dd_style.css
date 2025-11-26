@@ -1,1691 +1,0 @@
-‹/* =====================================================
-   DESIGN SYSTEM - TÅ±z Mestereinek LaboratÃ³riuma
-   ===================================================== */
-
-:root {
-    /* SzÃ­npaletta - TÅ±z Ã©s TudomÃ¡ny */
-    --flame-orange: #FF6B35;
-    --flame-red: #F7931E;
-    --fire-glow: #FFB84D;
-    --science-blue: #00D9FF;
-    --science-cyan: #00B4D8;
-    --lab-dark: #0A1128;
-    --lab-darker: #001233;
-    --lab-light: #1E3A5F;
-
-    /* Neutral szÃ­nek */
-    --white: #FFFFFF;
-    --light-gray: #E8F1F5;
-    --gray: #8B95A5;
-    --dark-gray: #2D3748;
-
-    /* Effektek */
-    --glass-bg: rgba(255, 255, 255, 0.05);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glow-orange: 0 0 20px rgba(255, 107, 53, 0.5);
-    --glow-blue: 0 0 20px rgba(0, 217, 255, 0.5);
-
-    /* TipogrÃ¡fia */
-    --font-main: 'Poppins', sans-serif;
-    --font-mono: 'Roboto Mono', monospace;
-
-    /* MÃ©retek */
-    --border-radius: 16px;
-    --border-radius-sm: 8px;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* =====================================================
-   RESET & BASE STYLES
-   ===================================================== */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: var(--font-main);
-    background: linear-gradient(135deg, var(--lab-darker) 0%, var(--lab-dark) 100%);
-    color: var(--white);
-    min-height: 100vh;
-    overflow-x: hidden;
-    position: relative;
-}
-
-/* AnimÃ¡lt hÃ¡ttÃ©r rÃ©szecskÃ©k */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image:
-        radial-gradient(circle at 20% 30%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 70%, rgba(0, 217, 255, 0.1) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: 0;
-}
-
-/* =====================================================
-   SCREEN MANAGEMENT
-   ===================================================== */
-
-.screen {
-    display: none;
-    min-height: 100vh;
-    padding: 2rem 1rem;
-    position: relative;
-    z-index: 1;
-    animation: fadeIn 0.6s ease-out;
-}
-
-.screen.active {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.container {
-    max-width: 900px;
-    width: 100%;
-    margin: 0 auto;
-}
-
-/* =====================================================
-   PROGRESS BAR
-   ===================================================== */
-
-.progress-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: var(--glass-bg);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--glass-border);
-    padding: 1rem;
-    z-index: 100;
-    display: none;
-}
-
-.progress-container.visible {
-    display: block;
-    animation: slideDown 0.5s ease-out;
-}
-
-@keyframes slideDown {
-    from {
-        transform: translateY(-100%);
-    }
-
-    to {
-        transform: translateY(0);
-    }
-}
-
-.code-display {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-.code-slots {
-    display: flex;
-    gap: 0.5rem;
-}
-
-.code-slot {
-    width: 50px;
-    height: 50px;
-    background: var(--glass-bg);
-    border: 2px solid var(--glass-border);
-    border-radius: var(--border-radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-mono);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--gray);
-    transition: var(--transition);
-}
-
-.code-slot.unlocked {
-    background: linear-gradient(135deg, var(--flame-orange), var(--flame-red));
-    border-color: var(--fire-glow);
-    color: var(--white);
-    box-shadow: var(--glow-orange);
-    animation: pulse 0.6s ease-out;
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.15);
-    }
-}
-
-/* =====================================================
-   INTRO SCREEN
-   ===================================================== */
-
-.lab-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.flame-icon {
-    font-size: 4rem;
-    animation: flicker 2s infinite;
-}
-
-@keyframes flicker {
-
-    0%,
-    100% {
-        opacity: 1;
-        filter: drop-shadow(0 0 10px var(--flame-orange));
-    }
-
-    50% {
-        opacity: 0.8;
-        filter: drop-shadow(0 0 20px var(--flame-red));
-    }
-}
-
-.lab-header h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--flame-orange), var(--science-cyan));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-top: 1rem;
-    line-height: 1.2;
-}
-
-.story-box {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.character-badge {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--glass-border);
-}
-
-.scientist-icon {
-    font-size: 2rem;
-}
-
-.story-box p {
-    margin-bottom: 1rem;
-    line-height: 1.6;
-    font-size: 1.05rem;
-}
-
-.story-box p:last-child {
-    margin-bottom: 0;
-}
-
-.highlight {
-    background: linear-gradient(90deg, rgba(255, 107, 53, 0.2), rgba(0, 217, 255, 0.2));
-    padding: 1rem;
-    border-radius: var(--border-radius-sm);
-    border-left: 4px solid var(--flame-orange);
-}
-
-.code-badge {
-    background: var(--flame-orange);
-    color: var(--white);
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-weight: 600;
-    font-family: var(--font-mono);
-}
-
-/* =====================================================
-   BUTTONS
-   ===================================================== */
-
-.btn {
-    font-family: var(--font-main);
-    font-weight: 600;
-    font-size: 1.1rem;
-    padding: 1rem 2.5rem;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: var(--transition);
-    display: inline-block;
-    text-align: center;
-    text-decoration: none;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--flame-orange), var(--flame-red));
-    color: var(--white);
-    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--glow-orange);
-}
-
-.btn-primary:active {
-    transform: translateY(0);
-}
-
-.btn-secondary {
-    background: linear-gradient(135deg, var(--science-blue), var(--science-cyan));
-    color: var(--white);
-    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.4);
-}
-
-.btn-secondary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--glow-blue);
-}
-
-.btn-secondary:active {
-    transform: translateY(0);
-}
-
-/* =====================================================
-   STATION STYLES
-   ===================================================== */
-
-.station {
-    padding-top: 100px;
-}
-
-.station-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.station-number {
-    display: block;
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-    color: var(--science-cyan);
-    font-weight: 600;
-    letter-spacing: 2px;
-    margin-bottom: 0.5rem;
-}
-
-.station-header h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--white);
-}
-
-/* Monitor Screen */
-.monitor-screen {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    border: 2px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    overflow: hidden;
-    margin-bottom: 2rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-}
-
-.monitor-header {
-    background: linear-gradient(90deg, var(--lab-light), var(--lab-dark));
-    padding: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    border-bottom: 1px solid var(--glass-border);
-    font-family: var(--font-mono);
-    font-size: 0.9rem;
-}
-
-.status-light {
-    width: 12px;
-    height: 12px;
-    background: var(--science-cyan);
-    border-radius: 50%;
-    box-shadow: 0 0 10px var(--science-cyan);
-    animation: blink 2s infinite;
-}
-
-@keyframes blink {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.3;
-    }
-}
-
-.monitor-content {
-    padding: 2rem;
-}
-
-.warning-text {
-    background: rgba(255, 107, 53, 0.1);
-    border-left: 4px solid var(--flame-orange);
-    padding: 1rem;
-    border-radius: var(--border-radius-sm);
-    margin-bottom: 1.5rem;
-}
-
-.info-box {
-    background: rgba(0, 217, 255, 0.05);
-    border: 1px solid rgba(0, 217, 255, 0.2);
-    border-radius: var(--border-radius-sm);
-    padding: 1.5rem;
-    margin-top: 1.5rem;
-}
-
-.info-box h3 {
-    color: var(--science-cyan);
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
-}
-
-.info-box ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-.info-box li {
-    padding: 0.5rem 0;
-    padding-left: 1.5rem;
-    position: relative;
-}
-
-.info-box li::before {
-    content: 'â–¸';
-    position: absolute;
-    left: 0;
-    color: var(--flame-orange);
-}
-
-/* Notebook */
-.notebook {
-    background: linear-gradient(135deg, rgba(247, 147, 30, 0.1), rgba(0, 180, 216, 0.1));
-    border: 2px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    margin-bottom: 2rem;
-}
-
-.notebook h3 {
-    color: var(--fire-glow);
-    margin-bottom: 1rem;
-}
-
-.notebook-desc {
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-}
-
-.data-table {
-    display: grid;
-    gap: 0.75rem;
-}
-
-.data-row {
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--border-radius-sm);
-    padding: 1rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: var(--transition);
-}
-
-.data-row:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--science-cyan);
-}
-
-.material {
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-.temp {
-    font-family: var(--font-mono);
-    color: var(--flame-orange);
-    font-weight: 700;
-    font-size: 1.2rem;
-}
-
-/* Alert Panel */
-.alert-panel {
-    background: rgba(255, 107, 53, 0.1);
-    border: 2px solid var(--flame-orange);
-    border-radius: var(--border-radius);
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.alert-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    color: var(--flame-orange);
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-}
-
-.alert-icon {
-    font-size: 1.5rem;
-    animation: shake 1s infinite;
-}
-
-@keyframes shake {
-
-    0%,
-    100% {
-        transform: rotate(0deg);
-    }
-
-    25% {
-        transform: rotate(-5deg);
-    }
-
-    75% {
-        transform: rotate(5deg);
-    }
-}
-
-.alert-message {
-    line-height: 1.6;
-}
-
-/* Scenarios */
-.scenarios {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.scenario-card {
-    background: var(--glass-bg);
-    border: 2px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    padding: 1.5rem;
-    cursor: pointer;
-    transition: var(--transition);
-    position: relative;
-}
-
-.scenario-card:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--science-cyan);
-    transform: translateY(-4px);
-}
-
-.scenario-card input[type="radio"] {
-    position: absolute;
-    opacity: 0;
-}
-
-.scenario-card input[type="radio"]:checked+label {
-    color: var(--science-cyan);
-}
-
-.scenario-card input[type="radio"]:checked~* {
-    border-color: var(--science-cyan);
-}
-
-.scenario-card label {
-    cursor: pointer;
-    display: block;
-}
-
-.scenario-icon {
-    font-size: 3rem;
-    text-align: center;
-    margin-bottom: 1rem;
-}
-
-.scenario-card h4 {
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-}
-
-.scenario-card p {
-    color: var(--gray);
-    font-size: 0.95rem;
-}
-
-.scenario-card.selected {
-    background: linear-gradient(135deg, rgba(0, 217, 255, 0.2), rgba(0, 180, 216, 0.2));
-    border-color: var(--science-cyan);
-    box-shadow: var(--glow-blue);
-}
-
-/* Safe Panel */
-.safe-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    border: 2px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.safe-icon {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    display: block;
-}
-
-.safe-panel h3 {
-    color: var(--fire-glow);
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-}
-
-.safe-panel>p {
-    margin-bottom: 2rem;
-    line-height: 1.6;
-}
-
-.emergency-numbers {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.emergency-card {
-    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(0, 217, 255, 0.1));
-    border: 1px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    padding: 1.5rem 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.emergency-icon {
-    font-size: 2.5rem;
-}
-
-.emergency-card h4 {
-    font-size: 1rem;
-    color: var(--gray);
-}
-
-.number {
-    font-family: var(--font-mono);
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--flame-orange);
-}
-
-.math-puzzle {
-    background: rgba(0, 217, 255, 0.05);
-    border: 1px solid rgba(0, 217, 255, 0.2);
-    border-radius: var(--border-radius-sm);
-    padding: 1.5rem;
-}
-
-.puzzle-text {
-    margin-bottom: 1rem;
-    line-height: 1.6;
-}
-
-.calculation {
-    font-family: var(--font-mono);
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--white);
-}
-
-.result {
-    color: var(--science-cyan);
-}
-
-/* Answer Section */
-.answer-section {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    border: 2px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    text-align: center;
-}
-
-.answer-section label {
-    display: block;
-    margin-bottom: 1rem;
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-.answer-section small {
-    display: block;
-    color: var(--gray);
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-    font-weight: 400;
-}
-
-.answer-input {
-    width: 100%;
-    max-width: 300px;
-    padding: 1rem;
-    font-size: 2rem;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    text-align: center;
-    background: var(--glass-bg);
-    border: 2px solid var(--glass-border);
-    border-radius: var(--border-radius-sm);
-    color: var(--white);
-    margin-bottom: 1.5rem;
-    transition: var(--transition);
-}
-
-.answer-input:focus {
-    outline: none;
-    border-color: var(--science-cyan);
-    box-shadow: var(--glow-blue);
-}
-
-.feedback {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    border-radius: var(--border-radius-sm);
-    font-weight: 600;
-    font-size: 1.05rem;
-    display: none;
-}
-
-.feedback.show {
-    display: block;
-    animation: slideIn 0.4s ease-out;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.feedback.correct {
-    background: rgba(0, 255, 127, 0.15);
-    border: 2px solid #00FF7F;
-    color: #00FF7F;
-}
-
-.feedback.incorrect {
-    background: rgba(255, 71, 87, 0.15);
-    border: 2px solid #FF4757;
-    color: #FF4757;
-}
-
-/* =====================================================
-   FINAL & VICTORY SCREENS
-   ===================================================== */
-
-.final-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    border: 2px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    padding: 3rem 2rem;
-    text-align: center;
-}
-
-.final-panel h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    color: var(--fire-glow);
-}
-
-.final-code-display {
-    margin: 2rem 0;
-}
-
-.final-code-display>span {
-    display: block;
-    margin-bottom: 1rem;
-    font-weight: 600;
-    color: var(--gray);
-}
-
-.final-code-slots {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-}
-
-.final-code-slot {
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(135deg, var(--flame-orange), var(--flame-red));
-    border: 2px solid var(--fire-glow);
-    border-radius: var(--border-radius);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-mono);
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--white);
-    box-shadow: var(--glow-orange);
-}
-
-.victory-container {
-    text-align: center;
-}
-
-.victory-animation {
-    position: relative;
-    margin-bottom: 2rem;
-}
-
-.trophy {
-    font-size: 6rem;
-    animation: bounce 1s infinite;
-}
-
-@keyframes bounce {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-20px);
-    }
-}
-
-.flames {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 1rem;
-}
-
-.flames span {
-    font-size: 2rem;
-    animation: flicker 1.5s infinite;
-}
-
-.flames span:nth-child(2) {
-    animation-delay: 0.3s;
-}
-
-.flames span:nth-child(3) {
-    animation-delay: 0.6s;
-}
-
-.victory-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--fire-glow), var(--science-cyan));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 2rem;
-}
-
-.victory-message {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    border: 2px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    margin-bottom: 2rem;
-    text-align: left;
-}
-
-.scientist-badge {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--glass-border);
-}
-
-.scientist-badge span {
-    font-size: 2.5rem;
-}
-
-.victory-message p {
-    margin-bottom: 1rem;
-    line-height: 1.6;
-    font-size: 1.05rem;
-}
-
-.victory-message p:last-child {
-    margin-bottom: 0;
-}
-
-.victory-highlight {
-    background: linear-gradient(90deg, rgba(255, 107, 53, 0.3), rgba(0, 217, 255, 0.3));
-    padding: 1.5rem;
-    border-radius: var(--border-radius-sm);
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-    border: 2px solid var(--fire-glow);
-}
-
-/* =====================================================
-   RESPONSIVE DESIGN
-   ===================================================== */
-
-@media (max-width: 768px) {
-    .lab-header h1 {
-        font-size: 2rem;
-    }
-
-    .station-header h2 {
-        font-size: 1.5rem;
-    }
-
-    .scenarios {
-        grid-template-columns: 1fr;
-    }
-
-    .emergency-numbers {
-        grid-template-columns: 1fr;
-    }
-
-    .final-code-slots {
-        gap: 0.5rem;
-    }
-
-    .final-code-slot {
-        width: 60px;
-        height: 60px;
-        font-size: 2rem;
-    }
-
-    .victory-title {
-        font-size: 1.8rem;
-    }
-
-    .btn {
-        width: 100%;
-        padding: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .code-slots {
-        gap: 0.3rem;
-    }
-
-    .code-slot {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-
-    .lab-header h1 {
-        font-size: 1.5rem;
-    }
-
-    .flame-icon {
-        font-size: 3rem;
-    }
-}
-
-/* Quiz Panel Styles */
-.quiz-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    border: 2px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    margin-bottom: 2rem;
-}
-
-.quiz-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--glass-border);
-    padding-bottom: 1rem;
-}
-
-.quiz-icon {
-    font-size: 2.5rem;
-}
-
-.quiz-header h3 {
-    color: var(--science-cyan);
-    font-size: 1.5rem;
-}
-
-.quiz-desc {
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-}
-
-.quiz-list {
-    display: grid;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-}
-
-.quiz-item {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--border-radius-sm);
-    padding: 1rem;
-    font-size: 1rem;
-    line-height: 1.4;
-    transition: var(--transition);
-}
-
-.quiz-item:hover {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-20px);
-    }
-}
-
-.flames {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 1rem;
-}
-
-.flames span {
-    font-size: 2rem;
-    animation: flicker 1.5s infinite;
-}
-
-.flames span:nth-child(2) {
-    animation-delay: 0.3s;
-}
-
-.flames span:nth-child(3) {
-    animation-delay: 0.6s;
-}
-
-.victory-title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--fire-glow), var(--science-cyan));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 2rem;
-}
-
-.victory-message {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    border: 2px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    margin-bottom: 2rem;
-    text-align: left;
-}
-
-.scientist-badge {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--glass-border);
-}
-
-.scientist-badge span {
-    font-size: 2.5rem;
-}
-
-.victory-message p {
-    margin-bottom: 1rem;
-    line-height: 1.6;
-    font-size: 1.05rem;
-}
-
-.victory-message p:last-child {
-    margin-bottom: 0;
-}
-
-.victory-highlight {
-    background: linear-gradient(90deg, rgba(255, 107, 53, 0.3), rgba(0, 217, 255, 0.3));
-    padding: 1.5rem;
-    border-radius: var(--border-radius-sm);
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-    border: 2px solid var(--fire-glow);
-}
-
-/* =====================================================
-   RESPONSIVE DESIGN
-   ===================================================== */
-
-@media (max-width: 768px) {
-    .lab-header h1 {
-        font-size: 2rem;
-    }
-
-    .station-header h2 {
-        font-size: 1.5rem;
-    }
-
-    .scenarios {
-        grid-template-columns: 1fr;
-    }
-
-    .emergency-numbers {
-        grid-template-columns: 1fr;
-    }
-
-    .final-code-slots {
-        gap: 0.5rem;
-    }
-
-    .final-code-slot {
-        width: 60px;
-        height: 60px;
-        font-size: 2rem;
-    }
-
-    .victory-title {
-        font-size: 1.8rem;
-    }
-
-    .btn {
-        width: 100%;
-        padding: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .code-slots {
-        gap: 0.3rem;
-    }
-
-    .code-slot {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-
-    .lab-header h1 {
-        font-size: 1.5rem;
-    }
-
-    .flame-icon {
-        font-size: 3rem;
-    }
-}
-
-/* Quiz Panel Styles */
-.quiz-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    border: 2px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    margin-bottom: 2rem;
-}
-
-.quiz-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--glass-border);
-    padding-bottom: 1rem;
-}
-
-.quiz-icon {
-    font-size: 2.5rem;
-}
-
-.quiz-header h3 {
-    color: var(--science-cyan);
-    font-size: 1.5rem;
-}
-
-.quiz-desc {
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-}
-
-.quiz-list {
-    display: grid;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-}
-
-.quiz-item {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--border-radius-sm);
-    padding: 1rem;
-    font-size: 1rem;
-    line-height: 1.4;
-    transition: var(--transition);
-}
-
-.quiz-item:hover {
-    .quiz-buttons {
-        display: flex;
-        gap: 10px;
-        margin-top: 10px;
-        justify-content: flex-end;
-    }
-
-    .btn-quiz {
-        padding: 5px 15px;
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        background: rgba(255, 255, 255, 0.05);
-        color: var(--text-color);
-        border-radius: 8px;
-        cursor: pointer;
-        font-family: 'Roboto Mono', monospace;
-        font-weight: bold;
-        transition: all 0.3s ease;
-    }
-
-    .btn-quiz:hover {
-        background: rgba(255, 255, 255, 0.15);
-    }
-
-    .btn-true:hover {
-        border-color: #4CAF50;
-        color: #4CAF50;
-    }
-
-    .btn-false:hover {
-        border-color: #f44336;
-        color: #f44336;
-    }
-
-    /* Selected states */
-    .btn-quiz.selected {
-        transform: scale(1.05);
-    }
-
-    .btn-true.selected {
-        background: #4CAF50;
-        border-color: #4CAF50;
-        color: white;
-        box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
-    }
-
-    .btn-false.selected {
-        background: #f44336;
-        border-color: #f44336;
-        color: white;
-        box-shadow: 0 0 10px rgba(244, 67, 54, 0.4);
-    }
-
-    /* Feedback states (after checking) */
-    .quiz-item.correct-answer {
-        border-left: 4px solid #4CAF50;
-        background: rgba(76, 175, 80, 0.1);
-    }
-
-    .quiz-item.wrong-answer {
-        border-left: 4px solid #f44336;
-        background: rgba(244, 67, 54, 0.1);
-    }
-
-    /* Code Slot Animation */
-    @keyframes slotPop {
-        0% {
-            transform: scale(1);
-            box-shadow: 0 0 0 rgba(255, 165, 0, 0);
-        }
-
-        50% {
-            transform: scale(1.5);
-            box-shadow: 0 0 20px rgba(255, 165, 0, 0.8);
-            border-color: var(--primary-color);
-            background: rgba(255, 165, 0, 0.2);
-        }
-
-        100% {
-            transform: scale(1);
-            box-shadow: 0 0 0 rgba(255, 165, 0, 0);
-        }
-    }
-}
-
-/* =====================================================
-   RESPONSIVE DESIGN
-   ===================================================== */
-
-@media (max-width: 768px) {
-    .lab-header h1 {
-        font-size: 2rem;
-    }
-
-    .station-header h2 {
-        font-size: 1.5rem;
-    }
-
-    .scenarios {
-        grid-template-columns: 1fr;
-    }
-
-    .emergency-numbers {
-        grid-template-columns: 1fr;
-    }
-
-    .final-code-slots {
-        gap: 0.5rem;
-    }
-
-    .final-code-slot {
-        width: 60px;
-        height: 60px;
-        font-size: 2rem;
-    }
-
-    .victory-title {
-        font-size: 1.8rem;
-    }
-
-    .btn {
-        width: 100%;
-        padding: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .code-slots {
-        gap: 0.3rem;
-    }
-
-    .code-slot {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-
-    .lab-header h1 {
-        font-size: 1.5rem;
-    }
-
-    .flame-icon {
-        font-size: 3rem;
-    }
-}
-
-/* Quiz Panel Styles */
-.quiz-panel {
-    background: var(--glass-bg);
-    backdrop-filter: blur(15px);
-    border: 2px solid var(--glass-border);
-    border-radius: var(--border-radius);
-    padding: 2rem;
-    margin-bottom: 2rem;
-}
-
-.quiz-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid var(--glass-border);
-    padding-bottom: 1rem;
-}
-
-.quiz-icon {
-    font-size: 2.5rem;
-}
-
-.quiz-header h3 {
-    color: var(--science-cyan);
-    font-size: 1.5rem;
-}
-
-.quiz-desc {
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-}
-
-.quiz-list {
-    display: grid;
-    gap: 0.75rem;
-    margin-top: 1.5rem;
-}
-
-.quiz-item {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
-    border-radius: var(--border-radius-sm);
-    padding: 1rem;
-    font-size: 1rem;
-    line-height: 1.4;
-    transition: var(--transition);
-}
-
-.quiz-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--science-cyan);
-    transform: translateX(5px);
-}
-
-.quiz-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    justify-content: flex-end;
-}
-
-.btn-quiz {
-    padding: 5px 15px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-color);
-    border-radius: 8px;
-    cursor: pointer;
-    font-family: 'Roboto Mono', monospace;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.btn-quiz:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.btn-true:hover {
-    border-color: #4CAF50;
-    color: #4CAF50;
-}
-
-.btn-false:hover {
-    border-color: #f44336;
-    color: #f44336;
-}
-
-/* Selected states */
-.btn-quiz.selected {
-    transform: scale(1.05);
-}
-
-.btn-true.selected {
-    background: #4CAF50;
-    border-color: #4CAF50;
-    color: white;
-    box-shadow: 0 0 10px rgba(76, 175, 80, 0.4);
-}
-
-.btn-false.selected {
-    background: #f44336;
-    border-color: #f44336;
-    color: white;
-    box-shadow: 0 0 10px rgba(244, 67, 54, 0.4);
-}
-
-/* Feedback states (after checking) */
-.quiz-item.correct-answer {
-    border-left: 4px solid #4CAF50;
-    background: rgba(76, 175, 80, 0.1);
-}
-
-.quiz-item.wrong-answer {
-    border-left: 4px solid #f44336;
-    background: rgba(244, 67, 54, 0.1);
-}
-
-#quiz-status {
-    font-weight: bold;
-    margin-bottom: 10px;
-    font-size: 1.1rem;
-}
-
-/* Code Slot Animation */
-@keyframes slotPop {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 rgba(255, 165, 0, 0);
-    }
-
-    50% {
-        transform: scale(1.5);
-        box-shadow: 0 0 20px rgba(255, 165, 0, 0.8);
-        border-color: var(--primary-color);
-        background: rgba(255, 165, 0, 0.2);
-    }
-
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 rgba(255, 165, 0, 0);
-    }
-}
-
-.code-slot.pop-animation {
-    animation: slotPop 0.6s ease-out;
-}
-
-/* =========================================
-   MAIN MENU (HUB) STYLES
-   ========================================= */
-
-.mission-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
-    margin-top: 30px;
-}
-
-.mission-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid var(--glass-border);
-    border-radius: 15px;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.mission-card:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.mission-card .card-icon {
-    font-size: 3rem;
-    margin-bottom: 10px;
-}
-
-.mission-card h3 {
-    font-size: 1rem;
-    margin-bottom: 10px;
-    color: var(--text-color);
-}
-
-.mission-card .card-status {
-    font-size: 0.8rem;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* States */
-.mission-card.locked {
-    opacity: 0.6;
-    cursor: not-allowed;
-    filter: grayscale(100%);
-}
-
-.mission-card.locked:hover {
-    transform: none;
-}
-
-.mission-card.active {
-    border-color: var(--science-cyan);
-    box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
-}
-
-.mission-card.active .card-status {
-    color: var(--science-cyan);
-}
-
-.mission-card.completed {
-    border-color: #4CAF50;
-    background: rgba(76, 175, 80, 0.1);
-}
-
-.mission-card.completed .card-status {
-    color: #4CAF50;
-}
-
-.mission-card.completed::after {
-    content: 'âœ…';
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 1.2rem;
-}
-
-.mission-card.final-gate {
-    grid-column: 1 / -1;
-    background: linear-gradient(45deg, rgba(255, 107, 53, 0.2), rgba(0, 0, 0, 0.5));
-    border-color: var(--fire-glow);
-}
-
-.mission-card.final-gate.active {
-    animation: pulseBorder 2s infinite;
-}
-
-@keyframes pulseBorder {
-    0% {
-        box-shadow: 0 0 0 0 rgba(255, 107, 53, 0.4);
-    }
-
-    70% {
-        box-shadow: 0 0 0 10px rgba(255, 107, 53, 0);
-    }
-
-    100% {
-        box-shadow: 0 0 0 0 rgba(255, 107, 53, 0);
-    }
-}
-
-/* =====================================================
-   RESPONSIVE DESIGN
-   ===================================================== */
-
-@media (max-width: 768px) {
-    .lab-header h1 {
-        font-size: 2rem;
-    }
-
-    .station-header h2 {
-        font-size: 1.5rem;
-    }
-
-    .scenarios {
-        grid-template-columns: 1fr;
-    }
-
-    .emergency-numbers {
-        grid-template-columns: 1fr;
-    }
-
-    .final-code-slots {
-        gap: 0.5rem;
-    }
-
-    .final-code-slot {
-        width: 60px;
-        height: 60px;
-        font-size: 2rem;
-    }
-
-    .victory-title {
-        font-size: 1.8rem;
-    }
-
-    .btn {
-        width: 100%;
-        padding: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .code-slots {
-        gap: 0.3rem;
-    }
-
-    .code-slot {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-    }
-
-    .lab-header h1 {
-        font-size: 1.5rem;
-    }
-
-    .flame-icon {
-        font-size: 3rem;
-    }
-}Ä *cascade08ÄÄ*cascade08ÄÅ *cascade08ÅÅ*cascade08ÅŸ *cascade08ŸŸ*cascade08Ÿ *cascade08*cascade08“ *cascade08““*cascade08“ó *cascade08óõ*cascade08õà *cascade08àâ*cascade08â  *cascade08 ‘ *cascade08‘ ˜  *cascade08˜  *cascade08 Ë  *cascade08Ë Í *cascade08Í »# *cascade08»#½#*cascade08½#Ä# *cascade08Ä#É#*cascade08É#ª$ *cascade08ª$¬$*cascade08¬$ÙC *cascade08ÙCÛC*cascade08ÛCâC *cascade08âCçC*cascade08çCŒD *cascade08ŒDD*cascade08DßW *cascade08ßWáW*cascade08áWèW *cascade08èWíW*cascade08íWŸX *cascade08ŸX¡X*cascade08¡XÖX *cascade08ÖXØX*cascade08ØX‹| *cascade08‹||*cascade08|Ù‰ *cascade08Ù‰Û‰*cascade08Û‰â‰ *cascade08â‰ç‰*cascade08ç‰šŠ *cascade08šŠœŠ*cascade08œŠÍ˜ *cascade08Í˜Í˜*cascade08Í˜Œ™ *cascade08Œ™Œ™*cascade08Œ™Ì™ *cascade08Ì™Ì™*cascade08Ì™”š *cascade08”š”š*cascade08”šÌš *cascade08ÌšÌš*cascade08Ìš´› *cascade08´›´›*cascade08´›ï› *cascade08ï›ï›*cascade08ï›„ *cascade08„„*cascade08„è *cascade08èè*cascade08è£ *cascade08££*cascade08£Ü *cascade08Ü¶¦ *cascade08¶¦“Ã*cascade08“ÃÃ *cascade08ÃÃ*cascade08Ã¡Ã *cascade08¡Ã¥Ã *cascade08¥Ã¦Ã*cascade08¦ÃÀÃ *cascade08ÀÃÁÃ*cascade08ÁÃÅÃ *cascade08ÅÃÈÃ*cascade08ÈÃÔÃ *cascade08ÔÃØÃ*cascade08ØÃóÃ *cascade08óÃ÷Ã*cascade08÷Ã“Ä *cascade08“Ä—Ä*cascade08—ÄœÄ *cascade08œÄ Ä*cascade08 Ä­Ä *cascade08­Ä®Ä*cascade08®Ä²Ä *cascade08²ÄµÄ*cascade08µÄÉÄ *cascade08ÉÄÌÄ*cascade08ÌÄĞÄ *cascade08ĞÄÑÄ*cascade08ÑÄ‚Å *cascade08‚Å†Å*cascade08†Å®Å *cascade08®Å°Å*cascade08°Å´Å *cascade08´Å¶Å*cascade08¶ÅÑÅ *cascade08ÑÅÕÅ*cascade08ÕÅòÅ *cascade08òÅöÅ*cascade08öÅˆÆ *cascade08ˆÆŒÆ*cascade08ŒÆ¸Æ *cascade08¸Æ¼Æ*cascade08¼ÆØÆ *cascade08ØÆÜÆ*cascade08ÜÆøÆ *cascade08øÆüÆ*cascade08üÆÇ *cascade08Ç…Ç*cascade08…Ç˜Ç *cascade08˜Ç™Ç*cascade08™ÇÇ *cascade08Ç Ç*cascade08 ÇÈÇ *cascade08ÈÇÌÇ*cascade08ÌÇÑÇ *cascade08ÑÇÕÇ*cascade08ÕÇèÇ *cascade08èÇéÇ*cascade08éÇíÇ *cascade08íÇğÇ*cascade08ğÇˆÈ *cascade08ˆÈŒÈ*cascade08ŒÈ¡È *cascade08¡È¥È*cascade08¥ÈªÈ *cascade08ªÈ®È*cascade08®ÈÂÈ *cascade08ÂÈÆÈ*cascade08ÆÈæÈ *cascade08æÈêÈ*cascade08êÈûÈ *cascade08ûÈÿÈ*cascade08ÿÈ„É *cascade08„ÉˆÉ*cascade08ˆÉŸÉ *cascade08ŸÉ£É*cascade08£É¹É *cascade08¹É¼É*cascade08¼ÉÀÉ *cascade08ÀÉÁÉ*cascade08ÁÉÚÉ *cascade08ÚÉŞÉ*cascade08ŞÉãÉ *cascade08ãÉçÉ*cascade08çÉıÉ *cascade08ıÉÊ*cascade08ÊŸÊ *cascade08ŸÊ£Ê*cascade08£Ê»Ê *cascade08»Ê¾Ê*cascade08¾ÊÂÊ *cascade08ÂÊÃÊ*cascade08ÃÊÒÊ *cascade08ÒÊÖÊ*cascade08ÖÊˆË *cascade08ˆËŒË*cascade08ŒË‘Ë *cascade08‘Ë•Ë*cascade08•Ë¬Ë *cascade08¬Ë®Ë*cascade08®Ë²Ë *cascade08²Ë´Ë*cascade08´ËÊË *cascade08ÊËËË*cascade08ËËÏË *cascade08ÏËÒË*cascade08ÒËêË *cascade08êËîË*cascade08îË…Ì *cascade08…Ì‰Ì*cascade08‰Ì·Ì *cascade08·Ì»Ì*cascade08»ÌÀÌ *cascade08ÀÌÄÌ*cascade08ÄÌìÌ *cascade08ìÌğÌ*cascade08ğÌÍ *cascade08ÍÍ*cascade08Í“Í *cascade08“Í•Í*cascade08•Í¶Í *cascade08¶ÍºÍ*cascade08ºÍãÍ *cascade08ãÍçÍ*cascade08çÍìÍ *cascade08ìÍğÍ*cascade08ğÍ‹Î *cascade08‹ÎÎ*cascade08Î´Î *cascade08´ÎµÎ*cascade08µÎ¹Î *cascade08¹Î¼Î*cascade08¼ÎáÎ *cascade08áÎåÎ*cascade08åÎêÎ *cascade08êÎîÎ*cascade08îÎ‰Ï *cascade08‰ÏÏ*cascade08Ï£Ï *cascade08£Ï§Ï*cascade08§Ï¹Ï *cascade08¹Ï½Ï*cascade08½ÏÓÏ *cascade08ÓÏ×Ï*cascade08×ÏŒĞ *cascade08ŒĞĞ*cascade08Ğ•Ğ *cascade08•Ğ–Ğ*cascade08–ĞšĞ *cascade08šĞĞ*cascade08Ğ¤Ğ *cascade08¤Ğ¨Ğ*cascade08¨ĞÈĞ *cascade08ÈĞÌĞ*cascade08ÌĞ‚Ñ *cascade08‚Ñ„Ñ*cascade08„ÑŒÑ *cascade08ŒÑÑ*cascade08Ñ³Ñ *cascade08³Ñ·Ñ*cascade08·ÑèÑ *cascade08èÑìÑ*cascade08ìÑñÑ *cascade08ñÑóÑ*cascade08óÑ÷Ñ *cascade08÷ÑùÑ*cascade08ùÑÒ *cascade08Ò…Ò*cascade08…Ò£Ò *cascade08£Ò¤Ò*cascade08¤Ò¬Ò *cascade08¬Ò¯Ò*cascade08¯ÒØÒ *cascade08ØÒÛÒ*cascade08ÛÒßÒ *cascade08ßÒàÒ*cascade08àÒãÒ *cascade08ãÒçÒ*cascade08çÒêÒ *cascade08êÒëß *cascade08ëßìß*cascade08ìßíß *cascade08íßîß*cascade08îßïß *cascade08ïßğß*cascade08ğßòß *cascade08òßóß*cascade08óßõß *cascade08õßöß*cascade08ößùß *cascade08ùßıß*cascade08ıßşß*cascade08şßÿß *cascade08ÿß€à*cascade08€à„à *cascade08„à‡à*cascade08‡àˆà *cascade08ˆà‰à*cascade08‰àà *cascade08àà *cascade08à”à*cascade08”à–à *cascade08–à—à*cascade08—à™à *cascade08™àšà*cascade08šàœà *cascade08œà à*cascade08 à¡à *cascade08¡à¢à*cascade08¢à«à *cascade08«à­à*cascade08­à®à *cascade08®à°à*cascade08°à±à *cascade08±à²à*cascade08²à³à *cascade08³à´à*cascade08´à»à *cascade08»à¼à *cascade08¼àŞà *cascade08Şààà*cascade08ààèà *cascade08èàéà*cascade08éàëà *cascade08ëàìà*cascade08ìàóà *cascade08óàôà*cascade08ôàõà *cascade08õà÷à*cascade08÷àúà *cascade08úàûà*cascade08ûàıà *cascade08ıà€á*cascade08€áá *cascade08á…á*cascade08…áˆá *cascade08ˆáá*cascade08áá *cascade08á”á*cascade08”á•á*cascade08•á–á *cascade08–á›á*cascade08›áœá *cascade08œá¡á*cascade08¡á©á *cascade08©áªá*cascade08ªá­á *cascade08­á®á*cascade08®á°á *cascade08°á±á*cascade08±á²á *cascade08²á´á*cascade08´á¶á *cascade08¶á»á*cascade08»á½á *cascade08½áÀá*cascade08ÀáÁá *cascade08ÁáÅá*cascade08ÅáÆá *cascade08ÆáÈá*cascade08ÈáÊá *cascade08ÊáËá*cascade08ËáÑá *cascade08ÑáÒá *cascade08ÒáÚá *cascade08ÚáÛá*cascade08ÛáÜá *cascade08Üáİá*cascade08İáàá *cascade08àááá*cascade08ááãá *cascade08ãáäá*cascade08äáçá *cascade08çáéá*cascade08éáğá *cascade08ğáñá*cascade08ñáóá *cascade08óáõá*cascade08õáøá *cascade08øáùá*cascade08ùáúá *cascade08úáûá*cascade08ûá…â *cascade08…â†â*cascade08†âˆâ *cascade08ˆâ‰â*cascade08‰ââ *cascade08ââ*cascade08ââ *cascade08ââ*cascade08â‘â *cascade08‘â”â*cascade08”â™â *cascade08™âœâ*cascade08œââ *cascade08âŸâ*cascade08Ÿâ¨â *cascade08¨âªâ*cascade08ªâ«â *cascade08«â¬â*cascade08¬â­â *cascade08­â®â*cascade08®â¯â *cascade08¯â´â*cascade08´â¶â *cascade08¶â·â*cascade08·âÀâ *cascade08ÀâÁâ*cascade08ÁâÂâ *cascade08ÂâÄâ*cascade08ÄâÆâ *cascade08ÆâÈâ*cascade08ÈâĞâ *cascade08ĞâÓâ*cascade08ÓâÖâ *cascade08ÖâØâ*cascade08Øâáâ *cascade08áâââ*cascade08ââæâ *cascade08æâëâ*cascade08ëâ’ã *cascade08’ã“ã*cascade08“ã”ã *cascade08”ã˜ã*cascade08˜ãšã *cascade08šã›ã*cascade08›ãã *cascade08ãŸã*cascade08Ÿã¡ã *cascade08¡ã£ã*cascade08£ã¤ã *cascade08¤ã§ã*cascade08§ã©ã *cascade08©ã«ã*cascade08«ãµã *cascade08µã·ã*cascade08·ã¸ã *cascade08¸ã¹ã*cascade08¹ãºã *cascade08ºã¼ã*cascade08¼ã¾ã *cascade08¾ãÀã*cascade08ÀãÈã *cascade08ÈãÉã *cascade08ÉãÊã*cascade08ÊãÏã *cascade08ÏãĞã*cascade08ĞãÒã *cascade08ÒãÓã*cascade08ÓãÕã *cascade08ÕãÖã*cascade08ÖãÙã *cascade08Ùãİã*cascade08İãßã*cascade08ßãéã *cascade08éãìã*cascade08ìãíã *cascade08íãïã*cascade08ïãğã *cascade08ğãñã*cascade08ñãòã *cascade08òãôã*cascade08ôãõã *cascade08õã÷ã*cascade08÷ã€ä *cascade08€ä‚ä *cascade08‚ä„ä *cascade08„ä‰ä*cascade08‰äŠä *cascade08Šää*cascade08ä‘ä *cascade08‘ä“ä*cascade08“ä•ä *cascade08•äšä*cascade08šä›ä *cascade08›ää*cascade08ä¦ä *cascade08¦ä¨ä*cascade08¨äªä *cascade08ªä¬ä*cascade08¬ä­ä *cascade08­ä®ä*cascade08®ä´ä *cascade08´ä¶ä *cascade08¶äºä*cascade08ºä¼ä *cascade08¼ä½ä*cascade08½ä¿ä *cascade08¿äÂä*cascade08ÂäÄä *cascade08ÄäÇä*cascade08ÇäÏä *cascade08ÏäĞä*cascade08ĞäÒä *cascade08ÒäÔä*cascade08ÔäÖä *cascade08ÖäÜä*cascade08Üäêä *cascade08êäíä*cascade08íäïä *cascade08ïäğä*cascade08ğäñä *cascade08ñäòä*cascade08òäøä *cascade08øäŠå*cascade08Šåå *cascade08å“å*cascade08“å•å *cascade08•å˜å*cascade08˜åšå *cascade08šåå*cascade08å¡å *cascade08¡å¢å*cascade08¢å§å *cascade08§å¨å*cascade08¨å¸å *cascade08¸å¹å*cascade08¹åºå *cascade08ºå¼å*cascade08¼å½å *cascade08½å¿å*cascade08¿åÁå *cascade08ÁåÂå*cascade08ÂåÆå *cascade08ÆåËå*cascade08ËåÎå *cascade08ÎåĞå*cascade08ĞåÑå *cascade08ÑåÒå*cascade08ÒåÓå *cascade08ÓåÔå*cascade08ÔåÕå *cascade08ÕåØå*cascade08ØåÙå *cascade08Ùåİå*cascade08İåãå *cascade08ãåçå*cascade08çåèå *cascade08èåéå*cascade08éåñå *cascade08ñåòå*cascade08òåùå *cascade08ùåúå*cascade08úåûå *cascade08ûåıå*cascade08ıåşå *cascade08şåÿå*cascade08ÿå€æ *cascade08€æ„æ*cascade08„æ†æ *cascade08†æ‰æ*cascade08‰æŠæ *cascade08Šææ*cascade08ææ *cascade08æ“æ*cascade08“æ•æ *cascade08•æ–æ *cascade08–æšæ*cascade08šæœæ *cascade08œææ*cascade08ææ *cascade08æŸæ*cascade08Ÿæªæ *cascade08ªæ¬æ*cascade08¬æ­æ *cascade08­æ°æ*cascade08°æ²æ *cascade08²æ¶æ*cascade08¶æ¾æ *cascade08¾æ¿æ*cascade08¿æÀæ *cascade08ÀæÃæ*cascade08ÃæÇæ *cascade08ÇæÉæ*cascade08ÉæÊæ *cascade08ÊæÌæ*cascade08ÌæÍæ *cascade08ÍæĞæ*cascade08ĞæÒæ *cascade08ÒæÕæ*cascade08Õæßæ *cascade08ßæáæ*cascade08áæâæ *cascade08âæåæ*cascade08åæææ *cascade08ææéæ*cascade08éæêæ *cascade08êæíæ*cascade08íæõæ *cascade08õæùæ*cascade08ùæşæ *cascade08şæÿæ*cascade08ÿæç *cascade08ç—ç*cascade08—ç˜ç *cascade08˜çšç*cascade08šç£ç *cascade08£ç¥ç*cascade08¥ç§ç *cascade08§ç©ç*cascade08©çªç *cascade08ªç¯ç*cascade08¯ç¹ç *cascade08¹ç»ç*cascade08»ç¾ç *cascade08¾ç¿ç*cascade08¿çÃç *cascade08ÃçÅç*cascade08ÅçÇç *cascade08ÇçÎç*cascade08ÎçÙç *cascade08ÙçÚç*cascade08ÚçÜç *cascade08Üçâç*cascade08âçìç *cascade08ìçîç*cascade08îçïç *cascade08ïçñç*cascade08ñçóç *cascade08óçôç*cascade08ôçõç *cascade08õç÷ç*cascade08÷çøç *cascade08øçûç*cascade08ûçƒè *cascade08ƒè†è*cascade08†èˆè *cascade08ˆèè*cascade08è‘è *cascade08‘è—è*cascade08—èŸè *cascade08Ÿè¢è*cascade08¢è£è *cascade08£è¤è*cascade08¤è¦è *cascade08¦è­è*cascade08­èµè *cascade08µè·è*cascade08·è¸è *cascade08¸èÀè*cascade08ÀèÁè *cascade08ÁèÇè*cascade08ÇèÈè *cascade08ÈèÌè*cascade08ÌèÍè *cascade08ÍèÎè*cascade08ÎèÏè *cascade08ÏèĞè*cascade08ĞèÑè *cascade08ÑèÓè*cascade08ÓèÔè *cascade08ÔèØè*cascade08ØèÚè *cascade08ÚèŞè*cascade08Şèæè *cascade08æèéè*cascade08éèëè *cascade08ëèïè*cascade08ïèñè *cascade08ñè÷è*cascade08÷èùè *cascade08ùèüè*cascade08üèˆé *cascade08ˆé‰é*cascade08‰éŠé *cascade08Šé–é*cascade08–é—é *cascade08—é˜é*cascade08˜éé *cascade08éŸé*cascade08Ÿé é *cascade08 é¢é*cascade08¢é¤é *cascade08¤é§é*cascade08§éªé *cascade08ªé«é*cascade08«é¬é *cascade08¬é°é*cascade08°é±é *cascade08±é²é*cascade08²é¸é *cascade08¸é¹é*cascade08¹éºé *cascade08ºé»é*cascade08»é½é *cascade08½é¾é*cascade08¾é¿é *cascade08¿éÁé*cascade08ÁéÃé *cascade08ÃéÄé*cascade08ÄéÆé *cascade08ÆéÌé*cascade08ÌéØé *cascade08ØéÚé*cascade08ÚéÜé *cascade08Üéİé*cascade08İéßé *cascade08ßéàé*cascade08àéçé *cascade08çéòé*cascade08òéóé *cascade08óéôé*cascade08ôéõé *cascade08õéöé*cascade08öé÷é *cascade08÷éøé*cascade08øéüé *cascade08üé„ê*cascade08„ê…ê *cascade08…ê‰ê*cascade08‰êŠê *cascade08Šêê*cascade08êê *cascade08êê*cascade08êê *cascade08ê’ê*cascade08’ê›ê *cascade08›êœê *cascade08œêê*cascade08êŸê *cascade08Ÿê ê*cascade08 ê¡ê *cascade08¡ê£ê*cascade08£ê¤ê *cascade08¤ê­ê*cascade08­êµê *cascade08µê»ê*cascade08»ê¼ê *cascade08¼ê½ê*cascade08½ê¾ê *cascade08¾ê¿ê*cascade08¿êÁê *cascade08ÁêÈê*cascade08ÈêÏê *cascade08ÏêÜê*cascade08Üêİê *cascade08İêåê*cascade08åêëê *cascade08ëêíê*cascade08íêïê *cascade08ïêñê*cascade08ñêòê *cascade08òêøê*cascade08øêşê *cascade08şêÿê*cascade08ÿê€ë *cascade08€ëë*cascade08ëƒë *cascade08ƒëˆë*cascade08ˆëŠë *cascade08Šë‹ë*cascade08‹ëŒë *cascade08Œëë*cascade08ëë *cascade08ë’ë*cascade08’ë“ë *cascade08“ëœë*cascade08œëë *cascade08ë ë*cascade08 ë¡ë *cascade08¡ë¤ë*cascade08¤ë¥ë *cascade08¥ëªë*cascade08ªë´ë *cascade08´ë¼ë*cascade08¼ë½ë *cascade08½ë¿ë*cascade08¿ëÀë *cascade08ÀëÁë*cascade08ÁëÂë *cascade08ÂëÃë*cascade08ÃëÄë *cascade08ÄëÇë*cascade08ÇëÉë *cascade08ÉëÔë*cascade08Ôëßë *cascade08ßëìë*cascade08ìëîë *cascade08îëğë*cascade08ğëñë *cascade08ñëòë*cascade08òëúë *cascade08úë›ì*cascade08›ì­ì *cascade08­ì®ì*cascade08®ì¯ì *cascade08¯ìÀì*cascade08ÀìÄì *cascade08ÄìÎì*cascade08ÎìÒì *cascade08ÒìÕì*cascade08ÕìÖì *cascade08Öìàì*cascade08àìáì *cascade08áìâì*cascade08âìîì *cascade08îìóì*cascade08óìõì *cascade08õìöì*cascade08öìÿì *cascade08ÿì†í*cascade08†íí *cascade08í’í*cascade08’í•í *cascade08•í–í*cascade08–íœí *cascade08œíªí*cascade08ªí«í *cascade08«í¯í*cascade08¯í·í *cascade08·í¸í*cascade08¸í½í *cascade08½í¿í*cascade08¿íÀí *cascade08ÀíÃí*cascade08ÃíÌí *cascade08ÌíÍí*cascade08ÍíÏí *cascade08ÏíÑí*cascade08ÑíÒí *cascade08ÒíÓí*cascade08ÓíÔí *cascade08ÔíÖí*cascade08ÖíØí *cascade08ØíÜí*cascade08Üíóí *cascade08óíöí*cascade08öíıí *cascade08ıíşí*cascade08şíÿí *cascade08ÿíî*cascade08î„î *cascade08„î…î*cascade08…îˆî *cascade08ˆîŠî*cascade08Šî–î *cascade08–î˜î*cascade08˜î™î *cascade08™îî*cascade08îî *cascade08î¢î*cascade08¢î£î *cascade08£î¥î*cascade08¥î¦î *cascade08¦î©î*cascade08©î­î *cascade08­î¯î*cascade08¯î±î *cascade08±î³î*cascade08³î´î *cascade08´î¶î*cascade08¶î·î *cascade08·î¸î*cascade08¸î¹î *cascade08¹î»î*cascade08»î¼î *cascade08¼îÃî*cascade08ÃîÄî *cascade08ÄîÅî*cascade08ÅîËî *cascade08ËîÍî*cascade08ÍîÙî *cascade08Ùîßî*cascade08ßîáî *cascade08áîâî*cascade08âîçî *cascade08çîëî*cascade08ëî÷î *cascade08÷îøî*cascade08øîùî *cascade08ùîúî*cascade08úîüî *cascade08üîï*cascade08ïƒï *cascade08ƒï“ï*cascade08“ï”ï *cascade08”ï•ï*cascade08•ï–ï *cascade08–ïï*cascade08ï­ï *cascade08­ï°ï*cascade08°ï¼ï *cascade08¼ï½ï*cascade08½ï¾ï *cascade08¾ï¿ï*cascade08¿ïÀï *cascade08ÀïÂï*cascade08ÂïÃï *cascade08ÃïÄï*cascade08ÄïÇï *cascade08ÇïÍï*cascade08ÍïĞï *cascade08ĞïÑï*cascade08ÑïÜï *cascade08Üïßï*cascade08ßïàï *cascade08àïáï*cascade08áïâï *cascade08âïæï*cascade08æïèï *cascade08èïéï*cascade08éïêï *cascade08êïëï*cascade08ëïìï *cascade08ìïğï*cascade08ğïñï *cascade08ñïúï*cascade08úïûï *cascade08ûïÿï*cascade08ÿï€ğ *cascade08€ğ‚ğ*cascade08‚ğƒğ *cascade08ƒğ„ğ*cascade08„ğ…ğ *cascade08…ğˆğ*cascade08ˆğ’ğ *cascade08’ğ•ğ*cascade08•ğ–ğ *cascade08–ğ›ğ*cascade08›ğœğ *cascade08œğğ*cascade08ğ ğ *cascade08 ğ¢ğ*cascade08¢ğ£ğ *cascade08£ğ¦ğ*cascade08¦ğ¨ğ *cascade08¨ğ©ğ*cascade08©ğ¬ğ *cascade08¬ğ­ğ*cascade08­ğ®ğ *cascade08®ğ±ğ*cascade08±ğ³ğ *cascade08³ğ´ğ*cascade08´ğÕğ *cascade08Õğ×ğ*cascade08×ğÚğ *cascade08ÚğÛğ*cascade08Ûğßğ *cascade08ßğàğ*cascade08àğèğ *cascade08èğíğ*cascade08íğñğ *cascade08ñğùğ*cascade08ùğûğ *cascade08ûğ€ñ*cascade08€ññ *cascade08ñ‚ñ*cascade08‚ñ„ñ *cascade08„ñ…ñ*cascade08…ñ†ñ *cascade08†ñ‡ñ*cascade08‡ñ‰ñ *cascade08‰ññ*cascade08ñ‘ñ *cascade08‘ñ“ñ*cascade08“ñ¡ñ *cascade08¡ñ¢ñ*cascade08¢ñ£ñ *cascade08£ñ¥ñ*cascade08¥ñ§ñ *cascade08§ñ©ñ*cascade08©ñ«ñ *cascade08«ñ±ñ*cascade08±ñ²ñ *cascade08²ñ³ñ*cascade08³ñµñ *cascade08µñÄñ*cascade08ÄñÌñ *cascade08Ìñğñ*cascade08ğñõñ *cascade08õñúñ*cascade08úñûñ *cascade08ûñüñ*cascade08üñÿñ *cascade08ÿñŒò*cascade08Œòò *cascade08ò”ò*cascade08”ò—ò *cascade08—ò˜ò*cascade08˜òšò *cascade08šòò*cascade08òŸò *cascade08ŸòÊò*cascade08ÊòÍò *cascade08ÍòÑò*cascade08ÑòÒò *cascade08ÒòÖò*cascade08Öò×ò *cascade08×òåò*cascade08åòçò *cascade08çò˜ó*cascade08˜ó´ö *cascade08´ö¸ö *cascade08¸ö£÷ *cascade08£÷¤÷ *cascade08¤÷ª÷*cascade08ª÷õ÷ *cascade08õ÷ö÷ *cascade08ö÷”ø *cascade08”ø¾ø *cascade08¾ø¿ø *cascade08¿øéù *cascade08éùëù *cascade08ëù¨ú *cascade08¨ú©ú *cascade08©úúû *cascade08úû‚ü *cascade08‚üşÿ *cascade08şÿ€ *cascade08€¤€*cascade08¤€¬€ *cascade08¬€Í€ *cascade08Í€Ò€ *cascade08Ò€í *cascade08íï *cascade08ï‚ *cascade08‚†‚*cascade08†‚Š‚ *cascade08Š‚‚*cascade08‚‚ *cascade08‚‘‚*cascade08‘‚™‚ *cascade08™‚Œ‹*cascade08Œ‹‹ *cascade082=file:///C:/Users/Tomi/Oktat%C3%A1s/fire-escape-room/style.css

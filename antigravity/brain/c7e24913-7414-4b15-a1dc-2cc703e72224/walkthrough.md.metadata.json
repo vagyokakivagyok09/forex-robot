@@ -1,5 +1,0 @@
-{
-  "artifactType": "ARTIFACT_TYPE_WALKTHROUGH",
-  "summary": "Complete walkthrough of the TTM Squeeze forex trading webapp implementation. Documents all created files (backend logic, data fetcher, Telegram notifications, Streamlit dashboard, scheduler, configuration), verification tests that confirm all modules work correctly, and provides next steps for running the dashboard and optional Telegram setup.",
-  "updatedAt": "2025-11-25T21:37:35.553576700Z"
-}

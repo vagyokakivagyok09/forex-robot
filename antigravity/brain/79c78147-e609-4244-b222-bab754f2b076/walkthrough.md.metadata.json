@@ -1,6 +1,0 @@
-{
-  "artifactType": "ARTIFACT_TYPE_WALKTHROUGH",
-  "summary": "Refactored app.py to fix `ValueError`, improve Chart Visualization, and prevent Race Conditions.\n- Fixed `ValueError` by flattening `yfinance` data.\n- Improved Chart Visualization: Arrows start from 08:00 GMT.\n- **Race Condition Fix**: Added a \"Double Check\" that reloads history immediately before sending a Telegram message to prevent duplicate alerts from multiple tabs/processes.\n- Persistent Signal History remains implemented.",
-  "updatedAt": "2025-11-24T21:05:43.848879900Z",
-  "version": "5"
-}

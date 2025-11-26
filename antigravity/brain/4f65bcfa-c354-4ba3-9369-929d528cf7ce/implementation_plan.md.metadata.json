@@ -1,6 +1,0 @@
-{
-  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
-  "summary": "Plan to restructure the app navigation to a Hub/Main Menu model.\n- New 'main-menu' section in HTML.\n- CSS for mission cards (Locked/Active/Completed).\n- JS updates to redirect to menu after station completion and manage unlock states.",
-  "updatedAt": "2025-11-26T08:11:31.117563100Z",
-  "version": "1"
-}

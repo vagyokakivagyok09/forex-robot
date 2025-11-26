@@ -1,5 +1,0 @@
-{
-  "artifactType": "ARTIFACT_TYPE_IMPLEMENTATION_PLAN",
-  "summary": "Detailed implementation plan for building an adaptive learning platform using Google Gemini AI. Covers frontend architecture, core JavaScript modules (Gemini agent, knowledge tracing, adaptive engine), subject-specific modules for 5-6th grade Science and 7-8th grade Geography, including knowledge graphs, simulations, and gamification. Includes verification strategy and phased implementation timeline.",
-  "updatedAt": "2025-11-25T19:01:57.538483600Z"
-}

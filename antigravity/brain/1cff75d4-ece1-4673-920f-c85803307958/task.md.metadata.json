@@ -1,5 +1,0 @@
-{
-  "artifactType": "ARTIFACT_TYPE_TASK",
-  "summary": "Task checklist for modifying the weekly Telegram report to send every Friday at 20:00 and summarize only the current week's trading performance instead of all-time statistics.",
-  "updatedAt": "2025-11-25T07:35:32.299324600Z"
-}
