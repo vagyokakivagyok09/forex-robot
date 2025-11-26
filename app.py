@@ -220,6 +220,11 @@ def analyze_london_breakout(df, symbol):
 # --- FŐ ALKALMAZÁS ---
 
 def main():
+    # Logo megjelenítése
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.image("logo.png", use_container_width=True)
+    
     st.title("🇬🇧 London Breakout Pro Dashboard")
     st.caption("3 Eszköz Szimultán Figyelése (07:00-08:00 GMT + EMA 50)")
     
