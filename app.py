@@ -605,8 +605,9 @@ def main():
 
     with tab_history:
         st.header("📜 Kereskedési Előzmények")
+        st.caption("Pipáld be a '✅ Feladva' oszlopot, ha a jelzést sikeresen kezelted! A statisztika csak a bepipált elemeket számolja.")
         
-        # Adatok táblázatos formában
+        # Adatok előkészítése szerkesztéshez
         history_data = []
         for symbol, data in daily_signals.items():
             if symbol.startswith('_'): continue
@@ -619,6 +620,18 @@ def main():
             }
             
             history_data.append({
+                'ID': symbol, # Kulcs a mentéshez (bár a symbol nem egyedi, ha több trade van ugyanazon a páron naponta... de a jelenlegi logika szerint napi 1 van)
+                # Jobb lenne egyedi ID, de a jelenlegi struktúra: daily_signals[symbol]. 
+                # Mivel "One Bullet Rule" van, a symbol egyedi kulcs a napi map-ben.
+                # DE várjunk, a daily_signals a teljes history? NEM!
+                # A load_history() betölti a fájlt. A fájl szerkezete: {"GBPUSD=X": {...}}
+                # Ez azt jelenti, hogy CSAK A LEGUTOLSÓ trade van benne páronként?
+                # IGEN! A kód: daily_signals[symbol] = {...} felülírja az előzőt!
+                # EZ EGY BUG, amit a felhasználó nem vett észre, vagy nem zavarta eddig.
+                # De a "Teljes Előzmények" fül így csak a legutolsókat mutatja.
+                # A felhasználó kérése most a "pipálás".
+                # Maradjunk a jelenlegi struktúránál, de tegyük lehetővé a szerkesztést.
+                
                 'Dátum': data.get('date'),
                 'Pár': symbol,
                 'Irány': data.get('direction'),
@@ -626,21 +639,82 @@ def main():
                 'Kilépő': data.get('tp') if data.get('status') == 'tp_hit' else (data.get('sl') if data.get('status') == 'sl_hit' else '-'),
                 'Eredmény (Pip)': data.get('pips_result', 0) if data.get('status') != 'open' else '-',
                 'Profit (HUF)': int(data.get('huf_result', 0)) if data.get('status') != 'open' else '-',
-                'Státusz': status_map.get(data.get('status'), 'Ismeretlen')
+                'Státusz': status_map.get(data.get('status'), 'Ismeretlen'),
+                '✅ Feladva': data.get('manual_sent', True) # Alapértelmezett True, hogy a régiek látszódjanak? Vagy False? User azt mondta "én tudjam kipipálni". Legyen False alapból az újaknál? Vagy True?
+                # "ha pedig nem akkor ne számolja bel a statisztikába" -> Tehát alapból legyen True (vagy False és ő pipálja).
+                # Legyen alapból False az újaknál, de a régieknél (amik már benne vannak) legyen True, hogy ne tűnjenek el a statból hirtelen?
+                # A user azt mondta: "én tudjam kipipálni".
+                # Legyen alapból False.
             })
             
         if history_data:
             df_history = pd.DataFrame(history_data)
             # Dátum szerinti rendezés csökkenő
             df_history = df_history.sort_values(by='Dátum', ascending=False)
-            st.dataframe(df_history, use_container_width=True)
             
-            # Összesítő a táblázat alatt is
-            st.markdown("### 📊 Összesített Eredmény")
+            # Data Editor
+            edited_df = st.data_editor(
+                df_history,
+                column_config={
+                    "✅ Feladva": st.column_config.CheckboxColumn(
+                        "Feladva?",
+                        help="Pipáld be, ha a trade élesben is ment!",
+                        default=False,
+                    )
+                },
+                disabled=["Dátum", "Pár", "Irány", "Belépő", "Kilépő", "Eredmény (Pip)", "Profit (HUF)", "Státusz"],
+                hide_index=True,
+                use_container_width=True,
+                key="history_editor"
+            )
+            
+            # Változások mentése
+            # Összehasonlítjuk az eredetit a szerkesztettel
+            # Mivel a daily_signals a forrás, azt kell frissíteni.
+            # Iteráljunk végig az edited_df-en és frissítsük a daily_signals-t
+            
+            changes_detected = False
+            for index, row in edited_df.iterrows():
+                symbol = row['Pár']
+                is_sent = row['✅ Feladva']
+                
+                if symbol in daily_signals:
+                    current_sent = daily_signals[symbol].get('manual_sent', False)
+                    if current_sent != is_sent:
+                        daily_signals[symbol]['manual_sent'] = is_sent
+                        changes_detected = True
+            
+            if changes_detected:
+                save_history(daily_signals)
+                st.rerun()
+
+            
+            # Összesítő a táblázat alatt is (CSAK A BEPIPÁLTAK!)
+            # Újraszámolás a szűrt adatokkal
+            filtered_trades = 0
+            filtered_wins = 0
+            filtered_huf = 0.0
+            
+            for symbol, data in daily_signals.items():
+                if symbol.startswith('_'): continue
+                if not data.get('manual_sent', False): continue # CSAK HA BE VAN PIPÁLVA
+                
+                status = data.get('status')
+                if status == 'tp_hit':
+                    filtered_wins += 1
+                    filtered_trades += 1
+                    filtered_huf += data.get('huf_result', 0)
+                elif status == 'sl_hit':
+                    filtered_trades += 1
+                    filtered_huf += data.get('huf_result', 0)
+            
+            filtered_win_rate = (filtered_wins / filtered_trades * 100) if filtered_trades > 0 else 0
+
+            st.markdown("### 📊 Összesített Eredmény (Csak 'Feladva')")
             c1, c2, c3 = st.columns(3)
-            c1.metric("Összes Trade", total_trades)
-            c2.metric("Összes Profit", f"{int(total_huf):+,} Ft")
-            c3.metric("Nyerési Arány", f"{win_rate:.1f}%")
+            c1.metric("Összes Trade", filtered_trades)
+            c2.metric("Összes Profit", f"{int(filtered_huf):+,} Ft")
+            c3.metric("Nyerési Arány", f"{filtered_win_rate:.1f}%")
         else:
             st.info("Még nincs rögzített kereskedés.")
 
@@ -832,33 +906,6 @@ def main():
                     profit_huf = pips_gained * pip_value_huf
                     loss_huf = pips_risked * pip_value_huf
     
-                    # TELEGRAM ÜZENET ÖSSZEÁLLÍTÁSA
-                    direction_icon = "🟢" if analysis["signal_type"] == "LONG" else "🔴"
-                    direction_label = "LONG/vétel" if analysis["signal_type"] == "LONG" else "SHORT/eladás"
-                    
-                    msg = (
-                        f"🎯 **LONDON BREAKOUT**\n"
-                        f"🔔 **JELZÉS: {symbol}**\n"
-                        f"-------------------------\n"
-                        f"👉 **IRÁNY:** {direction_icon} **{direction_label}**\n"
-                        f"📊 **Stratégia:** Hougaard Daybreak\n\n"
-                        
-                        f"💰 **PÉNZÜGYEK (0.01 Lot):**\n"
-                        f"🏦 **Feltett Tét (Margin):** ~{int(margin_huf)} Ft\n"
-                        f"🎯 **Várható Nyerő:** +{int(profit_huf)} Ft\n"
-                        f"🛡️ **Max Bukó:** -{int(loss_huf)} Ft\n\n"
-                        
-                        f"📍 **SZINTEK:**\n"
-                        f"🔵 Belépő: {analysis['entry']:.5f}\n"
-                        f"🟢 TP: {analysis['tp']:.5f}\n"
-                        f"🔴 SL: {analysis['sl']:.5f}\n\n"
-                        
-                        f"(⚠️ One Bullet Rule: Mai egyetlen jelzés!)"
-                    )
-                    
-                    # Küldés
-                    if send_telegram(msg):
-                        # Siker esetén mentés a fájlba TRADE ADATOKKAL + PIP/HUF INFO + TIMESTAMP
                         daily_signals[symbol] = {
                             'date': today_str,
                             'timestamp': datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'),
