@@ -234,7 +234,7 @@ def main():
         
     # --- TRADING MODE KAPCSOLÓ ---
     # Ez engedélyezi a jelzések küldését. Alapból kikapcsolva a biztonságért.
-    trading_mode = st.sidebar.checkbox("Trading Mode (Jelzések küldése)", value=False, help="Pipáld be, ha szeretnéd, hogy a rendszer Telegram üzeneteket küldjön!")
+    trading_mode = st.sidebar.checkbox("Trading Mode (Jelzések küldése)", value=True, help="Pipáld be, ha szeretnéd, hogy a rendszer Telegram üzeneteket küldjön!")
     
     if trading_mode:
         st.sidebar.success("✅ JELZÉSEK AKTÍVAK")
@@ -281,6 +281,10 @@ def main():
     weekly_pips = 0.0
     weekly_huf = 0.0
     
+    # Napi lezárt tradek gyűjtése
+    today_closed_trades = []
+    today_str = now.strftime('%Y-%m-%d')
+
     for symbol, data in daily_signals.items():
         if symbol.startswith('_'):  # Skip metadata
             continue
@@ -289,10 +293,13 @@ def main():
         # Ellenőrizzük, hogy az aktuális héten zárult-e le
         trade_date_str = data.get('date')
         is_current_week = False
+        is_today = False
+        
         if trade_date_str:
             try:
                 trade_date = datetime.strptime(trade_date_str, '%Y-%m-%d').date()
                 is_current_week = current_week_start <= trade_date <= current_week_end
+                is_today = trade_date_str == today_str
             except:
                 pass
         
@@ -309,6 +316,10 @@ def main():
                 weekly_trades += 1
                 weekly_pips += data.get('pips_result', 0)
                 weekly_huf += data.get('huf_result', 0)
+            
+            # Today stats
+            if is_today:
+                today_closed_trades.append({'symbol': symbol, 'result': 'WIN', 'huf': data.get('huf_result', 0), 'pips': data.get('pips_result', 0)})
                 
         elif status == 'sl_hit':
             losses += 1
@@ -322,6 +333,10 @@ def main():
                 weekly_trades += 1
                 weekly_pips += data.get('pips_result', 0)
                 weekly_huf += data.get('huf_result', 0)
+
+            # Today stats
+            if is_today:
+                today_closed_trades.append({'symbol': symbol, 'result': 'LOSS', 'huf': data.get('huf_result', 0), 'pips': data.get('pips_result', 0)})
                 
         elif status == 'open':
             open_trades += 1
@@ -426,6 +441,14 @@ def main():
                                 f"{int(huf_current):+,} Ft", 
                                 delta=f"{pips_current:+.1f} pip")
                         st.markdown("---")
+    # --- MAI LEZÁRT TRADEK (ÚJ) ---
+    if today_closed_trades:
+        st.sidebar.markdown("---")
+        st.sidebar.markdown("### ✅ Mai Lezárt Tradek")
+        for trade in today_closed_trades:
+            icon = "✅" if trade['result'] == 'WIN' else "❌"
+            st.sidebar.markdown(f"{icon} **{trade['symbol']}**: {int(trade['huf']):+,} Ft ({trade['pips']:+.1f} pip)")
+
     st.sidebar.markdown("---")
     # --- STATISZTIKÁK VÉGE ---
     
@@ -577,6 +600,50 @@ def main():
 
 
 
+    # --- TABS LÉTREHOZÁSA ---
+    tab_charts, tab_history = st.tabs(["📈 Grafikonok", "📜 Teljes Előzmények"])
+
+    with tab_history:
+        st.header("📜 Kereskedési Előzmények")
+        
+        # Adatok táblázatos formában
+        history_data = []
+        for symbol, data in daily_signals.items():
+            if symbol.startswith('_'): continue
+            
+            # Csak a lezárt vagy nyitott tradek
+            status_map = {
+                'tp_hit': '✅ NYERŐ',
+                'sl_hit': '❌ VESZTŐ',
+                'open': '🔄 NYITOTT'
+            }
+            
+            history_data.append({
+                'Dátum': data.get('date'),
+                'Pár': symbol,
+                'Irány': data.get('direction'),
+                'Belépő': data.get('entry'),
+                'Kilépő': data.get('tp') if data.get('status') == 'tp_hit' else (data.get('sl') if data.get('status') == 'sl_hit' else '-'),
+                'Eredmény (Pip)': data.get('pips_result', 0) if data.get('status') != 'open' else '-',
+                'Profit (HUF)': int(data.get('huf_result', 0)) if data.get('status') != 'open' else '-',
+                'Státusz': status_map.get(data.get('status'), 'Ismeretlen')
+            })
+            
+        if history_data:
+            df_history = pd.DataFrame(history_data)
+            # Dátum szerinti rendezés csökkenő
+            df_history = df_history.sort_values(by='Dátum', ascending=False)
+            st.dataframe(df_history, use_container_width=True)
+            
+            # Összesítő a táblázat alatt is
+            st.markdown("### 📊 Összesített Eredmény")
+            c1, c2, c3 = st.columns(3)
+            c1.metric("Összes Trade", total_trades)
+            c2.metric("Összes Profit", f"{int(total_huf):+,} Ft")
+            c3.metric("Nyerési Arány", f"{win_rate:.1f}%")
+        else:
+            st.info("Még nincs rögzített kereskedés.")
+
     # Adatok frissítése állapotjelzővel
     with st.spinner('Piacok elemzése...'):
         
@@ -667,263 +734,264 @@ def main():
                             save_history(daily_signals)
         # --- TRADE KÖVETÉS VÉGE ---
         
-        for symbol in TARGET_PAIRS:
-            st.markdown("---")
-            st.header(f"🇬🇧 {symbol}")
-            
-            # 1. Adatok
-            df = get_data(symbol)
-            if df is None:
-                st.warning("Nem sikerült letölteni az adatokat.")
-                continue
+        with tab_charts:
+            for symbol in TARGET_PAIRS:
+                st.markdown("---")
+                st.header(f"🇬🇧 {symbol}")
                 
-            # Hétvége / Frissesség ellenőrzése
-            last_time = df.index[-1]
-            is_data_fresh = last_time.date() == datetime.utcnow().date()
-            
-            if not is_data_fresh:
-                st.warning(f"⚠️ A piac zárva van. Az utolsó adat: {last_time.strftime('%Y-%m-%d %H:%M')}")
-            
-            # 2. Indikátorok
-            df['EMA_50'] = calculate_ema(df)
-            
-            # 3. Stratégia Elemzés
-            analysis = analyze_london_breakout(df, symbol)
-            
-            # 4. Jelzés Kezelése (One Bullet Logic)
-            today_str = datetime.utcnow().strftime('%Y-%m-%d')
-            saved_signal = daily_signals.get(symbol)
-            
-            signal_locked = False
-            locked_direction = None
-            
-            # Ellenőrizzük, volt-e már MAI jelzés
-            if saved_signal and saved_signal['date'] == today_str:
-                signal_locked = True
-                locked_direction = saved_signal['direction']
-                st.info(f"🔒 **MAI JELZÉS ELKÜLDVE:** {locked_direction}. A terv a grafikonon látható (One Bullet Rule).")
-                
-            # Ha még nem volt jelzés, de most van TRIGGER és friss az adat
-            # ÉS be van kapcsolva a Trading Mode
-            elif analysis and analysis["signal_type"] and is_data_fresh and trading_mode:
-                
-                # --- DUPLA ELLENŐRZÉS (Race Condition ellen) ---
-                # Frissítjük a memóriát a fájlból, hátha egy másik tab már elküldte
-                current_history = load_history()
-                if symbol in current_history and current_history[symbol]['date'] == today_str:
-                    st.warning(f"⚠️ {symbol} jelzést már egy másik folyamat elküldte! (Race Condition elkerülve)")
+                # 1. Adatok
+                df = get_data(symbol)
+                if df is None:
+                    st.warning("Nem sikerült letölteni az adatokat.")
                     continue
-
-                # --- PÉNZÜGYI SZÁMÍTÁSOK (HUF) ---
-                # Alapértelmezések
-                lot_size = 0.01
-                leverage = 30
-                contract_size = 100000 # Standard lot
-                
-                # Deviza párok felbontása
-                base_currency = symbol[:3] # pl GBP
-                quote_currency = symbol[3:6] # pl USD
-                
-                # Árfolyamok lekérése
-                base_huf_rate = get_huf_rate(base_currency)
-                usd_huf_rate = get_huf_rate('USD') # Kell a pip értékhez ha USD a quote
-                
-                margin_huf = 0
-                pip_value_huf = 0
-                
-                if base_huf_rate:
-                    # Margin számítás: (Contract Size * Lot * Base_HUF) / Leverage
-                    # 0.01 lot esetén contract size effektív 1000
-                    margin_huf = (1000 * base_huf_rate) / leverage
-                
-                # Pip Érték számítás
-                if quote_currency == 'USD':
-                    # XXX/USD: 1 pip = 10 USD / lot -> 0.1 USD / 0.01 lot
-                    if usd_huf_rate:
-                        pip_value_huf = 0.1 * usd_huf_rate
-                elif quote_currency == 'JPY':
-                    # XXX/JPY: 1 pip = 1000 JPY / lot -> 10 JPY / 0.01 lot
-                    # Átváltás: 10 JPY -> HUF. (USDHUF / USDJPY) vagy közelítés
-                    # Mivel nincs USDJPY, használjunk egy közelítést vagy kérjünk le USDJPY-t?
-                    # Egyszerűsítés: 1 JPY kb 2.5 HUF. De pontosabb ha USDHUF-ból számoljuk.
-                    # Ha nincs USDJPY, akkor a prompt szerinti "convert USD value" nehéz.
-                    # Használjuk a prompt javaslatát: "10 * (JPYHUF_Rate / 100)" ami fura.
-                    # Inkább: 10 JPY * (USDHUF / USDJPY).
-                    # Mivel USDJPY nincs, használjuk a keresztárfolyamot a jelenlegi árból:
-                    # GBPJPY / GBPUSD = USDJPY
-                    # De ehhez kellene a GBPUSD árfolyam is.
-                    # Egyszerűbb: 10 JPY ~ 25 HUF (Hardcoded becslés ha nincs jobb, de próbáljunk pontosabbat)
-                    # Ha van USDHUF, akkor 1 USD = X HUF. 1 USD ~ 150 JPY. 1 JPY = X / 150.
-                    if usd_huf_rate:
-                        pip_value_huf = 10 * (usd_huf_rate / 153.0) # Kb 153 az USDJPY
-                
-                # Nyereség / Veszteség
-                pips_gained = analysis['box_height'] * (100 if "JPY" in symbol else 10000)
-                pips_risked = pips_gained # 1:1 R/R
-                
-                profit_huf = pips_gained * pip_value_huf
-                loss_huf = pips_risked * pip_value_huf
-
-                # TELEGRAM ÜZENET ÖSSZEÁLLÍTÁSA
-                direction_icon = "🟢" if analysis["signal_type"] == "LONG" else "🔴"
-                direction_label = "LONG/vétel" if analysis["signal_type"] == "LONG" else "SHORT/eladás"
-                
-                msg = (
-                    f"🎯 **LONDON BREAKOUT**\n"
-                    f"🔔 **JELZÉS: {symbol}**\n"
-                    f"-------------------------\n"
-                    f"👉 **IRÁNY:** {direction_icon} **{direction_label}**\n"
-                    f"📊 **Stratégia:** Hougaard Daybreak\n\n"
                     
-                    f"💰 **PÉNZÜGYEK (0.01 Lot):**\n"
-                    f"🏦 **Feltett Tét (Margin):** ~{int(margin_huf)} Ft\n"
-                    f"🎯 **Várható Nyerő:** +{int(profit_huf)} Ft\n"
-                    f"🛡️ **Max Bukó:** -{int(loss_huf)} Ft\n\n"
-                    
-                    f"📍 **SZINTEK:**\n"
-                    f"🔵 Belépő: {analysis['entry']:.5f}\n"
-                    f"🟢 TP: {analysis['tp']:.5f}\n"
-                    f"🔴 SL: {analysis['sl']:.5f}\n\n"
-                    
-                    f"(⚠️ One Bullet Rule: Mai egyetlen jelzés!)"
-                )
+                # Hétvége / Frissesség ellenőrzése
+                last_time = df.index[-1]
+                is_data_fresh = last_time.date() == datetime.utcnow().date()
                 
-                # Küldés
-                if send_telegram(msg):
-                    # Siker esetén mentés a fájlba TRADE ADATOKKAL + PIP/HUF INFO + TIMESTAMP
-                    daily_signals[symbol] = {
-                        'date': today_str,
-                        'timestamp': datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'),
-                        'direction': analysis['signal_type'],
-                        'entry': analysis['entry'],
-                        'tp': analysis['tp'],
-                        'sl': analysis['sl'],
-                        'status': 'open',  # Nyitott pozíció, követjük
-                        'pips_target': pips_gained,  # Tervezett pip
-                        'pip_value_huf': pip_value_huf  # 1 pip értéke HUF-ban
-                    }
-                    save_history(daily_signals)
-                    
+                if not is_data_fresh:
+                    st.warning(f"⚠️ A piac zárva van. Az utolsó adat: {last_time.strftime('%Y-%m-%d %H:%M')}")
+                
+                # 2. Indikátorok
+                df['EMA_50'] = calculate_ema(df)
+                
+                # 3. Stratégia Elemzés
+                analysis = analyze_london_breakout(df, symbol)
+                
+                # 4. Jelzés Kezelése (One Bullet Logic)
+                today_str = datetime.utcnow().strftime('%Y-%m-%d')
+                saved_signal = daily_signals.get(symbol)
+                
+                signal_locked = False
+                locked_direction = None
+                
+                # Ellenőrizzük, volt-e már MAI jelzés
+                if saved_signal and saved_signal['date'] == today_str:
                     signal_locked = True
-                    locked_direction = analysis['signal_type']
-                    st.success("✅ Telegram üzenet elküldve!")
-                    st.rerun() # Újratöltés, hogy frissüljön a UI
-
-            # 5. GRAFIKON RAJZOLÁSA (Mindig látható!)
-            
-            # Zoom beállítása (utolsó 60 gyertya)
-            zoom_start = df.index[-60]
-            zoom_end = df.index[-1] + timedelta(hours=4) # Hely a jövőnek
-            
-            # Y-tengely skálázás (Látható részre)
-            visible_df = df[df.index >= zoom_start]
-            y_min = visible_df['Low'].min()
-            y_max = visible_df['High'].max()
-            # Ha van doboz, azt is vegyük figyelembe a skálánál
-            if analysis:
-                y_min = min(y_min, analysis['box_low'])
-                y_max = max(y_max, analysis['box_high'])
-            padding = (y_max - y_min) * 0.1
-            
-            fig = go.Figure()
-
-            # Gyertyák
-            fig.add_trace(go.Candlestick(
-                x=df.index,
-                open=df['Open'], high=df['High'],
-                low=df['Low'], close=df['Close'],
-                name="Árfolyam",
-                increasing_line_color='green', decreasing_line_color='red'
-            ))
-
-            # EMA 50 (Sárga vonal)
-            fig.add_trace(go.Scatter(
-                x=df.index, y=df['EMA_50'],
-                line=dict(color='yellow', width=2),
-                name="Trend (EMA 50)"
-            ))
-
-            # London Doboz Rajzolása MINDEN Látható Napra (07:00-08:00 GMT)
-            # Utolsó 5 kereskedési napra rajzoljuk be a dobozokat
-            visible_days = sorted(list(set(df.index.date)))[-5:]  # Utolsó 5 egyedi nap
-            
-            for day in visible_days:
-                # Szűrés az adott napra és a 07:00-08:00 GMT időszakra
-                day_mask = (df.index.date == day) & (df.index.hour == 7)
-                morning_candles = df[day_mask]
-                
-                if not morning_candles.empty:
-                    # Doboz határainak kiszámítása
-                    box_high = float(morning_candles['High'].max())
-                    box_low = float(morning_candles['Low'].min())
+                    locked_direction = saved_signal['direction']
+                    st.info(f"🔒 **MAI JELZÉS ELKÜLDVE:** {locked_direction}. A terv a grafikonon látható (One Bullet Rule).")
                     
-                    # Időpontok a dobozhoz
-                    box_start_time = pd.Timestamp(day).tz_localize('UTC').replace(hour=7, minute=0, second=0, microsecond=0)
-                    box_end_time = pd.Timestamp(day).tz_localize('UTC').replace(hour=8, minute=0, second=0, microsecond=0)
+                # Ha még nem volt jelzés, de most van TRIGGER és friss az adat
+                # ÉS be van kapcsolva a Trading Mode
+                elif analysis and analysis["signal_type"] and is_data_fresh and trading_mode:
                     
-                    # Mai napra más szín
-                    is_today = (day == last_time.date())
-                    fillcolor = "lightblue" if is_today else "lightgray"
-                    linecolor = "blue" if is_today else "gray"
-                    opacity = 0.3 if is_today else 0.15
+                    # --- DUPLA ELLENŐRZÉS (Race Condition ellen) ---
+                    # Frissítjük a memóriát a fájlból, hátha egy másik tab már elküldte
+                    current_history = load_history()
+                    if symbol in current_history and current_history[symbol]['date'] == today_str:
+                        st.warning(f"⚠️ {symbol} jelzést már egy másik folyamat elküldte! (Race Condition elkerülve)")
+                        continue
+    
+                    # --- PÉNZÜGYI SZÁMÍTÁSOK (HUF) ---
+                    # Alapértelmezések
+                    lot_size = 0.01
+                    leverage = 30
+                    contract_size = 100000 # Standard lot
                     
-                    # Téglalap alakú doboz
-                    fig.add_shape(
-                        type="rect",
-                        x0=box_start_time, 
-                        x1=box_end_time,
-                        y0=box_low, 
-                        y1=box_high,
-                        fillcolor=fillcolor,
-                        opacity=opacity,
-                        line=dict(color=linecolor, width=2 if is_today else 1),
-                        xref="x", 
-                        yref="y"
+                    # Deviza párok felbontása
+                    base_currency = symbol[:3] # pl GBP
+                    quote_currency = symbol[3:6] # pl USD
+                    
+                    # Árfolyamok lekérése
+                    base_huf_rate = get_huf_rate(base_currency)
+                    usd_huf_rate = get_huf_rate('USD') # Kell a pip értékhez ha USD a quote
+                    
+                    margin_huf = 0
+                    pip_value_huf = 0
+                    
+                    if base_huf_rate:
+                        # Margin számítás: (Contract Size * Lot * Base_HUF) / Leverage
+                        # 0.01 lot esetén contract size effektív 1000
+                        margin_huf = (1000 * base_huf_rate) / leverage
+                    
+                    # Pip Érték számítás
+                    if quote_currency == 'USD':
+                        # XXX/USD: 1 pip = 10 USD / lot -> 0.1 USD / 0.01 lot
+                        if usd_huf_rate:
+                            pip_value_huf = 0.1 * usd_huf_rate
+                    elif quote_currency == 'JPY':
+                        # XXX/JPY: 1 pip = 1000 JPY / lot -> 10 JPY / 0.01 lot
+                        # Átváltás: 10 JPY -> HUF. (USDHUF / USDJPY) vagy közelítés
+                        # Mivel nincs USDJPY, használjunk egy közelítést vagy kérjünk le USDJPY-t?
+                        # Egyszerűsítés: 1 JPY kb 2.5 HUF. De pontosabb ha USDHUF-ból számoljuk.
+                        # Ha nincs USDJPY, akkor a prompt szerinti "convert USD value" nehéz.
+                        # Használjuk a prompt javaslatát: "10 * (JPYHUF_Rate / 100)" ami fura.
+                        # Inkább: 10 JPY * (USDHUF / USDJPY).
+                        # Mivel USDJPY nincs, használjuk a keresztárfolyamot a jelenlegi árból:
+                        # GBPJPY / GBPUSD = USDJPY
+                        # De ehhez kellene a GBPUSD árfolyam is.
+                        # Egyszerűbb: 10 JPY ~ 25 HUF (Hardcoded becslés ha nincs jobb, de próbáljunk pontosabbat)
+                        # Ha van USDHUF, akkor 1 USD = X HUF. 1 USD ~ 150 JPY. 1 JPY = X / 150.
+                        if usd_huf_rate:
+                            pip_value_huf = 10 * (usd_huf_rate / 153.0) # Kb 153 az USDJPY
+                    
+                    # Nyereség / Veszteség
+                    pips_gained = analysis['box_height'] * (100 if "JPY" in symbol else 10000)
+                    pips_risked = pips_gained # 1:1 R/R
+                    
+                    profit_huf = pips_gained * pip_value_huf
+                    loss_huf = pips_risked * pip_value_huf
+    
+                    # TELEGRAM ÜZENET ÖSSZEÁLLÍTÁSA
+                    direction_icon = "🟢" if analysis["signal_type"] == "LONG" else "🔴"
+                    direction_label = "LONG/vétel" if analysis["signal_type"] == "LONG" else "SHORT/eladás"
+                    
+                    msg = (
+                        f"🎯 **LONDON BREAKOUT**\n"
+                        f"🔔 **JELZÉS: {symbol}**\n"
+                        f"-------------------------\n"
+                        f"👉 **IRÁNY:** {direction_icon} **{direction_label}**\n"
+                        f"📊 **Stratégia:** Hougaard Daybreak\n\n"
+                        
+                        f"💰 **PÉNZÜGYEK (0.01 Lot):**\n"
+                        f"🏦 **Feltett Tét (Margin):** ~{int(margin_huf)} Ft\n"
+                        f"🎯 **Várható Nyerő:** +{int(profit_huf)} Ft\n"
+                        f"🛡️ **Max Bukó:** -{int(loss_huf)} Ft\n\n"
+                        
+                        f"📍 **SZINTEK:**\n"
+                        f"🔵 Belépő: {analysis['entry']:.5f}\n"
+                        f"🟢 TP: {analysis['tp']:.5f}\n"
+                        f"🔴 SL: {analysis['sl']:.5f}\n\n"
+                        
+                        f"(⚠️ One Bullet Rule: Mai egyetlen jelzés!)"
                     )
                     
-                    # Felirat csak a mai dobozra
-                    if is_today:
-                        box_center_time = box_start_time + (box_end_time - box_start_time) / 2
-                        fig.add_annotation(
-                            x=box_center_time,
-                            y=box_high,
-                            text="London Doboz (07-08 GMT)",
-                            showarrow=False,
-                            yshift=10,
-                            font=dict(color="blue", size=10, weight="bold")
-                        )
-
-
-            # Formázás (Fix nézet, Nincs Zoom/Pan, Smart Scaling)
-            fig.update_layout(
-                height=500,
-                xaxis_rangeslider_visible=False,
-                yaxis=dict(range=[y_min - padding, y_max + padding], fixedrange=True), # Smart Scaling + Lock
-                xaxis=dict(range=[zoom_start, zoom_end], fixedrange=True), # Zoom Lock
-                dragmode=False, # Pan letiltása
-                template="plotly_white",
-                title=f"{symbol} (15m) - {analysis['trend'] if analysis else 'N/A'}",
-                margin=dict(l=10, r=10, t=40, b=10)
-            )
-            
-            # Hétvégék kivétele (Hogy ne legyen rés)
-            fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])
-
-            # Konfiguráció (Görgő letiltása)
-            st.plotly_chart(fig, use_container_width=True, config={'scrollZoom': False, 'displayModeBar': False})
-
-            # Kereskedési Terv Szövegesen (Ha van doboz)
-            if analysis:
-                c1, c2, c3, c4 = st.columns(4)
-                c1.metric("Trend (EMA 50)", analysis['trend'], delta="Bika" if analysis['trend']=="BULLISH" else "-Medve")
-                c2.metric("Doboz Magasság", f"{(analysis['box_height']*10000):.1f} pip")
-                c3.metric("💰 Aktuális Ár", f"{analysis['current_price']:.5f}")
+                    # Küldés
+                    if send_telegram(msg):
+                        # Siker esetén mentés a fájlba TRADE ADATOKKAL + PIP/HUF INFO + TIMESTAMP
+                        daily_signals[symbol] = {
+                            'date': today_str,
+                            'timestamp': datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'),
+                            'direction': analysis['signal_type'],
+                            'entry': analysis['entry'],
+                            'tp': analysis['tp'],
+                            'sl': analysis['sl'],
+                            'status': 'open',  # Nyitott pozíció, követjük
+                            'pips_target': pips_gained,  # Tervezett pip
+                            'pip_value_huf': pip_value_huf  # 1 pip értéke HUF-ban
+                        }
+                        save_history(daily_signals)
+                        
+                        signal_locked = True
+                        locked_direction = analysis['signal_type']
+                        st.success("✅ Telegram üzenet elküldve!")
+                        st.rerun() # Újratöltés, hogy frissüljön a UI
+    
+                # 5. GRAFIKON RAJZOLÁSA (Mindig látható!)
                 
-                # Státusz kiírása
-                if signal_locked:
-                    c4.info(f"🔒 Pozíció: {locked_direction}")
-                else:
-                    c4.warning("⏳ Várakozás kitörésre...")
+                # Zoom beállítása (utolsó 60 gyertya)
+                zoom_start = df.index[-60]
+                zoom_end = df.index[-1] + timedelta(hours=4) # Hely a jövőnek
+                
+                # Y-tengely skálázás (Látható részre)
+                visible_df = df[df.index >= zoom_start]
+                y_min = visible_df['Low'].min()
+                y_max = visible_df['High'].max()
+                # Ha van doboz, azt is vegyük figyelembe a skálánál
+                if analysis:
+                    y_min = min(y_min, analysis['box_low'])
+                    y_max = max(y_max, analysis['box_high'])
+                padding = (y_max - y_min) * 0.1
+                
+                fig = go.Figure()
+    
+                # Gyertyák
+                fig.add_trace(go.Candlestick(
+                    x=df.index,
+                    open=df['Open'], high=df['High'],
+                    low=df['Low'], close=df['Close'],
+                    name="Árfolyam",
+                    increasing_line_color='green', decreasing_line_color='red'
+                ))
+    
+                # EMA 50 (Sárga vonal)
+                fig.add_trace(go.Scatter(
+                    x=df.index, y=df['EMA_50'],
+                    line=dict(color='yellow', width=2),
+                    name="Trend (EMA 50)"
+                ))
+    
+                # London Doboz Rajzolása MINDEN Látható Napra (07:00-08:00 GMT)
+                # Utolsó 5 kereskedési napra rajzoljuk be a dobozokat
+                visible_days = sorted(list(set(df.index.date)))[-5:]  # Utolsó 5 egyedi nap
+                
+                for day in visible_days:
+                    # Szűrés az adott napra és a 07:00-08:00 GMT időszakra
+                    day_mask = (df.index.date == day) & (df.index.hour == 7)
+                    morning_candles = df[day_mask]
+                    
+                    if not morning_candles.empty:
+                        # Doboz határainak kiszámítása
+                        box_high = float(morning_candles['High'].max())
+                        box_low = float(morning_candles['Low'].min())
+                        
+                        # Időpontok a dobozhoz
+                        box_start_time = pd.Timestamp(day).tz_localize('UTC').replace(hour=7, minute=0, second=0, microsecond=0)
+                        box_end_time = pd.Timestamp(day).tz_localize('UTC').replace(hour=8, minute=0, second=0, microsecond=0)
+                        
+                        # Mai napra más szín
+                        is_today = (day == last_time.date())
+                        fillcolor = "lightblue" if is_today else "lightgray"
+                        linecolor = "blue" if is_today else "gray"
+                        opacity = 0.3 if is_today else 0.15
+                        
+                        # Téglalap alakú doboz
+                        fig.add_shape(
+                            type="rect",
+                            x0=box_start_time, 
+                            x1=box_end_time,
+                            y0=box_low, 
+                            y1=box_high,
+                            fillcolor=fillcolor,
+                            opacity=opacity,
+                            line=dict(color=linecolor, width=2 if is_today else 1),
+                            xref="x", 
+                            yref="y"
+                        )
+                        
+                        # Felirat csak a mai dobozra
+                        if is_today:
+                            box_center_time = box_start_time + (box_end_time - box_start_time) / 2
+                            fig.add_annotation(
+                                x=box_center_time,
+                                y=box_high,
+                                text="London Doboz (07-08 GMT)",
+                                showarrow=False,
+                                yshift=10,
+                                font=dict(color="blue", size=10, weight="bold")
+                            )
+    
+    
+                # Formázás (Fix nézet, Nincs Zoom/Pan, Smart Scaling)
+                fig.update_layout(
+                    height=500,
+                    xaxis_rangeslider_visible=False,
+                    yaxis=dict(range=[y_min - padding, y_max + padding], fixedrange=True), # Smart Scaling + Lock
+                    xaxis=dict(range=[zoom_start, zoom_end], fixedrange=True), # Zoom Lock
+                    dragmode=False, # Pan letiltása
+                    template="plotly_white",
+                    title=f"{symbol} (15m) - {analysis['trend'] if analysis else 'N/A'}",
+                    margin=dict(l=10, r=10, t=40, b=10)
+                )
+                
+                # Hétvégék kivétele (Hogy ne legyen rés)
+                fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])
+    
+                # Konfiguráció (Görgő letiltása)
+                st.plotly_chart(fig, use_container_width=True, config={'scrollZoom': False, 'displayModeBar': False})
+    
+                # Kereskedési Terv Szövegesen (Ha van doboz)
+                if analysis:
+                    c1, c2, c3, c4 = st.columns(4)
+                    c1.metric("Trend (EMA 50)", analysis['trend'], delta="Bika" if analysis['trend']=="BULLISH" else "-Medve")
+                    c2.metric("Doboz Magasság", f"{(analysis['box_height']*10000):.1f} pip")
+                    c3.metric("💰 Aktuális Ár", f"{analysis['current_price']:.5f}")
+                    
+                    # Státusz kiírása
+                    if signal_locked:
+                        c4.info(f"🔒 Pozíció: {locked_direction}")
+                    else:
+                        c4.warning("⏳ Várakozás kitörésre...")
     
     # Automatikus frissítés visszaszámláló
     st.markdown("---")
