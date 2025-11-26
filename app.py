@@ -304,6 +304,26 @@ def main():
             except:
                 pass
         
+        # 1. Gyűjtsük ki a mai lezártakat (hogy a sidebarban megjelenjenek és pipálhatók legyenek)
+        if is_today and status in ['tp_hit', 'sl_hit']:
+             today_closed_trades.append({'symbol': symbol, 'result': 'WIN' if status == 'tp_hit' else 'LOSS', 'huf': data.get('huf_result', 0), 'pips': data.get('pips_result', 0)})
+
+        # 2. Csak a BEPIPÁLT tradek számítanak a statisztikába
+        if not data.get('manual_sent', False):
+            if status == 'open': # Nyitott tradeket is számoljuk ha open? Nem, az open tradek száma független a pipától?
+                # A kód szerint: open_trades += 1
+                # De a felhasználó azt kérte: "ha kipipálom csak akkor számolja"
+                # Ez vonatkozhat a nyitott pozíciókra is.
+                # A sidebarban a nyitott pozícióknál IS ott a pipa.
+                # Tehát ha nincs bepipálva, akkor open_trades-be se számítson?
+                # A sidebar logika (397. sor) `if open_trades > 0:`
+                # Ha nem számolom bele, eltűnik a sidebarból?
+                # NEM! A sidebar logika (410. sor) újra iterálja a daily_signals-t.
+                # Tehát az `open_trades` változó csak a számlálóhoz kell.
+                pass
+            else:
+                continue
+
         # ALL TIME stats
         if status == 'tp_hit':
             wins += 1
@@ -318,10 +338,6 @@ def main():
                 weekly_pips += data.get('pips_result', 0)
                 weekly_huf += data.get('huf_result', 0)
             
-            # Today stats
-            if is_today:
-                today_closed_trades.append({'symbol': symbol, 'result': 'WIN', 'huf': data.get('huf_result', 0), 'pips': data.get('pips_result', 0)})
-                
         elif status == 'sl_hit':
             losses += 1
             total_trades += 1
@@ -335,11 +351,13 @@ def main():
                 weekly_pips += data.get('pips_result', 0)
                 weekly_huf += data.get('huf_result', 0)
 
-            # Today stats
-            if is_today:
-                today_closed_trades.append({'symbol': symbol, 'result': 'LOSS', 'huf': data.get('huf_result', 0), 'pips': data.get('pips_result', 0)})
-                
         elif status == 'open':
+            # Csak akkor növeljük a számlálót, ha be van pipálva (már ellenőriztük fentebb, vagy nem?)
+            # A fenti `if not data.get('manual_sent', False):` kiszűri a nem pipáltakat.
+            # De az `open` tradeknél lehet, hogy még nincs bepipálva alapból?
+            # A felhasználó most kérte a pipálást.
+            # Ha `continue`-t nyomok fent, akkor az open trade nem számolódik.
+            # Ez így jó.
             open_trades += 1
     
     win_rate = (wins / total_trades * 100) if total_trades > 0 else 0
@@ -462,9 +480,26 @@ def main():
     if today_closed_trades:
         st.sidebar.markdown("---")
         st.sidebar.markdown("### ✅ Mai Lezárt Tradek")
+        
+        # Checkbox minden lezárt trade-hez
         for trade in today_closed_trades:
+            symbol = trade['symbol']
+            # Adatok lekérése a daily_signals-ből a státuszhoz
+            signal_data = daily_signals.get(symbol, {})
+            current_sent = signal_data.get('manual_sent', False)
+            
             icon = "✅" if trade['result'] == 'WIN' else "❌"
-            st.sidebar.markdown(f"{icon} **{trade['symbol']}**: {int(trade['huf']):+,} Ft ({trade['pips']:+.1f} pip)")
+            label = f"{symbol}: {int(trade['huf']):+,} Ft ({trade['pips']:+.1f} pip)"
+            
+            # Checkbox megjelenítése (ikon a label előtt nem mindig szép checkboxnál, de megpróbáljuk a labelben)
+            # A felhasználó kérése szerint: [x] GBPJPY=X: +468 Ft...
+            is_sent = st.sidebar.checkbox(label, value=current_sent, key=f"sidebar_closed_{symbol}")
+            
+            # Ha változott, mentés és újratöltés
+            if is_sent != current_sent:
+                daily_signals[symbol]['manual_sent'] = is_sent
+                save_history(daily_signals)
+                st.rerun()
 
     st.sidebar.markdown("---")
     # --- STATISZTIKÁK VÉGE ---
