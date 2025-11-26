@@ -52,7 +52,8 @@ def send_telegram(message):
     payload = {
         "chat_id": TELEGRAM_CHAT_ID,
         "text": message,
-        "parse_mode": "Markdown"
+        "parse_mode": "HTML",
+        "disable_web_page_preview": True
     }
     try:
         response = requests.post(url, json=payload)
@@ -351,6 +352,11 @@ def main():
     for symbol, data in daily_signals.items():
         if symbol.startswith('_'):  # Skip metadata
             continue
+        
+        # CSAK HA BE VAN PIPÁLVA (vagy alapból False)
+        if not data.get('manual_sent', False):
+            continue
+
         if data.get('status') == 'open':
             # Friss ár lekérése
             df_current = get_data(symbol)
@@ -431,6 +437,17 @@ def main():
                         direction_label = "LONG/vétel" if direction == "LONG" else "SHORT/eladás"
                         
                         st.markdown(f"**{color} {symbol}** - {direction_label}")
+                        
+                        # --- CHECKBOX A FELADÁSHOZ ---
+                        current_sent = data.get('manual_sent', False)
+                        is_sent = st.checkbox("✅ Feladva (Számoljon)", value=current_sent, key=f"sidebar_chk_{symbol}")
+                        
+                        if is_sent != current_sent:
+                            daily_signals[symbol]['manual_sent'] = is_sent
+                            save_history(daily_signals)
+                            st.rerun()
+                        # -----------------------------
+
                         st.caption(f"Belépő: {entry_price:.5f}")
                         st.caption(f"Aktuális: {current_price:.5f}")
                         st.caption(f"TP: {tp_price:.5f} | SL: {sl_price:.5f}")
@@ -761,14 +778,14 @@ def main():
                         direction_label = "LONG/vétel" if direction == "LONG" else "SHORT/eladás"
                         
                         msg = (
-                            f"🎯 **LONDON BREAKOUT**\n"
-                            f"✅ **NYERŐ TRADE: {symbol}**\n"
-                            f"🎯 **CÉLÁR ELÉRVE!**\n\n"
+                            f"🎯 <b><a href='https://t.me'>LONDON BREAKOUT</a></b>\n"
+                            f"✅ <b>NYERŐ TRADE: {symbol}</b>\n"
+                            f"🎯 <b>CÉLÁR ELÉRVE!</b>\n\n"
                             f"Irány: {direction_label}\n"
                             f"Belépő: {entry_price:.5f}\n"
                             f"Célár: {tp_price:.5f}\n"
                             f"Jelenlegi ár: {current_price:.5f}\n\n"
-                            f"💰 **Eredmény:**\n"
+                            f"💰 <b>Eredmény:</b>\n"
                             f"📊 Pip: +{pips_result:.1f}\n"
                             f"💵 Profit: +{int(huf_result):,} Ft\n\n"
                             f"🎉 Gratulálok! A trade profittal lezárult!"
@@ -789,14 +806,14 @@ def main():
                         direction_label = "LONG/vétel" if direction == "LONG" else "SHORT/eladás"
                         
                         msg = (
-                            f"🎯 **LONDON BREAKOUT**\n"
-                            f"🔴 **VESZTŐ TRADE: {symbol}**\n"
-                            f"🛡️ **STOP LOSS ELÉRVE!**\n\n"
+                            f"🎯 <b><a href='https://t.me'>LONDON BREAKOUT</a></b>\n"
+                            f"🔴 <b>VESZTŐ TRADE: {symbol}</b>\n"
+                            f"🛡️ <b>STOP LOSS ELÉRVE!</b>\n\n"
                             f"Irány: {direction_label}\n"
                             f"Belépő: {entry_price:.5f}\n"
                             f"Stop: {sl_price:.5f}\n"
                             f"Jelenlegi ár: {current_price:.5f}\n\n"
-                            f"💰 **Eredmény:**\n"
+                            f"💰 <b>Eredmény:</b>\n"
                             f"📊 Pip: {pips_result:.1f}\n"
                             f"💵 Loss: {int(huf_result):,} Ft\n\n"
                             f"⚠️ A trade veszteséggel lezárult. Következő alkalom!"
@@ -906,6 +923,33 @@ def main():
                     profit_huf = pips_gained * pip_value_huf
                     loss_huf = pips_risked * pip_value_huf
     
+                    # TELEGRAM ÜZENET ÖSSZEÁLLÍTÁSA
+                    direction_icon = "🟢" if analysis["signal_type"] == "LONG" else "🔴"
+                    direction_label = "LONG/vétel" if analysis["signal_type"] == "LONG" else "SHORT/eladás"
+                    
+                    msg = (
+                        f"🎯 <b><a href='https://t.me'>LONDON BREAKOUT</a></b>\n"
+                        f"🔔 <b>JELZÉS: {symbol}</b>\n"
+                        f"-------------------------\n"
+                        f"👉 <b>IRÁNY:</b> {direction_icon} <b>{direction_label}</b>\n"
+                        f"📊 <b>Stratégia:</b> Hougaard Daybreak\n\n"
+                        
+                        f"💰 <b>PÉNZÜGYEK (0.01 Lot):</b>\n"
+                        f"🏦 <b>Feltett Tét (Margin):</b> ~{int(margin_huf)} Ft\n"
+                        f"🎯 <b>Várható Nyerő:</b> +{int(profit_huf)} Ft\n"
+                        f"🛡️ <b>Max Bukó:</b> -{int(loss_huf)} Ft\n\n"
+                        
+                        f"📍 <b>SZINTEK:</b>\n"
+                        f"🔵 Belépő: {analysis['entry']:.5f}\n"
+                        f"🟢 TP: {analysis['tp']:.5f}\n"
+                        f"🔴 SL: {analysis['sl']:.5f}\n\n"
+                        
+                        f"(⚠️ One Bullet Rule: Mai egyetlen jelzés!)"
+                    )
+                    
+                    # Küldés
+                    if send_telegram(msg):
+                        # Siker esetén mentés a fájlba TRADE ADATOKKAL + PIP/HUF INFO + TIMESTAMP
                         daily_signals[symbol] = {
                             'date': today_str,
                             'timestamp': datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'),
@@ -923,24 +967,24 @@ def main():
                         locked_direction = analysis['signal_type']
                         st.success("✅ Telegram üzenet elküldve!")
                         st.rerun() # Újratöltés, hogy frissüljön a UI
-    
-                # 5. GRAFIKON RAJZOLÁSA (Mindig látható!)
-                
-                # Zoom beállítása (utolsó 60 gyertya)
-                zoom_start = df.index[-60]
-                zoom_end = df.index[-1] + timedelta(hours=4) # Hely a jövőnek
-                
-                # Y-tengely skálázás (Látható részre)
-                visible_df = df[df.index >= zoom_start]
-                y_min = visible_df['Low'].min()
-                y_max = visible_df['High'].max()
-                # Ha van doboz, azt is vegyük figyelembe a skálánál
-                if analysis:
-                    y_min = min(y_min, analysis['box_low'])
-                    y_max = max(y_max, analysis['box_high'])
-                padding = (y_max - y_min) * 0.1
-                
-                fig = go.Figure()
+
+            # 5. GRAFIKON RAJZOLÁSA (Mindig látható!)
+            
+            # Zoom beállítása (utolsó 60 gyertya)
+            zoom_start = df.index[-60]
+            zoom_end = df.index[-1] + timedelta(hours=4) # Hely a jövőnek
+            
+            # Y-tengely skálázás (Látható részre)
+            visible_df = df[df.index >= zoom_start]
+            y_min = visible_df['Low'].min()
+            y_max = visible_df['High'].max()
+            # Ha van doboz, azt is vegyük figyelembe a skálánál
+            if analysis:
+                y_min = min(y_min, analysis['box_low'])
+                y_max = max(y_max, analysis['box_high'])
+            padding = (y_max - y_min) * 0.1
+            
+            fig = go.Figure()
     
                 # Gyertyák
                 fig.add_trace(go.Candlestick(
