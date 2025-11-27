@@ -7,6 +7,7 @@ import time
 import requests
 import json
 import os
+import pytz
 
 # --- FELHASZNÁLÓI KONFIGURÁCIÓ ---
 # Cseréld le a sajátodra, ha szükséges!
@@ -509,8 +510,9 @@ def main():
     meta = daily_signals.get('_meta', {})
     last_report_str = meta.get('last_weekly_report')
     
-    # Helyi idő (GMT+1)
-    local_now = now + timedelta(hours=1)  # UTC -> GMT+1
+    # Helyi idő (Europe/Budapest)
+    tz_budapest = pytz.timezone('Europe/Budapest')
+    local_now = datetime.now(tz_budapest)
     is_friday = local_now.weekday() == 4  # 4 = Péntek
     is_8pm = local_now.hour == 20
     
@@ -572,8 +574,9 @@ def main():
     meta = daily_signals.get('_meta', {})
     last_close_reminder_str = meta.get('last_close_reminder')
     
-    # Helyi idő (GMT+1)
-    local_now = now + timedelta(hours=1)  # UTC -> GMT+1
+    # Helyi idő (Europe/Budapest)
+    tz_budapest = pytz.timezone('Europe/Budapest')
+    local_now = datetime.now(tz_budapest)
     is_1725 = local_now.hour == 17 and local_now.minute == 25
     
     send_close_reminder = False
