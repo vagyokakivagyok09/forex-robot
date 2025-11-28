@@ -17,7 +17,11 @@ TELEGRAM_CHAT_ID = "1736205722"
 # --- KONSTANSOK ÉS BEÁLLÍTÁSOK ---
 TARGET_PAIRS = ['GBPUSD=X', 'GBPJPY=X', 'EURUSD=X']
 BUFFER_PIPS = 0.0003 # Kb. 3 pip puffer a doboz széleihez
-RISK_PER_TRADE = 0.005 # 0.5% kockázat (példa)
+
+# Számla és kockázatkezelés
+ACCOUNT_BALANCE = 1_000_000  # Számla egyenlege HUF-ban
+RISK_PERCENT = 0.01  # Kockáztatott összeg: 1% a számlából (0.01 = 1%)
+
 HISTORY_FILE = os.path.join(os.getcwd(), "trade_history.json")
 
 # Az oldal beállítása
@@ -989,8 +993,6 @@ def main():
                         continue
     
                     # --- PÉNZÜGYI SZÁMÍTÁSOK (HUF) ---
-                    # Alapértelmezések
-                    lot_size = 0.01
                     leverage = 30
                     contract_size = 100000 # Standard lot
                     
@@ -1002,39 +1004,45 @@ def main():
                     base_huf_rate = get_huf_rate(base_currency)
                     usd_huf_rate = get_huf_rate('USD') # Kell a pip értékhez ha USD a quote
                     
-                    margin_huf = 0
-                    pip_value_huf = 0
+                    # SL távolság pipben (box height alapján, mivel 1:1 R/R)
+                    pips_risked = analysis['box_height'] * (100 if "JPY" in symbol else 10000)
                     
-                    if base_huf_rate:
-                        # Margin számítás: (Contract Size * Lot * Base_HUF) / Leverage
-                        # 0.01 lot esetén contract size effektív 1000
-                        margin_huf = (1000 * base_huf_rate) / leverage
-                    
-                    # Pip Érték számítás
+                    # Pip Érték számítás (1 pip értéke HUF-ban, 1 standard lot-ra)
+                    pip_value_per_lot = 0
                     if quote_currency == 'USD':
-                        # XXX/USD: 1 pip = 10 USD / lot -> 0.1 USD / 0.01 lot
+                        # XXX/USD: 1 pip = 10 USD / standard lot
                         if usd_huf_rate:
-                            pip_value_huf = 0.1 * usd_huf_rate
+                            pip_value_per_lot = 10 * usd_huf_rate
                     elif quote_currency == 'JPY':
-                        # XXX/JPY: 1 pip = 1000 JPY / lot -> 10 JPY / 0.01 lot
-                        # Átváltás: 10 JPY -> HUF. (USDHUF / USDJPY) vagy közelítés
-                        # Mivel nincs USDJPY, használjunk egy közelítést vagy kérjünk le USDJPY-t?
-                        # Egyszerűsítés: 1 JPY kb 2.5 HUF. De pontosabb ha USDHUF-ból számoljuk.
-                        # Ha nincs USDJPY, akkor a prompt szerinti "convert USD value" nehéz.
-                        # Használjuk a prompt javaslatát: "10 * (JPYHUF_Rate / 100)" ami fura.
-                        # Inkább: 10 JPY * (USDHUF / USDJPY).
-                        # Mivel USDJPY nincs, használjuk a keresztárfolyamot a jelenlegi árból:
-                        # GBPJPY / GBPUSD = USDJPY
-                        # De ehhez kellene a GBPUSD árfolyam is.
-                        # Egyszerűbb: 10 JPY ~ 25 HUF (Hardcoded becslés ha nincs jobb, de próbáljunk pontosabbat)
-                        # Ha van USDHUF, akkor 1 USD = X HUF. 1 USD ~ 150 JPY. 1 JPY = X / 150.
+                        # XXX/JPY: 1 pip = 1000 JPY / standard lot
+                        # Átváltás: 1000 JPY -> HUF (USDHUF / USDJPY közelítéssel)
                         if usd_huf_rate:
-                            pip_value_huf = 10 * (usd_huf_rate / 153.0) # Kb 153 az USDJPY
+                            pip_value_per_lot = 1000 * (usd_huf_rate / 153.0) # Kb 153 az USDJPY
                     
-                    # Nyereség / Veszteség
-                    pips_gained = analysis['box_height'] * (100 if "JPY" in symbol else 10000)
-                    pips_risked = pips_gained # 1:1 R/R
+                    # DINAMIKUS LOT MÉRET SZÁMÍTÁS
+                    # Képlet: Lot = Kockáztatott összeg / (SL távolság pipben × Pip érték)
+                    risk_amount = ACCOUNT_BALANCE * RISK_PERCENT
                     
+                    if pip_value_per_lot > 0 and pips_risked > 0:
+                        lot_size = risk_amount / (pips_risked * pip_value_per_lot)
+                        # Kerekítés 0.01-re (broker minimum)
+                        lot_size = round(lot_size, 2)
+                        # Biztonsági minimum/maximum
+                        lot_size = max(0.01, min(lot_size, 1.0))  # Min 0.01, Max 1.0 lot
+                    else:
+                        lot_size = 0.01  # Fallback
+                    
+                    # Pip érték a konkrét lot méretre
+                    pip_value_huf = pip_value_per_lot * lot_size
+                    
+                    # Margin számítás a dinamikus lot mérettel
+                    margin_huf = 0
+                    if base_huf_rate:
+                        # Margin = (Contract Size × Lot × Base_HUF) / Leverage
+                        margin_huf = (contract_size * lot_size * base_huf_rate) / leverage
+                    
+                    # Várható nyereség/veszteség
+                    pips_gained = pips_risked  # 1:1 R/R
                     profit_huf = pips_gained * pip_value_huf
                     loss_huf = pips_risked * pip_value_huf
     
@@ -1049,10 +1057,11 @@ def main():
                         f"👉 <b>IRÁNY:</b> {direction_icon} <b>{direction_label}</b>\n"
                         f"📊 <b>Stratégia:</b> Hougaard Daybreak\n\n"
                         
-                        f"💰 <b>PÉNZÜGYEK (0.01 Lot):</b>\n"
-                        f"🏦 <b>Feltett Tét (Margin):</b> ~{int(margin_huf)} Ft\n"
-                        f"🎯 <b>Várható Nyerő:</b> +{int(profit_huf)} Ft\n"
-                        f"🛡️ <b>Max Bukó:</b> -{int(loss_huf)} Ft\n\n"
+                        f"💰 <b>PÉNZÜGYEK ({lot_size} Lot):</b>\n"
+                        f"📊 <b>Lot méret:</b> {lot_size} (Dinamikus számítás)\n"
+                        f"🏦 <b>Feltett Tét (Margin):</b> ~{int(margin_huf):,} Ft\n"
+                        f"🎯 <b>Várható Nyerő:</b> +{int(profit_huf):,} Ft\n"
+                        f"🛡️ <b>Max Bukó:</b> -{int(loss_huf):,} Ft ({RISK_PERCENT*100:.0f}% számla)\n\n"
                         
                         f"📍 <b>SZINTEK:</b>\n"
                         f"🔵 Belépő: {analysis['entry']:.5f}\n"
