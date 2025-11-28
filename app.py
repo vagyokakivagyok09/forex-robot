@@ -110,7 +110,7 @@ def get_huf_rate(base_currency):
         pass
     return None
 
-@st.cache_data(ttl=60) # Gyorsítótár 60 másodpercig
+@st.cache_data(ttl=180) # Gyorsítótár 3 percig (Twelve Data rate limit optimalizálás: ~480 call/nap)
 def get_data(ticker):
     """
     Adatok letöltése (15 perces, 59 napra).
