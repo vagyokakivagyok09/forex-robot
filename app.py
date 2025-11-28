@@ -219,7 +219,52 @@ def analyze_london_breakout(df, symbol):
 
     return result
 
+def is_market_active():
+    """
+    Ellenőrzi, hogy a Forex piac aktív-e.
+    Piac nyitva: Hétfő 00:00 GMT - Péntek 23:00 GMT
+    Aktív kereskedési idő: 06:00-23:00 GMT (hétköznap)
+    """
+    now_utc = datetime.now(pytz.UTC)
+    weekday = now_utc.weekday()  # 0=Hétfő, 6=Vasárnap
+    hour = now_utc.hour
+    
+    # Hétvége (Szombat-Vasárnap)
+    if weekday >= 5:
+        return False
+    
+    # Péntek este 23:00 után zárva
+    if weekday == 4 and hour >= 23:
+        return False
+    
+    # Éjszakai órák (23:00-06:00 GMT) - kevés aktivitás
+    if hour >= 23 or hour < 6:
+        return False
+    
+    return True
+
+def is_notification_allowed():
+    """
+    Ellenőrzi, hogy engedélyezett-e a Telegram értesítés küldése.
+    Értesítések csak munkaidőben (hétköznap 07:00-20:00 magyar idő szerint).
+    """
+    tz_budapest = pytz.timezone('Europe/Budapest')
+    local_now = datetime.now(tz_budapest)
+    weekday = local_now.weekday()  # 0=Hétfő, 6=Vasárnap
+    hour = local_now.hour
+    
+    # Hétvége (Szombat-Vasárnap)
+    if weekday >= 5:
+        return False
+    
+    # Munkaidőn kívül (07:00-20:00)
+    if hour < 7 or hour >= 20:
+        return False
+    
+    return True
+
 # --- FŐ ALKALMAZÁS ---
+
 
 def main():
     # Logo megjelenítése
@@ -244,9 +289,37 @@ def main():
         st.sidebar.warning("⚠️ JELZÉSEK KIKAPCSOLVA")
 
     
-    # Automatikus frissítés időzítő megjelenítése
-    placeholder = st.empty()
-    refresh_interval = 30  # másodperc
+    # --- PIAC AKTIVITÁS ELLENŐRZÉS ÉS OKOS FRISSÍTÉS ---
+    market_active = is_market_active()
+    
+    # Dinamikus frissítési időköz
+    if market_active:
+        refresh_interval = 30  # 30 másodperc (aktív kereskedési idő)
+        refresh_mode_icon = "🟢"
+        refresh_mode_text = "Aktív Mód"
+    else:
+        refresh_interval = 300  # 5 perc (hétvége/éjszaka)
+        refresh_mode_icon = "🌙"
+        refresh_mode_text = "Éjszakai/Hétvége Mód"
+    
+    # Státusz megjelenítése a sidebarban
+    st.sidebar.markdown("---")
+    st.sidebar.markdown(f"### {refresh_mode_icon} Frissítési Mód")
+    
+    now_utc = datetime.now(pytz.UTC)
+    weekday_names = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap']
+    current_day = weekday_names[now_utc.weekday()]
+    
+    st.sidebar.metric(
+        "Jelenlegi Mód",
+        refresh_mode_text,
+        delta=f"{refresh_interval}s frissítés"
+    )
+    
+    st.sidebar.caption(f"📅 {current_day} | ⏰ {now_utc.strftime('%H:%M')} GMT")
+    
+    if not market_active:
+        st.sidebar.info("💤 Piac zárva vagy kevés aktivitás. Lassabb frissítés az erőforrások kímélése érdekében.")
 
     # Memória inicializálása (Fájlból)
     daily_signals = load_history()
@@ -561,7 +634,8 @@ def main():
             f"💪 Kitartás! Minden trade tapasztalat!"
         )
         
-        if send_telegram(weekly_msg):
+        # Csak munkaidőben küldjük
+        if is_notification_allowed() and send_telegram(weekly_msg):
             # Frissítjük az utolsó report dátumát
             if '_meta' not in daily_signals:
                 daily_signals['_meta'] = {}
@@ -645,7 +719,8 @@ def main():
             f"Holnap új lehetőségek várnak! 💪"
         )
         
-        if send_telegram(reminder_msg):
+        # Csak munkaidőben küldjük
+        if is_notification_allowed() and send_telegram(reminder_msg):
             # Frissítjük az utolsó emlékeztető dátumát
             if '_meta' not in daily_signals:
                 daily_signals['_meta'] = {}
@@ -828,7 +903,8 @@ def main():
                             f"💵 Profit: +{int(huf_result):,} Ft\n\n"
                             f"🎉 Gratulálok! A trade profittal lezárult!"
                         )
-                        if send_telegram(msg):
+                        # Csak munkaidőben küldjük
+                        if is_notification_allowed() and send_telegram(msg):
                             daily_signals[symbol]['status'] = 'tp_hit'
                             daily_signals[symbol]['pips_result'] = pips_result
                             daily_signals[symbol]['huf_result'] = huf_result
@@ -856,7 +932,8 @@ def main():
                             f"💵 Loss: {int(huf_result):,} Ft\n\n"
                             f"⚠️ A trade veszteséggel lezárult. Következő alkalom!"
                         )
-                        if send_telegram(msg):
+                        # Csak munkaidőben küldjük
+                        if is_notification_allowed() and send_telegram(msg):
                             daily_signals[symbol]['status'] = 'sl_hit'
                             daily_signals[symbol]['pips_result'] = pips_result
                             daily_signals[symbol]['huf_result'] = huf_result
@@ -985,8 +1062,8 @@ def main():
                         f"(⚠️ One Bullet Rule: Mai egyetlen jelzés!)"
                     )
                     
-                    # Küldés
-                    if send_telegram(msg):
+                    # Küldés - Csak munkaidőben!
+                    if is_notification_allowed() and send_telegram(msg):
                         # Siker esetén mentés a fájlba TRADE ADATOKKAL + PIP/HUF INFO + TIMESTAMP
                         daily_signals[symbol] = {
                             'date': today_str,
@@ -1004,123 +1081,123 @@ def main():
                         signal_locked = True
                         locked_direction = analysis['signal_type']
                         st.success("✅ Telegram üzenet elküldve!")
-                        st.rerun() # Újratöltés, hogy frissüljön a UI
+                    st.rerun() # Újratöltés, hogy frissüljön a UI
 
-            # 5. GRAFIKON RAJZOLÁSA (Mindig látható!)
-            
-            # Zoom beállítása (utolsó 60 gyertya)
-            zoom_start = df.index[-60]
-            zoom_end = df.index[-1] + timedelta(hours=4) # Hely a jövőnek
-            
-            # Y-tengely skálázás (Látható részre)
-            visible_df = df[df.index >= zoom_start]
-            y_min = visible_df['Low'].min()
-            y_max = visible_df['High'].max()
-            # Ha van doboz, azt is vegyük figyelembe a skálánál
-            if analysis:
-                y_min = min(y_min, analysis['box_low'])
-                y_max = max(y_max, analysis['box_high'])
-            padding = (y_max - y_min) * 0.1
-            
-            fig = go.Figure()
-
-            # Gyertyák
-            fig.add_trace(go.Candlestick(
-                x=df.index,
-                open=df['Open'], high=df['High'],
-                low=df['Low'], close=df['Close'],
-                name="Árfolyam",
-                increasing_line_color='green', decreasing_line_color='red'
-            ))
-
-            # EMA 50 (Sárga vonal)
-            fig.add_trace(go.Scatter(
-                x=df.index, y=df['EMA_50'],
-                line=dict(color='yellow', width=2),
-                name="Trend (EMA 50)"
-            ))
-
-            # London Doboz Rajzolása MINDEN Látható Napra (07:00-08:00 GMT)
-            # Utolsó 5 kereskedési napra rajzoljuk be a dobozokat
-            visible_days = sorted(list(set(df.index.date)))[-5:]  # Utolsó 5 egyedi nap
-            
-            for day in visible_days:
-                # Szűrés az adott napra és a 07:00-08:00 GMT időszakra
-                day_mask = (df.index.date == day) & (df.index.hour == 7)
-                morning_candles = df[day_mask]
+                # 5. GRAFIKON RAJZOLÁSA (Mindig látható!)
                 
-                if not morning_candles.empty:
-                    # Doboz határainak kiszámítása
-                    box_high = float(morning_candles['High'].max())
-                    box_low = float(morning_candles['Low'].min())
+                # Zoom beállítása (utolsó 60 gyertya)
+                zoom_start = df.index[-60]
+                zoom_end = df.index[-1] + timedelta(hours=4) # Hely a jövőnek
+                
+                # Y-tengely skálázás (Látható részre)
+                visible_df = df[df.index >= zoom_start]
+                y_min = visible_df['Low'].min()
+                y_max = visible_df['High'].max()
+                # Ha van doboz, azt is vegyük figyelembe a skálánál
+                if analysis:
+                    y_min = min(y_min, analysis['box_low'])
+                    y_max = max(y_max, analysis['box_high'])
+                padding = (y_max - y_min) * 0.1
+                
+                fig = go.Figure()
+
+                # Gyertyák
+                fig.add_trace(go.Candlestick(
+                    x=df.index,
+                    open=df['Open'], high=df['High'],
+                    low=df['Low'], close=df['Close'],
+                    name="Árfolyam",
+                    increasing_line_color='green', decreasing_line_color='red'
+                ))
+
+                # EMA 50 (Sárga vonal)
+                fig.add_trace(go.Scatter(
+                    x=df.index, y=df['EMA_50'],
+                    line=dict(color='yellow', width=2),
+                    name="Trend (EMA 50)"
+                ))
+
+                # London Doboz Rajzolása MINDEN Látható Napra (07:00-08:00 GMT)
+                # Utolsó 5 kereskedési napra rajzoljuk be a dobozokat
+                visible_days = sorted(list(set(df.index.date)))[-5:]  # Utolsó 5 egyedi nap
+                
+                for day in visible_days:
+                    # Szűrés az adott napra és a 07:00-08:00 GMT időszakra
+                    day_mask = (df.index.date == day) & (df.index.hour == 7)
+                    morning_candles = df[day_mask]
                     
-                    # Időpontok a dobozhoz
-                    box_start_time = pd.Timestamp(day).tz_localize('UTC').replace(hour=7, minute=0, second=0, microsecond=0)
-                    box_end_time = pd.Timestamp(day).tz_localize('UTC').replace(hour=8, minute=0, second=0, microsecond=0)
-                    
-                    # Mai napra más szín
-                    is_today = (day == last_time.date())
-                    fillcolor = "lightblue" if is_today else "lightgray"
-                    linecolor = "blue" if is_today else "gray"
-                    opacity = 0.3 if is_today else 0.15
-                    
-                    # Téglalap alakú doboz
-                    fig.add_shape(
-                        type="rect",
-                        x0=box_start_time, 
-                        x1=box_end_time,
-                        y0=box_low, 
-                        y1=box_high,
-                        fillcolor=fillcolor,
-                        opacity=opacity,
-                        line=dict(color=linecolor, width=2 if is_today else 1),
-                        xref="x", 
-                        yref="y"
-                    )
-                    
-                    # Felirat csak a mai dobozra
-                    if is_today:
-                        box_center_time = box_start_time + (box_end_time - box_start_time) / 2
-                        fig.add_annotation(
-                            x=box_center_time,
-                            y=box_high,
-                            text="London Doboz (07-08 GMT)",
-                            showarrow=False,
-                            yshift=10,
-                            font=dict(color="blue", size=10, weight="bold")
+                    if not morning_candles.empty:
+                        # Doboz határainak kiszámítása
+                        box_high = float(morning_candles['High'].max())
+                        box_low = float(morning_candles['Low'].min())
+                        
+                        # Időpontok a dobozhoz
+                        box_start_time = pd.Timestamp(day).tz_localize('UTC').replace(hour=7, minute=0, second=0, microsecond=0)
+                        box_end_time = pd.Timestamp(day).tz_localize('UTC').replace(hour=8, minute=0, second=0, microsecond=0)
+                        
+                        # Mai napra más szín
+                        is_today = (day == last_time.date())
+                        fillcolor = "lightblue" if is_today else "lightgray"
+                        linecolor = "blue" if is_today else "gray"
+                        opacity = 0.3 if is_today else 0.15
+                        
+                        # Téglalap alakú doboz
+                        fig.add_shape(
+                            type="rect",
+                            x0=box_start_time, 
+                            x1=box_end_time,
+                            y0=box_low, 
+                            y1=box_high,
+                            fillcolor=fillcolor,
+                            opacity=opacity,
+                            line=dict(color=linecolor, width=2 if is_today else 1),
+                            xref="x", 
+                            yref="y"
                         )
+                        
+                        # Felirat csak a mai dobozra
+                        if is_today:
+                            box_center_time = box_start_time + (box_end_time - box_start_time) / 2
+                            fig.add_annotation(
+                                x=box_center_time,
+                                y=box_high,
+                                text="London Doboz (07-08 GMT)",
+                                showarrow=False,
+                                yshift=10,
+                                font=dict(color="blue", size=10, weight="bold")
+                            )
 
 
-            # Formázás (Fix nézet, Nincs Zoom/Pan, Smart Scaling)
-            fig.update_layout(
-                height=500,
-                xaxis_rangeslider_visible=False,
-                yaxis=dict(range=[y_min - padding, y_max + padding], fixedrange=True), # Smart Scaling + Lock
-                xaxis=dict(range=[zoom_start, zoom_end], fixedrange=True), # Zoom Lock
-                dragmode=False, # Pan letiltása
-                template="plotly_white",
-                title=f"{symbol} (15m) - {analysis['trend'] if analysis else 'N/A'}",
-                margin=dict(l=10, r=10, t=40, b=10)
-            )
+                # Formázás (Fix nézet, Nincs Zoom/Pan, Smart Scaling)
+                fig.update_layout(
+                    height=500,
+                    xaxis_rangeslider_visible=False,
+                    yaxis=dict(range=[y_min - padding, y_max + padding], fixedrange=True), # Smart Scaling + Lock
+                    xaxis=dict(range=[zoom_start, zoom_end], fixedrange=True), # Zoom Lock
+                    dragmode=False, # Pan letiltása
+                    template="plotly_white",
+                    title=f"{symbol} (15m) - {analysis['trend'] if analysis else 'N/A'}",
+                    margin=dict(l=10, r=10, t=40, b=10)
+                )
                 
-            # Hétvégék kivétele (Hogy ne legyen rés)
-            fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])
+                # Hétvégék kivétele (Hogy ne legyen rés)
+                fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])
 
-            # Konfiguráció (Görgő letiltása)
-            st.plotly_chart(fig, use_container_width=True, config={'scrollZoom': False, 'displayModeBar': False})
+                # Konfiguráció (Görgő letiltása)
+                st.plotly_chart(fig, use_container_width=True, config={'scrollZoom': False, 'displayModeBar': False}, key=f"chart_{symbol}")
 
-            # Kereskedési Terv Szövegesen (Ha van doboz)
-            if analysis:
-                c1, c2, c3, c4 = st.columns(4)
-                c1.metric("Trend (EMA 50)", analysis['trend'], delta="Bika" if analysis['trend']=="BULLISH" else "-Medve")
-                c2.metric("Doboz Magasság", f"{(analysis['box_height']*10000):.1f} pip")
-                c3.metric("💰 Aktuális Ár", f"{analysis['current_price']:.5f}")
-                
-                # Státusz kiírása
-                if signal_locked:
-                    c4.info(f"🔒 Pozíció: {locked_direction}")
-                else:
-                    c4.warning("⏳ Várakozás kitörésre...")
+                # Kereskedési Terv Szövegesen (Ha van doboz)
+                if analysis:
+                    c1, c2, c3, c4 = st.columns(4)
+                    c1.metric("Trend (EMA 50)", analysis['trend'], delta="Bika" if analysis['trend']=="BULLISH" else "-Medve")
+                    c2.metric("Doboz Magasság", f"{(analysis['box_height']*10000):.1f} pip")
+                    c3.metric("💰 Aktuális Ár", f"{analysis['current_price']:.5f}")
+                    
+                    # Státusz kiírása
+                    if signal_locked:
+                        c4.info(f"🔒 Pozíció: {locked_direction}")
+                    else:
+                        c4.warning("⏳ Várakozás kitörésre...")
     
     # Automatikus frissítés visszaszámláló
     st.markdown("---")
