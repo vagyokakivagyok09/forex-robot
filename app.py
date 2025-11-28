@@ -110,15 +110,30 @@ def get_huf_rate(base_currency):
         pass
     return None
 
-@st.cache_data(ttl=180) # Gyorsítótár 3 percig (Twelve Data rate limit optimalizálás: ~480 call/nap)
+@st.cache_data(ttl=180) # Gyorsítótár 3 percig (Twelve Data rate limit optimalizálás: ~85 call/nap)
 def get_data(ticker):
     """
     Adatok letöltése (15 perces, 59 napra).
     Elsődleges: Twelve Data API (pontos árfolyamok, broker-minőség)
     Tartalék: yfinance (ha Twelve Data nem elérhető)
+    
+    Twelve Data CSAK hétköznap 06:00-12:00 GMT között (London trading hours).
+    Hétvégén és délután yfinance fallback (rate limit spórolás).
     """
-    # Try Twelve Data first (if API key available)
-    if TWELVE_DATA_API_KEY:
+    # Time-based Twelve Data usage optimization
+    now_utc = datetime.now(pytz.UTC)
+    weekday = now_utc.weekday()  # 0=Monday, 6=Sunday
+    hour = now_utc.hour
+    
+    # Use Twelve Data ONLY during London active hours (weekdays 06:00-12:00 GMT)
+    use_twelve_data = (
+        TWELVE_DATA_API_KEY and  # API key available
+        weekday < 5 and  # Monday-Friday
+        6 <= hour < 12  # 06:00-12:00 GMT
+    )
+    
+    # Try Twelve Data first (if in active trading window)
+    if use_twelve_data:
         try:
             df = td.get_historical_data(ticker, TWELVE_DATA_API_KEY, interval='15min', outputsize=5000)
             if df is not None and not df.empty:
