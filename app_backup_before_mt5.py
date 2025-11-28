@@ -8,19 +8,11 @@ import requests
 import json
 import os
 import pytz
-import twelve_data_connector as td
-
 
 # --- FELHASZNÁLÓI KONFIGURÁCIÓ ---
 # Cseréld le a sajátodra, ha szükséges!
 TELEGRAM_BOT_TOKEN = "7487229026:AAH51YJ4atFsvqHKfQj9l_QU7ytJMIwo0w0" 
 TELEGRAM_CHAT_ID = "1736205722"
-
-# Twelve Data API key (from Streamlit secrets or environment)
-try:
-    TWELVE_DATA_API_KEY = st.secrets.get("TWELVE_DATA_API_KEY", None)
-except:
-    TWELVE_DATA_API_KEY = os.environ.get("TWELVE_DATA_API_KEY", None)
 
 # --- KONSTANSOK ÉS BEÁLLÍTÁSOK ---
 TARGET_PAIRS = ['GBPUSD=X', 'GBPJPY=X', 'EURUSD=X']
@@ -112,23 +104,7 @@ def get_huf_rate(base_currency):
 
 @st.cache_data(ttl=60) # Gyorsítótár 60 másodpercig
 def get_data(ticker):
-    """
-    Adatok letöltése (15 perces, 59 napra).
-    Elsődleges: Twelve Data API (pontos árfolyamok, broker-minőség)
-    Tartalék: yfinance (ha Twelve Data nem elérhető)
-    """
-    # Try Twelve Data first (if API key available)
-    if TWELVE_DATA_API_KEY:
-        try:
-            df = td.get_historical_data(ticker, TWELVE_DATA_API_KEY, interval='15min', outputsize=5000)
-            if df is not None and not df.empty:
-                # Successful Twelve Data retrieval
-                return df
-        except Exception as e:
-            # Twelve Data failed, will fallback to yfinance
-            pass
-    
-    # Fallback to yfinance (original code)
+    """Adatok letöltése (15 perces, 59 napra)."""
     try:
         df = yf.download(ticker, period="59d", interval="15m", progress=False)
         if df.empty:
@@ -348,19 +324,6 @@ def main():
     
     if not market_active:
         st.sidebar.info("💤 Piac zárva vagy kevés aktivitás. Lassabb frissítés az erőforrások kímélése érdekében.")
-    
-    # --- DATA SOURCE INDICATOR ---
-    st.sidebar.markdown("---")
-    st.sidebar.markdown("### 📡 Adatforrás")
-    
-    if TWELVE_DATA_API_KEY and td.is_api_available(TWELVE_DATA_API_KEY):
-        st.sidebar.success("✅ Twelve Data API (Pontos árfolyamok)")
-        api_stats = td.get_api_call_stats()
-        st.sidebar.caption(f"API hívások: {api_stats['calls_this_minute']}/perc")
-    else:
-        st.sidebar.warning("⚠️ YFinance (Eltérhet XTB-től)")
-        if TWELVE_DATA_API_KEY:
-            st.sidebar.caption("Twelve Data API nem elérhető")
 
     # Memória inicializálása (Fájlból)
     daily_signals = load_history()
