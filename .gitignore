@@ -4,5 +4,6 @@ __pycache__/
 .env
 antigravity/
 antigravity-browser-profile/
+
 trade_history.json
 *.pyc
