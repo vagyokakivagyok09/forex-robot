@@ -1059,6 +1059,10 @@ def main():
                     # SL távolság pipben (box height alapján, mivel 1:1 R/R)
                     pips_risked = analysis['box_height'] * (100 if "JPY" in symbol else 10000)
                     
+                    # 🛡️ MINIMUM SL VÉDELEM: Ha túl szűk az SL (<10 pip), használjunk minimum értéket
+                    MIN_SL_PIPS = 10.0
+                    pips_risked = max(pips_risked, MIN_SL_PIPS)
+                    
                     # Pip Érték számítás (1 pip értéke HUF-ban, 1 standard lot-ra)
                     pip_value_per_lot = 0
                     if quote_currency == 'USD':
@@ -1079,8 +1083,11 @@ def main():
                         lot_size = risk_amount / (pips_risked * pip_value_per_lot)
                         # Kerekítés 0.01-re (broker minimum)
                         lot_size = round(lot_size, 2)
-                        # Biztonsági minimum/maximum
-                        lot_size = max(0.01, min(lot_size, 1.0))  # Min 0.01, Max 1.0 lot
+                        
+                        # ✨ DINAMIKUS MAXIMUM: 1M HUF számlára max 5.0 lot
+                        # Skálázható: max_lot = számla / 200 000 (de legfeljebb 5.0)
+                        max_lot = min(ACCOUNT_BALANCE / 200_000, 5.0)
+                        lot_size = max(0.01, min(lot_size, max_lot))
                     else:
                         lot_size = 0.01  # Fallback
                     
@@ -1093,6 +1100,20 @@ def main():
                         # Margin = (Contract Size × Lot × Base_HUF) / Leverage
                         margin_huf = (contract_size * lot_size * base_huf_rate) / leverage
                     
+                    # 📊 MARGIN LIMIT VÉDELEM: Max 20% a számlából egy trade-re
+                    max_margin_percent = 0.20
+                    max_allowed_margin = ACCOUNT_BALANCE * max_margin_percent
+                    
+                    if margin_huf > max_allowed_margin:
+                        # Csökkentjük a lot méretet, hogy a margin ne haladja meg a 20%-ot
+                        lot_size = (max_allowed_margin * leverage) / (contract_size * base_huf_rate)
+                        lot_size = round(lot_size, 2)
+                        lot_size = max(0.01, lot_size)
+                        
+                        # Újraszámoljuk a pip értéket, margint és várható profit/loss-t
+                        pip_value_huf = pip_value_per_lot * lot_size
+                        margin_huf = (contract_size * lot_size * base_huf_rate) / leverage
+                    
                     # Várható nyereség/veszteség
                     pips_gained = pips_risked  # 1:1 R/R
                     profit_huf = pips_gained * pip_value_huf
@@ -1102,6 +1123,9 @@ def main():
                     direction_icon = "🟢" if analysis["signal_type"] == "LONG" else "🔴"
                     direction_label = "LONG/vétel" if analysis["signal_type"] == "LONG" else "SHORT/eladás"
                     
+                    # 📱 BŐVÍTETT TELEGRAM ÜZENET (margin %, kockáztatott összeg)
+                    margin_percent = (margin_huf / ACCOUNT_BALANCE) * 100
+                    
                     msg = (
                         f"🎯 <b><a href='https://t.me'>LONDON BREAKOUT</a></b>\n"
                         f"🔔 <b>JELZÉS: {symbol}</b>\n"
@@ -1110,10 +1134,11 @@ def main():
                         f"📊 <b>Stratégia:</b> Hougaard Daybreak\n\n"
                         
                         f"💰 <b>PÉNZÜGYEK ({lot_size} Lot):</b>\n"
-                        f"📊 <b>Lot méret:</b> {lot_size} (Dinamikus számítás)\n"
-                        f"🏦 <b>Feltett Tét (Margin):</b> ~{int(margin_huf):,} Ft\n"
+                        f"📊 <b>Lot méret:</b> {lot_size} (Dinamikus)\n"
+                        f"💵 <b>Kockáztatott:</b> {int(risk_amount):,} Ft ({RISK_PERCENT*100:.1f}%)\n"
+                        f"🏦 <b>Margin:</b> ~{int(margin_huf):,} Ft ({margin_percent:.1f}%)\n"
                         f"🎯 <b>Várható Nyerő:</b> +{int(profit_huf):,} Ft\n"
-                        f"🛡️ <b>Max Bukó:</b> -{int(loss_huf):,} Ft ({RISK_PERCENT*100:.0f}% számla)\n\n"
+                        f"🛡️ <b>Max Bukó:</b> -{int(loss_huf):,} Ft\n\n"
                         
                         f"📍 <b>SZINTEK:</b>\n"
                         f"🔵 Belépő: {analysis['entry']:.5f}\n"
